@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Mukta+Malar:wght@400;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-200: #bbf7d0;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
+  --color-brand-500: #22c55e;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #15803d;
+  --color-brand-800: #166534;
+  --color-brand-900: #14532d;
+  --color-brand-950: #052e16;
+}
+
+body {
+  font-family: 'Poppins', 'Mukta Malar', sans-serif;
+}
+
+.glow-effect {
+  box-shadow: 0 0 20px rgba(22, 163, 74, 0.15);
+}
+.glow-effect:hover {
+  box-shadow: 0 0 25px rgba(22, 163, 74, 0.3);
+}
+
+.editable-highlight { 
+  border: 2px dashed #f59e0b !important; 
+  position: relative;
+  background-color: rgba(245, 158, 11, 0.05);
+  padding: 4px;
+  border-radius: 4px;
+}
