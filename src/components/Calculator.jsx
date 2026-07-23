@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { validateFarmerName, validateLandSize, sanitizeInput } from '../utils/security';
 
 export default function Calculator({ products, whatsAppNumber, selectedProductName, setSelectedProductName, showToast }) {
   const [farmerName, setFarmerName] = useState('');
@@ -77,23 +78,33 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
   };
 
   const handleWhatsAppSend = () => {
-    if (!farmerName.trim() || !landSize || isNaN(parseFloat(landSize)) || parseFloat(landSize) <= 0) {
-      showToast("விவசாயி பெயர் மற்றும் நில அளவை சரியாக உள்ளிடவும்.", "error");
+    const nameVal = validateFarmerName(farmerName);
+    if (!nameVal.valid) {
+      showToast(nameVal.message, "error");
       return;
     }
 
-    let subsidyPercentStr = parseFloat(landSize) <= 5 ? "100%" : (parseFloat(landSize) <= 12 ? "75%" : "Custom Review Required");
+    const landVal = validateLandSize(landSize);
+    if (!landVal.valid) {
+      showToast(landVal.message, "error");
+      return;
+    }
+
+    const cleanDistrict = sanitizeInput(district.trim() || 'Dindigul');
+    const cleanProductName = sanitizeInput(selectedProductName);
+
+    let subsidyPercentStr = landVal.value <= 5 ? "100%" : (landVal.value <= 12 ? "75%" : "Custom Review Required");
 
     const textMessage = `*Thozhan Irrigation - New Ingestion Request*\n\n` +
-                        `• *Farmer Name:* ${farmerName}\n` +
-                        `• *District:* ${district}\n` +
-                        `• *Chosen Setup:* ${selectedProductName}\n` +
-                        `• *Land Extent:* ${landSize} Acres\n` +
+                        `• *Farmer Name:* ${nameVal.value}\n` +
+                        `• *District:* ${cleanDistrict}\n` +
+                        `• *Chosen Setup:* ${cleanProductName}\n` +
+                        `• *Land Extent:* ${landVal.value} Acres\n` +
                         `• *Estimated Subsidy:* ${subsidyPercentStr}\n\n` +
                         `Kindly process our subsidy blueprint quotation and send us information.`;
 
     const cleanUrl = `https://wa.me/91${whatsAppNumber}?text=${encodeURIComponent(textMessage)}`;
-    window.open(cleanUrl, '_blank');
+    window.open(cleanUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -118,8 +129,9 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
             
             <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
               <div className="form-group">
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Selected System Configuration</label>
+                <label htmlFor="system-config-select" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Selected System Configuration</label>
                 <select 
+                  id="system-config-select"
                   value={selectedProductName}
                   onChange={(e) => setSelectedProductName(e.target.value)}
                   className="w-full border border-slate-200 p-3.5 rounded-xl bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none font-semibold text-sm transition"
@@ -132,8 +144,9 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Farmer Name / விவசாயி பெயர்</label>
+                  <label htmlFor="farmer-name-input" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Farmer Name / விவசாயி பெயர்</label>
                   <input 
+                    id="farmer-name-input"
                     type="text" 
                     value={farmerName}
                     onChange={(e) => setFarmerName(e.target.value)}
@@ -143,8 +156,9 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
                   />
                 </div>
                 <div className="form-group">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">District / மாவட்டம்</label>
+                  <label htmlFor="district-input" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">District / மாவட்டம்</label>
                   <input 
+                    id="district-input"
                     type="text" 
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
@@ -155,11 +169,14 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
               </div>
 
               <div className="form-group">
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Total Land Extent Size (In Acres)</label>
+                <label htmlFor="land-size-input" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Total Land Extent Size (In Acres)</label>
                 <div className="relative">
                   <input 
+                    id="land-size-input"
                     type="number" 
                     step="0.1" 
+                    min="0.1"
+                    max="500"
                     value={landSize}
                     onChange={(e) => setLandSize(e.target.value)}
                     required 
@@ -190,7 +207,7 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
                 <span className="text-brand-300 font-medium">Estimated Project Cost:</span>
                 <span className="font-bold font-mono text-base">₹{projectCost.toLocaleString()}</span>
               </div>
-              <div class="flex justify-between items-center text-sm">
+              <div className="flex justify-between items-center text-sm">
                 <span className="text-brand-300 font-medium">Projected Govt Subsidy:</span>
                 <span className="font-bold text-brand-400 font-mono text-base">₹{subsidyAmount.toLocaleString()}</span>
               </div>
@@ -218,7 +235,7 @@ export default function Calculator({ products, whatsAppNumber, selectedProductNa
             <button 
               type="button" 
               onClick={handleWhatsAppSend} 
-              className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white p-4 rounded-xl font-extrabold text-base transition flex items-center justify-center space-x-2.5 shadow-md"
+              className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white p-4 rounded-xl font-extrabold text-base transition flex items-center justify-center space-x-2.5 shadow-md focus:ring-4 focus:ring-green-400 outline-none"
             >
               <i className="fa-brands fa-whatsapp text-xl"></i>
               <span>Submit Specs to WhatsApp Manager</span>

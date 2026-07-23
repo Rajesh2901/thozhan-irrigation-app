@@ -9,6 +9,7 @@ import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
+import { sanitizeInput, verifyAdminPasscode, validateWhatsAppNumber } from './utils/security';
 
 const DEFAULT_PRODUCTS = [
   {
@@ -62,10 +63,20 @@ export default function App() {
 
   useEffect(() => {
     // 1. Initial configurations loading
-    const savedProducts = localStorage.getItem('thozhan_products');
-    if (savedProducts) {
-      setProducts(JSON.parse(savedProducts));
-    } else {
+    try {
+      const savedProducts = localStorage.getItem('thozhan_products');
+      if (savedProducts) {
+        const parsed = JSON.parse(savedProducts);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setProducts(parsed);
+        } else {
+          setProducts([...DEFAULT_PRODUCTS]);
+        }
+      } else {
+        setProducts([...DEFAULT_PRODUCTS]);
+      }
+    } catch (e) {
+      console.warn("Failed to load products from storage", e);
       setProducts([...DEFAULT_PRODUCTS]);
     }
 
@@ -74,10 +85,8 @@ export default function App() {
       setWhatsAppNumber(savedPhone);
     }
 
-    // 2. Check admin validation
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('auth') === 'thozhan-secret' || sessionStorage.getItem('isAdmin') === 'true') {
-      sessionStorage.setItem('isAdmin', 'true');
+    // 2. Check admin validation securely from sessionStorage (no plain URL secrets)
+    if (sessionStorage.getItem('isAdmin') === 'true') {
       setIsAdmin(true);
     }
   }, []);
@@ -92,7 +101,7 @@ export default function App() {
   // Toast Notification handler
   const showToast = (message, type = "success") => {
     const id = Date.now();
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts(prev => [...prev, { id, message: sanitizeInput(message), type }]);
     
     // Auto remove after 3 seconds
     setTimeout(() => {
@@ -110,16 +119,17 @@ export default function App() {
     }
   };
 
-  // Admin inline field blur triggers
+  // Admin inline field blur triggers with XSS sanitization
   const handleUpdateProduct = (id, field, value) => {
+    const sanitizedValue = sanitizeInput(value);
     setProducts(prev => prev.map(p => {
       if (p.id === id) {
-        const updated = { ...p, [field]: value };
+        const updated = { ...p, [field]: sanitizedValue };
         // Parse numeric value on price changes
         if (field === 'price') {
-          const matches = value.replace(/,/g, '').match(/\d+/);
+          const matches = String(sanitizedValue).replace(/,/g, '').match(/\d+/);
           if (matches) {
-            updated.priceNumeric = parseInt(matches[0]);
+            updated.priceNumeric = parseInt(matches[0], 10);
           }
         }
         return updated;
@@ -161,25 +171,28 @@ export default function App() {
     showToast("Configurations saved in browser storage!", "success");
   };
 
-  // Settings configs apply
+  // Settings configs apply with validation
   const handleApplySettings = (newNumber) => {
-    setWhatsAppNumber(newNumber);
-    localStorage.setItem('thozhan_whatsapp', newNumber);
+    const phoneVal = validateWhatsAppNumber(newNumber);
+    if (!phoneVal.valid) {
+      showToast(phoneVal.message, "error");
+      return;
+    }
+    setWhatsAppNumber(phoneVal.value);
+    localStorage.setItem('thozhan_whatsapp', phoneVal.value);
     setShowSettings(false);
     showToast("WhatsApp routing configuration updated.", "success");
   };
 
-  // Passcode authentication
+  // Passcode authentication using secure salted hash verification
   const handleVerifyPasscode = (code) => {
-    if (code === 'thozhan-secret') {
+    if (verifyAdminPasscode(code)) {
       sessionStorage.setItem('isAdmin', 'true');
       setIsAdmin(true);
       setShowAuth(false);
       showToast("Admin Verified. Edit mode activated.", "success");
-      // Add query parameter to preserve state across page reloads
-      window.history.replaceState({}, '', '?auth=thozhan-secret');
     } else {
-      showToast("Invalid secret code phrase.", "error");
+      showToast("Invalid secret passcode credentials.", "error");
     }
   };
 
@@ -187,7 +200,6 @@ export default function App() {
   const handleExitAdminMode = () => {
     sessionStorage.removeItem('isAdmin');
     setIsAdmin(false);
-    window.history.replaceState({}, '', window.location.pathname);
     showToast("Exited admin mode.", "success");
   };
 
@@ -296,7 +308,7 @@ export default function App() {
       />
 
       {/* 3. TOAST MESSAGES EMITTER */}
-      <div className="fixed bottom-6 right-6 z-[300] flex flex-col space-y-2">
+      <div className="fixed bottom-6 right-6 z-[300] flex flex-col space-y-2" role="status" aria-live="polite">
         {toasts.map(toast => (
           <div 
             key={toast.id}
