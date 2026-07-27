@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from './components/DashboardLayout';
 import SmartFarm3DView from './components/SmartFarm3DView';
 import DripSystemInfographic from './components/DripSystemInfographic';
-import Header from './components/Header';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
 import Showcase from './components/Showcase';
@@ -54,6 +53,7 @@ const DEFAULT_PRODUCTS = [
 ];
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('home');
   const [products, setProducts] = useState([]);
   const [whatsAppNumber, setWhatsAppNumber] = useState('9489528432');
   const [isAdmin, setIsAdmin] = useState(false);
@@ -65,7 +65,6 @@ export default function App() {
   const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
-    // 1. Initial configurations loading
     try {
       const savedProducts = localStorage.getItem('thozhan_products');
       if (savedProducts) {
@@ -88,41 +87,31 @@ export default function App() {
       setWhatsAppNumber(savedPhone);
     }
 
-    // 2. Check admin validation securely from sessionStorage
     if (sessionStorage.getItem('isAdmin') === 'true') {
       setIsAdmin(true);
     }
   }, []);
 
-  // Sync selected product defaults once list is loaded
   useEffect(() => {
     if (products.length > 0 && !selectedProductName) {
       setSelectedProductName(products[0].title);
     }
   }, [products]);
 
-  // Toast Notification handler
   const showToast = (message, type = "success") => {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message: sanitizeInput(message), type }]);
-    
-    // Auto remove after 3 seconds
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
     }, 3000);
   };
 
-  // Select system from card trigger
   const handleSelectProduct = (name) => {
     setSelectedProductName(name);
-    showToast(`Selected: ${name.split('/')[0]}`, "success");
-    const calcSec = document.getElementById('calculator');
-    if (calcSec) {
-      calcSec.scrollIntoView({ behavior: 'smooth' });
-    }
+    setActiveTab('calculator');
+    showToast(`Selected: ${name.split('/')[0]} - Opened Calculator`, "success");
   };
 
-  // Admin inline field blur triggers with XSS sanitization
   const handleUpdateProduct = (id, field, value) => {
     const sanitizedValue = sanitizeInput(value);
     setProducts(prev => prev.map(p => {
@@ -140,7 +129,6 @@ export default function App() {
     }));
   };
 
-  // Add Product Setup
   const handleAddProduct = () => {
     const newId = Date.now();
     setProducts(prev => [
@@ -158,7 +146,6 @@ export default function App() {
     showToast("Added new system draft card. Edit inline.", "success");
   };
 
-  // Delete Product
   const handleDeleteProduct = (id) => {
     if (window.confirm("Remove this equipment module permanently from local state view?")) {
       setProducts(prev => prev.filter(p => p.id !== id));
@@ -166,14 +153,12 @@ export default function App() {
     }
   };
 
-  // Save changes locally in browser storage
   const handleSaveAdminChanges = () => {
     localStorage.setItem('thozhan_products', JSON.stringify(products));
     localStorage.setItem('thozhan_whatsapp', whatsAppNumber);
     showToast("Configurations saved in browser storage!", "success");
   };
 
-  // Settings configs apply with validation
   const handleApplySettings = (newNumber) => {
     const phoneVal = validateWhatsAppNumber(newNumber);
     if (!phoneVal.valid) {
@@ -186,7 +171,6 @@ export default function App() {
     showToast("WhatsApp routing configuration updated.", "success");
   };
 
-  // Passcode authentication using secure salted hash verification
   const handleVerifyPasscode = (code) => {
     if (verifyAdminPasscode(code)) {
       sessionStorage.setItem('isAdmin', 'true');
@@ -198,7 +182,6 @@ export default function App() {
     }
   };
 
-  // Exit Admin View
   const handleExitAdminMode = () => {
     sessionStorage.removeItem('isAdmin');
     setIsAdmin(false);
@@ -207,11 +190,13 @@ export default function App() {
 
   return (
     <DashboardLayout 
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
       isAdmin={isAdmin} 
       triggerAdmin={() => setShowAuth(true)} 
       exitAdmin={handleExitAdminMode}
     >
-      {/* 1. ADMIN SYSTEM CONTROL BANNER */}
+      {/* ADMIN CONTROL BANNER */}
       {isAdmin && (
         <div className="bg-amber-500 text-white px-4 py-3 rounded-2xl text-xs md:text-sm font-semibold shadow-md flex justify-between items-center mb-6">
           <div className="flex items-center space-x-2">
@@ -235,43 +220,59 @@ export default function App() {
         </div>
       )}
 
-      {/* 2. SMART FARM 3D VIEWPORT (IMAGE 1 MATCH) */}
-      <SmartFarm3DView />
-
-      {/* 3. CORE HERO & STATS OVERVIEW */}
-      <Hero />
-      <Stats />
-
-      {/* 4. DRIP SYSTEM INFOGRAPHIC & OFFICIAL CREDENTIALS (IMAGE 2 & 3 MATCH) */}
-      <DripSystemInfographic />
-
-      {/* 5. EQUIPMENT SHOWCASE & CALCULATOR MATRIX */}
-      <Showcase 
-        products={products}
-        isAdmin={isAdmin}
-        onSelectProduct={handleSelectProduct}
-        onUpdateProduct={handleUpdateProduct}
-        onDeleteProduct={handleDeleteProduct}
-        onAddProduct={handleAddProduct}
-      />
-
-      {products.length > 0 && (
-        <Calculator 
-          products={products}
-          whatsAppNumber={whatsAppNumber}
-          selectedProductName={selectedProductName}
-          setSelectedProductName={setSelectedProductName}
-          showToast={showToast}
-        />
+      {/* DYNAMIC TAB VIEWPORT SWITCHING (SOLVES EXCESSIVE SCROLLING) */}
+      {activeTab === 'home' && (
+        <div className="space-y-8">
+          <SmartFarm3DView />
+          <Hero />
+          <Stats />
+          <DripSystemInfographic />
+        </div>
       )}
 
-      <DocsChecklist />
-      <Testimonials />
-      <FAQ />
+      {activeTab === 'inventory' && (
+        <div className="space-y-8">
+          <Showcase 
+            products={products}
+            isAdmin={isAdmin}
+            onSelectProduct={handleSelectProduct}
+            onUpdateProduct={handleUpdateProduct}
+            onDeleteProduct={handleDeleteProduct}
+            onAddProduct={handleAddProduct}
+          />
+        </div>
+      )}
+
+      {activeTab === 'calculator' && (
+        <div className="space-y-8">
+          {products.length > 0 && (
+            <Calculator 
+              products={products}
+              whatsAppNumber={whatsAppNumber}
+              selectedProductName={selectedProductName}
+              setSelectedProductName={setSelectedProductName}
+              showToast={showToast}
+            />
+          )}
+        </div>
+      )}
+
+      {activeTab === 'docs' && (
+        <div className="space-y-8">
+          <DocsChecklist />
+        </div>
+      )}
+
+      {activeTab === 'support' && (
+        <div className="space-y-8">
+          <FAQ />
+          <Testimonials />
+        </div>
+      )}
 
       <Footer />
 
-      {/* 6. ADMIN MODALS CONTAINER */}
+      {/* ADMIN MODALS CONTAINER */}
       <AdminPanel 
         showAuth={showAuth}
         showSettings={showSettings}
@@ -282,7 +283,7 @@ export default function App() {
         onApplySettings={handleApplySettings}
       />
 
-      {/* 7. TOAST MESSAGES EMITTER */}
+      {/* TOAST MESSAGES EMITTER */}
       <div className="fixed bottom-6 right-6 z-[300] flex flex-col space-y-2" role="status" aria-live="polite">
         {toasts.map(toast => (
           <div 
