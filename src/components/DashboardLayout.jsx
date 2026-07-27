@@ -14,23 +14,19 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
   return (
     <div className="min-h-screen bg-[#041f14] text-slate-100 flex flex-col lg:flex-row antialiased selection:bg-brand-500 selection:text-white">
       
-      {/* 1. LEFT NAVIGATION SIDEBAR (IMAGE & LOGO MATCH) */}
+      {/* 1. LEFT NAVIGATION SIDEBAR (OFFICIAL LOGO MATCH) */}
       <aside className={`w-full lg:w-64 bg-[#03170e] border-r border-brand-900/60 p-5 flex flex-col justify-between shrink-0 transition-all duration-300 z-40 ${sidebarOpen ? 'block' : 'hidden lg:flex'}`}>
         <div className="space-y-6">
           
-          {/* Official Logo Brand Header */}
-          <a href="#" className="flex items-center space-x-3 group pt-1">
-            <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center shadow-lg border border-yellow-400/40 group-hover:scale-105 transition shrink-0">
-              <img src="/logo.png" alt="Thozhan Irrigation Logo" className="max-w-full max-h-full object-contain" />
-            </div>
-            <div>
-              <h1 className="text-sm font-black text-white leading-tight tracking-tight">Thozhan Irrigation</h1>
-              <p className="text-[11px] text-yellow-300 font-bold tracking-wide">தோழன் இரிகேஷன்</p>
+          {/* Official Transparent Brand Logo Display */}
+          <a href="#" className="block group pt-1">
+            <div className="bg-white/95 rounded-2xl p-3 shadow-xl border border-yellow-400/40 group-hover:scale-[1.02] transition flex items-center justify-center">
+              <img src="/logo.png" alt="Thozhan Irrigation Official Logo" className="w-full h-auto max-h-16 object-contain" />
             </div>
           </a>
 
           {/* Navigation Links */}
-          <nav className="space-y-1.5 pt-2" role="navigation" aria-label="Sidebar Navigation">
+          <nav className="space-y-1.5 pt-1" role="navigation" aria-label="Sidebar Navigation">
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
               return (
@@ -85,7 +81,7 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
       <div className="flex-1 flex flex-col min-w-0">
         
         {/* Top Header Bar */}
-        <header className="bg-[#03170e]/95 backdrop-blur-md border-b border-brand-900/60 px-4 md:px-8 py-3.5 flex justify-between items-center z-30 sticky top-0">
+        <header className="bg-[#03170e]/95 backdrop-blur-md border-b border-brand-900/60 px-4 md:px-8 py-3 flex justify-between items-center z-30 sticky top-0">
           
           <div className="flex items-center space-x-4">
             <button 
@@ -97,7 +93,7 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
             </button>
             
             <div className="flex items-center space-x-3">
-              <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain lg:hidden bg-white p-0.5 rounded-lg" />
+              <img src="/logo.png" alt="Thozhan Irrigation" className="h-8 w-auto object-contain bg-white/90 p-1 rounded-lg lg:hidden" />
               <div>
                 <h2 className="text-sm md:text-lg font-black text-white tracking-tight">Smart Farm Dashboard</h2>
                 <p className="text-[10px] text-brand-300 font-extrabold">விவசாயக் கட்டுப்பாட்டு மையம்</p>
@@ -127,7 +123,7 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
           </div>
         </header>
 
-        {/* Viewport Children (Clean single scroll container) */}
+        {/* Viewport Children */}
         <main className="flex-1 p-4 md:p-6 lg:p-8 space-y-8">
           {children}
         </main>
