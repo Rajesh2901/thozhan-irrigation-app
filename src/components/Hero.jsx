@@ -1,9 +1,78 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function Hero() {
+  const canvasRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  // Interactive 3D water particle simulation effect
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2.5 + 1,
+      speedY: Math.random() * 0.8 + 0.3,
+      speedX: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.6 + 0.2
+    }));
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y -= p.speedY;
+        p.x += p.speedX;
+        if (p.y < 0) {
+          p.y = canvas.height;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(34, 197, 94, ${p.opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#4ade80';
+        ctx.fill();
+      });
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setTilt({ x: -(y / 20), y: x / 20 });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   return (
     <section id="hero" className="relative overflow-hidden bg-gradient-to-br from-brand-950 via-brand-900 to-slate-950 text-white py-20 md:py-28 px-4 md:px-6">
-      {/* Background radial & grid patterns */}
+      {/* Dynamic 3D Particle Canvas Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <canvas ref={canvasRef} className="w-full h-full" />
+      </div>
+
+      {/* Radial Grid & Glow Layers */}
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-yellow-500/15 rounded-full blur-[100px] pointer-events-none"></div>
@@ -12,7 +81,7 @@ export default function Hero() {
         
         {/* Core Taglines & Value Proposition */}
         <div className="lg:col-span-7 space-y-6 md:space-y-8">
-          <span className="inline-flex items-center space-x-2 bg-brand-800/80 border border-brand-600 text-yellow-300 text-xs font-extrabold uppercase tracking-widest px-4 py-2 rounded-full shadow-md">
+          <span className="inline-flex items-center space-x-2 bg-brand-800/80 border border-brand-600 text-yellow-300 text-xs font-extrabold uppercase tracking-widest px-4 py-2 rounded-full shadow-md gpu-accelerated">
             <i className="fa-solid fa-award text-yellow-400"></i>
             <span>Govt Authorized Integrator Scheme 2026</span>
           </span>
@@ -32,15 +101,15 @@ export default function Hero() {
 
           {/* Trust Metrics */}
           <div className="grid grid-cols-3 gap-4 pt-2 border-t border-brand-800/60 max-w-lg">
-            <div>
+            <div className="gpu-accelerated hover:-translate-y-1 transition duration-300">
               <div className="text-2xl md:text-3xl font-black text-yellow-400">100%</div>
               <div className="text-[10px] text-brand-200 uppercase font-bold tracking-wider">Small Farmer Grant</div>
             </div>
-            <div>
+            <div className="gpu-accelerated hover:-translate-y-1 transition duration-300">
               <div className="text-2xl md:text-3xl font-black text-white">5,000+</div>
               <div className="text-[10px] text-brand-200 uppercase font-bold tracking-wider">Farms Integrated</div>
             </div>
-            <div>
+            <div className="gpu-accelerated hover:-translate-y-1 transition duration-300">
               <div className="text-2xl md:text-3xl font-black text-emerald-400">₹12.5 Cr</div>
               <div className="text-[10px] text-brand-200 uppercase font-bold tracking-wider">Subsidies Sanctioned</div>
             </div>
@@ -49,14 +118,14 @@ export default function Hero() {
           <div className="flex flex-wrap gap-4 pt-4">
             <a 
               href="#calculator" 
-              className="bg-yellow-400 hover:bg-yellow-500 text-brand-950 font-black text-sm px-8 py-4 rounded-xl shadow-xl transition transform hover:-translate-y-1 flex items-center space-x-3"
+              className="bg-yellow-400 hover:bg-yellow-500 text-brand-950 font-black text-sm px-8 py-4 rounded-xl shadow-xl transition btn-press flex items-center space-x-3"
             >
               <i className="fa-solid fa-calculator text-lg"></i>
               <span>Calculate Subsidy Scheme</span>
             </a>
             <a 
               href="#inventory" 
-              className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm px-7 py-4 rounded-xl transition flex items-center space-x-2"
+              className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm px-7 py-4 rounded-xl transition btn-press flex items-center space-x-2"
             >
               <span>Explore Portfolio</span>
               <i className="fa-solid fa-arrow-right"></i>
@@ -64,9 +133,17 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Hero Side Subsidy Tier Card */}
-        <div className="lg:col-span-5 relative">
-          <div className="glass-dark rounded-3xl p-8 border border-white/15 shadow-2xl relative">
+        {/* 3D Spatial Tilt Subsidy Tier Card */}
+        <div className="lg:col-span-5 relative perspective-[1000px]">
+          <div 
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+            className="glass-dark rounded-3xl p-8 border border-white/15 shadow-2xl relative gpu-accelerated"
+          >
             <div className="absolute -top-6 -right-6 w-20 h-20 bg-yellow-400 text-brand-950 rounded-full flex flex-col items-center justify-center font-black text-xs rotate-12 shadow-xl z-10 border-2 border-white">
               <span>100%</span>
               <span className="text-[9px] tracking-tight">GRANT</span>
@@ -77,7 +154,7 @@ export default function Hero() {
                 <h3 className="font-extrabold text-lg text-yellow-300">Govt Subsidy Brackets</h3>
                 <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">TN Horticulture Dept Guidelines</p>
               </div>
-              <span className="bg-yellow-400 text-brand-950 font-black text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">Active</span>
+              <span className="bg-yellow-400 text-brand-950 font-black text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Active</span>
             </div>
 
             <div className="space-y-4">

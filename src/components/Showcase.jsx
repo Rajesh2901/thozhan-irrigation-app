@@ -30,12 +30,12 @@ export default function Showcase({ products, isAdmin, onSelectProduct, onUpdateP
         {/* Showcase Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((p) => (
-            <div key={p.id} className="bg-white rounded-3xl border border-slate-200 hover:border-brand-300 shadow-sm overflow-hidden flex flex-col group relative transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+            <div key={p.id} className="bg-white rounded-3xl border border-slate-200 hover:border-brand-300 shadow-sm overflow-hidden flex flex-col group relative hover-lift gpu-accelerated">
               <div className="bg-slate-200 h-44 w-full relative flex items-center justify-center overflow-hidden">
                 {p.image && (
                   <img 
                     src={p.image} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500 gpu-accelerated" 
                     alt={decodeSanitizedInput(p.title)} 
                     onError={(e) => handleImageError(e, p.iconClass)}
                   />
@@ -97,7 +97,7 @@ export default function Showcase({ products, isAdmin, onSelectProduct, onUpdateP
                   <button 
                     onClick={() => onSelectProduct(p.title)} 
                     aria-label={`Get subsidy quote for ${decodeSanitizedInput(p.title)}`}
-                    className="bg-brand-700 hover:bg-brand-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm focus:ring-2 focus:ring-brand-500 outline-none"
+                    className="bg-brand-700 hover:bg-brand-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-sm btn-press focus:ring-2 focus:ring-brand-500 outline-none"
                   >
                     Get Quote
                   </button>
@@ -109,7 +109,7 @@ export default function Showcase({ products, isAdmin, onSelectProduct, onUpdateP
                 <button 
                   onClick={() => onDeleteProduct(p.id)} 
                   aria-label={`Delete system module ${decodeSanitizedInput(p.title)}`}
-                  className="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full shadow transition outline-none focus:ring-2 focus:ring-red-400"
+                  className="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white p-2.5 rounded-full shadow transition outline-none btn-press focus:ring-2 focus:ring-red-400"
                 >
                   <i className="fa-solid fa-trash-can text-xs"></i>
                 </button>
