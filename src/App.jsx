@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import DashboardLayout from './components/DashboardLayout';
+import SmartFarm3DView from './components/SmartFarm3DView';
+import DripSystemInfographic from './components/DripSystemInfographic';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Stats from './components/Stats';
@@ -85,7 +88,7 @@ export default function App() {
       setWhatsAppNumber(savedPhone);
     }
 
-    // 2. Check admin validation securely from sessionStorage (no plain URL secrets)
+    // 2. Check admin validation securely from sessionStorage
     if (sessionStorage.getItem('isAdmin') === 'true') {
       setIsAdmin(true);
     }
@@ -125,7 +128,6 @@ export default function App() {
     setProducts(prev => prev.map(p => {
       if (p.id === id) {
         const updated = { ...p, [field]: sanitizedValue };
-        // Parse numeric value on price changes
         if (field === 'price') {
           const matches = String(sanitizedValue).replace(/,/g, '').match(/\d+/);
           if (matches) {
@@ -204,99 +206,72 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <DashboardLayout 
+      isAdmin={isAdmin} 
+      triggerAdmin={() => setShowAuth(true)} 
+      exitAdmin={handleExitAdminMode}
+    >
       {/* 1. ADMIN SYSTEM CONTROL BANNER */}
       {isAdmin && (
-        <div className="bg-amber-500 text-white px-4 py-3 text-center text-sm font-semibold shadow-md sticky top-0 z-[100] flex justify-between items-center transition-all duration-300">
-          <div className="mx-auto flex items-center space-x-2">
+        <div className="bg-amber-500 text-white px-4 py-3 rounded-2xl text-xs md:text-sm font-semibold shadow-md flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-2">
             <i className="fa-solid fa-screwdriver-wrench animate-pulse text-lg"></i>
-            <span><strong>Admin System Active:</strong> You can edit equipment prices, titles, and descriptions directly on the screen. Click "Save Configuration" to sync.</span>
+            <span><strong>Admin Active:</strong> Edit equipment prices & descriptions inline. Click "Save Configuration" when done.</span>
           </div>
           <div className="flex items-center space-x-2">
             <button 
               onClick={() => setShowSettings(true)} 
-              className="bg-amber-700 hover:bg-amber-800 text-white px-3 py-1.5 rounded shadow text-xs font-bold transition flex items-center"
+              className="bg-amber-700 hover:bg-amber-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center"
             >
               <i className="fa-solid fa-cog mr-1"></i> Config Manager
             </button>
             <button 
               onClick={handleSaveAdminChanges} 
-              className="bg-white text-amber-700 hover:bg-amber-100 px-3 py-1.5 rounded shadow text-xs font-bold transition flex items-center"
+              className="bg-white text-amber-700 hover:bg-amber-100 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center"
             >
               <i className="fa-solid fa-floppy-disk mr-1"></i> Save Configuration
-            </button>
-            <button 
-              onClick={handleExitAdminMode} 
-              className="bg-red-600 hover:bg-red-700 text-white px-2.5 py-1.5 rounded shadow text-xs font-bold transition"
-            >
-              <i className="fa-solid fa-right-from-bracket"></i>
             </button>
           </div>
         </div>
       )}
 
-      {/* UPPER UTILITY STRIP */}
-      <div className="bg-brand-950 text-brand-100 text-xs py-2 border-b border-brand-900 hidden md:block">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <span><i className="fa-solid fa-circle-check text-yellow-400 mr-1.5"></i>Tamil Nadu Govt Subsidy Authorized Integrator</span>
-            <span><i className="fa-solid fa-location-dot mr-1.5"></i>Dindigul Base (Serving statewide)</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <a href="#about" className="hover:underline">Documentation Guide</a>
-            <a href="#calculator" className="hover:underline">Subsidy Estimation</a>
-            <button 
-              onClick={() => isAdmin ? handleExitAdminMode() : setShowAuth(true)} 
-              className="hover:text-yellow-300 transition text-[11px] font-bold outline-none"
-            >
-              <i className="fa-solid fa-user-shield mr-1"></i>
-              {isAdmin ? "Exit Admin" : "Admin Portal"}
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* 2. SMART FARM 3D VIEWPORT (IMAGE 1 MATCH) */}
+      <SmartFarm3DView />
 
-      {/* CORE COMPONENTS GRID */}
-      <Header 
-        isAdmin={isAdmin} 
-        triggerAdmin={() => setShowAuth(true)} 
-        exitAdmin={handleExitAdminMode} 
+      {/* 3. CORE HERO & STATS OVERVIEW */}
+      <Hero />
+      <Stats />
+
+      {/* 4. DRIP SYSTEM INFOGRAPHIC & OFFICIAL CREDENTIALS (IMAGE 2 & 3 MATCH) */}
+      <DripSystemInfographic />
+
+      {/* 5. EQUIPMENT SHOWCASE & CALCULATOR MATRIX */}
+      <Showcase 
+        products={products}
+        isAdmin={isAdmin}
+        onSelectProduct={handleSelectProduct}
+        onUpdateProduct={handleUpdateProduct}
+        onDeleteProduct={handleDeleteProduct}
+        onAddProduct={handleAddProduct}
       />
-      
-      <main className="flex-grow">
-        <Hero />
-        
-        <Stats />
-        
-        <Showcase 
+
+      {products.length > 0 && (
+        <Calculator 
           products={products}
-          isAdmin={isAdmin}
-          onSelectProduct={handleSelectProduct}
-          onUpdateProduct={handleUpdateProduct}
-          onDeleteProduct={handleDeleteProduct}
-          onAddProduct={handleAddProduct}
+          whatsAppNumber={whatsAppNumber}
+          selectedProductName={selectedProductName}
+          setSelectedProductName={setSelectedProductName}
+          showToast={showToast}
         />
-        
-        {products.length > 0 && (
-          <Calculator 
-            products={products}
-            whatsAppNumber={whatsAppNumber}
-            selectedProductName={selectedProductName}
-            setSelectedProductName={setSelectedProductName}
-            showToast={showToast}
-          />
-        )}
-        
-        <DocsChecklist />
-        
-        <Testimonials />
-        
-        <FAQ />
-      </main>
+      )}
+
+      <DocsChecklist />
+      <Testimonials />
+      <FAQ />
 
       <Footer />
 
-      {/* 2. ADMIN MODALS CONTAINER */}
+      {/* 6. ADMIN MODALS CONTAINER */}
       <AdminPanel 
         showAuth={showAuth}
         showSettings={showSettings}
@@ -307,7 +282,7 @@ export default function App() {
         onApplySettings={handleApplySettings}
       />
 
-      {/* 3. TOAST MESSAGES EMITTER */}
+      {/* 7. TOAST MESSAGES EMITTER */}
       <div className="fixed bottom-6 right-6 z-[300] flex flex-col space-y-2" role="status" aria-live="polite">
         {toasts.map(toast => (
           <div 
@@ -321,6 +296,6 @@ export default function App() {
           </div>
         ))}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
