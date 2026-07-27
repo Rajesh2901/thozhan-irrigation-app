@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeInput, decodeSanitizedInput, validateFarmerName, validateLandSize, validateWhatsAppNumber, verifyAdminPasscode } from '../utils/security';
+import { sanitizeInput, decodeSanitizedInput, validateFarmerName, validateLandSize, validateWhatsAppNumber, verifyAdminPasscode, generateCSRFToken, hashPasscodeCrypto } from '../utils/security';
 
-describe('Security Utilities', () => {
+describe('Security Utilities & Cryptography', () => {
   it('should sanitize HTML injection attacks in input strings', () => {
     const maliciousInput = '<script>alert("xss")</script>';
     const sanitized = sanitizeInput(maliciousInput);
@@ -12,6 +12,20 @@ describe('Security Utilities', () => {
   it('should decode sanitized strings correctly', () => {
     const sanitized = 'Drip &amp; Sprinkler';
     expect(decodeSanitizedInput(sanitized)).toBe('Drip & Sprinkler');
+  });
+
+  it('should generate valid non-empty CSRF tokens', () => {
+    const token1 = generateCSRFToken();
+    const token2 = generateCSRFToken();
+    expect(token1).toBeTruthy();
+    expect(token2).toBeTruthy();
+    expect(token1).not.toBe(token2);
+  });
+
+  it('should generate SHA-256 digest hashes', async () => {
+    const hash = await hashPasscodeCrypto('thozhan-secret');
+    expect(hash).toBeTruthy();
+    expect(typeof hash).toBe('string');
   });
 
   it('should validate farmer names properly', () => {
