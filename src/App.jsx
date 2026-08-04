@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from './components/DashboardLayout';
-import SmartFarm3DView from './components/SmartFarm3DView';
-import DripSystemInfographic from './components/DripSystemInfographic';
-import Hero from './components/Hero';
-import Stats from './components/Stats';
+import HomePage from './pages/HomePage';
+import ContactPage from './pages/ContactPage';
 import Showcase from './components/Showcase';
 import Calculator from './components/Calculator';
 import DocsChecklist from './components/DocsChecklist';
@@ -12,6 +10,7 @@ import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import { sanitizeInput, verifyAdminPasscode, validateWhatsAppNumber } from './utils/security';
+import { fetchProductsFromAPI } from './utils/api';
 
 const DEFAULT_PRODUCTS = [
   {
@@ -64,23 +63,37 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [toasts, setToasts] = useState([]);
 
+  // Fetch Django REST API product catalog on initial load
   useEffect(() => {
-    try {
-      const savedProducts = localStorage.getItem('thozhan_products');
-      if (savedProducts) {
-        const parsed = JSON.parse(savedProducts);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setProducts(parsed);
-        } else {
-          setProducts([...DEFAULT_PRODUCTS]);
-        }
+    async function loadProducts() {
+      const apiProducts = await fetchProductsFromAPI();
+      if (apiProducts && apiProducts.length > 0) {
+        setProducts(apiProducts.map(p => ({
+          id: p.id,
+          title: p.title_en || p.title,
+          desc: p.desc,
+          price: `₹${p.price_numeric.toLocaleString()} ${p.price_unit_text}`,
+          priceNumeric: p.price_numeric,
+          iconClass: p.icon_class || "fa-solid fa-seedling",
+          image: p.image_url || "/photos/drip.png"
+        })));
       } else {
+        // Fallback to local default products
+        const savedProducts = localStorage.getItem('thozhan_products');
+        if (savedProducts) {
+          try {
+            const parsed = JSON.parse(savedProducts);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setProducts(parsed);
+              return;
+            }
+          } catch (e) {}
+        }
         setProducts([...DEFAULT_PRODUCTS]);
       }
-    } catch (e) {
-      console.warn("Failed to load products from storage", e);
-      setProducts([...DEFAULT_PRODUCTS]);
     }
+
+    loadProducts();
 
     const savedPhone = localStorage.getItem('thozhan_whatsapp');
     if (savedPhone) {
@@ -109,7 +122,7 @@ export default function App() {
   const handleSelectProduct = (name) => {
     setSelectedProductName(name);
     setActiveTab('calculator');
-    showToast(`Selected: ${name.split('/')[0]} - Opened Calculator`, "success");
+    showToast(`Selected: ${name.split('/')[0]} - Subsidy Calculator Opened`, "success");
   };
 
   const handleUpdateProduct = (id, field, value) => {
@@ -196,7 +209,7 @@ export default function App() {
       triggerAdmin={() => setShowAuth(true)} 
       exitAdmin={handleExitAdminMode}
     >
-      {/* ADMIN CONTROL BANNER */}
+      {/* ADMIN SYSTEM CONTROL BANNER */}
       {isAdmin && (
         <div className="bg-amber-500 text-white px-4 py-3 rounded-2xl text-xs md:text-sm font-semibold shadow-md flex justify-between items-center mb-6">
           <div className="flex items-center space-x-2">
@@ -220,47 +233,40 @@ export default function App() {
         </div>
       )}
 
-      {/* DYNAMIC TAB VIEWPORT SWITCHING (SOLVES EXCESSIVE SCROLLING) */}
+      {/* MULTI-PAGE APPLICATION ROUTING VIEWS */}
       {activeTab === 'home' && (
-        <div className="space-y-8">
-          <SmartFarm3DView />
-          <Hero />
-          <Stats />
-          <DripSystemInfographic />
-        </div>
+        <HomePage onNavigate={(tab) => setActiveTab(tab)} />
       )}
 
-      {activeTab === 'inventory' && (
-        <div className="space-y-8">
-          <Showcase 
-            products={products}
-            isAdmin={isAdmin}
-            onSelectProduct={handleSelectProduct}
-            onUpdateProduct={handleUpdateProduct}
-            onDeleteProduct={handleDeleteProduct}
-            onAddProduct={handleAddProduct}
-          />
-        </div>
+      {activeTab === 'products' && (
+        <Showcase 
+          products={products}
+          isAdmin={isAdmin}
+          onSelectProduct={handleSelectProduct}
+          onUpdateProduct={handleUpdateProduct}
+          onDeleteProduct={handleDeleteProduct}
+          onAddProduct={handleAddProduct}
+        />
       )}
 
       {activeTab === 'calculator' && (
-        <div className="space-y-8">
-          {products.length > 0 && (
-            <Calculator 
-              products={products}
-              whatsAppNumber={whatsAppNumber}
-              selectedProductName={selectedProductName}
-              setSelectedProductName={setSelectedProductName}
-              showToast={showToast}
-            />
-          )}
-        </div>
+        products.length > 0 && (
+          <Calculator 
+            products={products}
+            whatsAppNumber={whatsAppNumber}
+            selectedProductName={selectedProductName}
+            setSelectedProductName={setSelectedProductName}
+            showToast={showToast}
+          />
+        )
       )}
 
-      {activeTab === 'docs' && (
-        <div className="space-y-8">
-          <DocsChecklist />
-        </div>
+      {activeTab === 'documents' && (
+        <DocsChecklist />
+      )}
+
+      {activeTab === 'contact' && (
+        <ContactPage showToast={showToast} />
       )}
 
       {activeTab === 'support' && (

@@ -5,25 +5,26 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
 
   const navItems = [
     { id: 'home', name: 'Home', icon: 'fa-solid fa-house' },
-    { id: 'inventory', name: 'Equipment & Fields', icon: 'fa-solid fa-border-all' },
+    { id: 'products', name: 'Products & Portfolio', icon: 'fa-solid fa-border-all' },
     { id: 'calculator', name: 'Subsidy Calculator', icon: 'fa-solid fa-calculator' },
-    { id: 'docs', name: 'Required Documents', icon: 'fa-solid fa-file-lines' },
+    { id: 'documents', name: 'Required Documents', icon: 'fa-solid fa-file-lines' },
+    { id: 'contact', name: 'Contact & Headquarters', icon: 'fa-solid fa-location-dot' },
     { id: 'support', name: 'FAQ & Support', icon: 'fa-solid fa-circle-question' }
   ];
 
   return (
     <div className="min-h-screen bg-[#041f14] text-slate-100 flex flex-col lg:flex-row antialiased selection:bg-brand-500 selection:text-white">
       
-      {/* 1. LEFT NAVIGATION SIDEBAR (OFFICIAL LOGO MATCH) */}
+      {/* 1. LEFT NAVIGATION SIDEBAR (OFFICIAL LOGO & MULTI-PAGE ROUTING) */}
       <aside className={`w-full lg:w-64 bg-[#03170e] border-r border-brand-900/60 p-5 flex flex-col justify-between shrink-0 transition-all duration-300 z-40 ${sidebarOpen ? 'block' : 'hidden lg:flex'}`}>
         <div className="space-y-6">
           
           {/* Official Transparent Brand Logo Display */}
-          <a href="#" className="block group pt-1">
+          <button onClick={() => setActiveTab('home')} className="w-full text-left group pt-1">
             <div className="bg-white/95 rounded-2xl p-3 shadow-xl border border-yellow-400/40 group-hover:scale-[1.02] transition flex items-center justify-center">
               <img src="/logo.png" alt="Thozhan Irrigation Official Logo" className="w-full h-auto max-h-16 object-contain" />
             </div>
-          </a>
+          </button>
 
           {/* Navigation Links */}
           <nav className="space-y-1.5 pt-1" role="navigation" aria-label="Sidebar Navigation">
@@ -107,7 +108,7 @@ export default function DashboardLayout({ children, activeTab, setActiveTab, isA
               <i className="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
               <input 
                 type="text" 
-                placeholder="Search..." 
+                placeholder="Search products, records..." 
                 className="w-full bg-brand-950/90 border border-brand-800/80 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-brand-500 transition"
               />
             </div>
