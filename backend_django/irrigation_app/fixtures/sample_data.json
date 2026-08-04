@@ -1,0 +1,154 @@
+[
+  {
+    "model": "irrigation_app.product",
+    "pk": 1,
+    "fields": {
+      "title_en": "Drip Irrigation Kit",
+      "title_ta": "சொட்டு நீர் பாசனம்",
+      "desc": "Premium complete agricultural setup engineered for uniform watering. Includes main pipe, sub-main, laterals, emitters, filter unit, fertilizer injector, and pressure regulators. Covers up to 5 acres per kit.",
+      "price_numeric": 24500,
+      "price_unit_text": "/ Acre",
+      "icon_class": "fa-solid fa-faucet-drip",
+      "image_url": "/photos/drip.png",
+      "is_subsidy_eligible": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "irrigation_app.product",
+    "pk": 2,
+    "fields": {
+      "title_en": "Sprinkler Micro Head System",
+      "title_ta": "தெளிப்பு நீர் பாசனம்",
+      "desc": "High-pressure overhead misting systems optimized for open ground crop layouts. Includes risers, impact sprinklers, main + sub-main lines, valve box, and control panel.",
+      "price_numeric": 18200,
+      "price_unit_text": "/ Acre",
+      "icon_class": "fa-solid fa-sprinkler",
+      "image_url": "/photos/sprinkler.png",
+      "is_subsidy_eligible": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "irrigation_app.product",
+    "pk": 3,
+    "fields": {
+      "title_en": "Rain Gun Irrigation System",
+      "title_ta": "மழை துப்பாக்கி பாசனம்",
+      "desc": "High-throw water cannon systems ideal for sugarcane, cotton, and forage grass crops. Single gun can cover 0.5–1 acre per position. Heavy-duty aluminium pipes.",
+      "price_numeric": 32000,
+      "price_unit_text": "/ Acre",
+      "icon_class": "fa-solid fa-cloud-showers-water",
+      "image_url": "/photos/raingun.png",
+      "is_subsidy_eligible": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "irrigation_app.product",
+    "pk": 4,
+    "fields": {
+      "title_en": "Solar Agri Pump Integration",
+      "title_ta": "சோலார் பம்ப் செட்",
+      "desc": "Grid-independent solar power pumping systems with automatic start controls. Compatible with all drip and sprinkler systems. Includes solar panels, VFD controller, and monoblock pump.",
+      "price_numeric": 85000,
+      "price_unit_text": "/ Unit",
+      "icon_class": "fa-solid fa-solar-panel",
+      "image_url": "/photos/solar.png",
+      "is_subsidy_eligible": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "irrigation_app.testimonial",
+    "pk": 1,
+    "fields": {
+      "name": "Murugesan Krishnamurthy",
+      "role": "Paddy Farmer, Dindigul",
+      "content": "Thozhan took care of all my Patta and Chitta documents and got me a 100% subsidy drip system. My water bill dropped to zero and my paddy yield went up by 35% in the first season.",
+      "rating": 5,
+      "avatar_url": null,
+      "district": "Dindigul",
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "irrigation_app.testimonial",
+    "pk": 2,
+    "fields": {
+      "name": "Lakshmi Sundaram",
+      "role": "Banana Cultivator, Trichy",
+      "content": "I was skeptical about government subsidies — too much paperwork. But Jayachandran's team handled everything. My 3-acre banana grove now has drip irrigation at zero cost to me.",
+      "rating": 5,
+      "avatar_url": null,
+      "district": "Trichy",
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "irrigation_app.testimonial",
+    "pk": 3,
+    "fields": {
+      "name": "Selvam Thamizharasan",
+      "role": "Sugarcane Farmer, Karur",
+      "content": "The rain gun system transformed my 8-acre sugarcane field. 75% subsidy meant I only paid ₹36,000 for a ₹1.4 lakh installation. Highly recommend Thozhan for large farms.",
+      "rating": 5,
+      "avatar_url": null,
+      "district": "Karur",
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "irrigation_app.blogpost",
+    "pk": 1,
+    "fields": {
+      "title": "How to Apply for PMKSY Drip Irrigation Subsidy in Tamil Nadu (2025 Guide)",
+      "slug": "pmksy-drip-irrigation-subsidy-tamilnadu-2025",
+      "summary": "Step-by-step guide to applying for the PMKSY drip irrigation subsidy through the TN Horticulture Department — from document collection to disbursement.",
+      "content": "# PMKSY Drip Irrigation Subsidy Application Guide\n\nThe Pradhan Mantri Krishi Sinchayee Yojana (PMKSY) provides 100% subsidy for drip and sprinkler irrigation to small and marginal farmers in Tamil Nadu.\n\n## Step 1: Check Eligibility\n- Land size: Up to 5 acres for 100% subsidy\n- Documents: Patta, Chitta, Adangal, Aadhaar, Bank Passbook\n\n## Step 2: Contact Thozhan Irrigation\nCall 94895 28432 for a free site assessment.\n\n## Step 3: Document Submission\nOur team handles all paperwork submission to the TN Horticulture Department.\n\n## Step 4: Inspection & Installation\nGovernment inspector visits your farm. Thozhan installs the system after approval.\n\n## Step 5: Subsidy Release\nGovernment directly pays the installation cost to Thozhan. Zero out-of-pocket for you.",
+      "author": "Jayachandran",
+      "cover_image": null,
+      "tags": ["subsidy", "pmksy", "how-to"],
+      "published": true
+    }
+  },
+  {
+    "model": "irrigation_app.subsidyrule",
+    "pk": 1,
+    "fields": {
+      "min_acres": 0.0,
+      "max_acres": 5.0,
+      "subsidy_percentage": 100,
+      "tier_label_en": "Small Farmer Grant (100%)",
+      "tier_label_ta": "சிறு/குறு விவசாயி (100%)",
+      "description": "Farmers with land up to 5 acres qualify for 100% subsidy under PMKSY small and marginal farmer scheme."
+    }
+  },
+  {
+    "model": "irrigation_app.subsidyrule",
+    "pk": 2,
+    "fields": {
+      "min_acres": 5.01,
+      "max_acres": 12.0,
+      "subsidy_percentage": 75,
+      "tier_label_en": "Other Farmer Grant (75%)",
+      "tier_label_ta": "இதர விவசாயி (75%)",
+      "description": "Farmers with 5.1 to 12 acres qualify for 75% subsidy under TN Horticulture Department scheme."
+    }
+  },
+  {
+    "model": "irrigation_app.subsidyrule",
+    "pk": 3,
+    "fields": {
+      "min_acres": 12.01,
+      "max_acres": 500.0,
+      "subsidy_percentage": 50,
+      "tier_label_en": "Large Farmer Custom Plan (50%)",
+      "tier_label_ta": "பெரும் நில விவசாயி (50%)",
+      "description": "Farmers with above 12 acres qualify for 50% subsidy. Custom phased installation plan required."
+    }
+  }
+]

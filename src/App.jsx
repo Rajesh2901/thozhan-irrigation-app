@@ -1,245 +1,203 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from './components/DashboardLayout';
-import HomePage from './pages/HomePage';
-import ContactPage from './pages/ContactPage';
-import Showcase from './components/Showcase';
-import Calculator from './components/Calculator';
+
+// ── Pages ─────────────────────────────────────────────────
+import HomePage      from './pages/HomePage';
+import AboutPage     from './pages/AboutPage';
+import ServicesPage  from './pages/ServicesPage';
+import PricingPage   from './pages/PricingPage';
+import BlogPage      from './pages/BlogPage';
+import ContactPage   from './pages/ContactPage';
+import AdminPage     from './pages/AdminPage';
+
+// ── Existing Components (tab-content pages) ────────────────
+import Showcase      from './components/Showcase';
+import Calculator    from './components/Calculator';
 import DocsChecklist from './components/DocsChecklist';
-import Testimonials from './components/Testimonials';
-import FAQ from './components/FAQ';
-import Footer from './components/Footer';
-import AdminPanel from './components/AdminPanel';
+import Testimonials  from './components/Testimonials';
+import FAQ           from './components/FAQ';
+import Footer        from './components/Footer';
+import AdminPanel    from './components/AdminPanel';
+
+// ── Utils ─────────────────────────────────────────────────
 import { sanitizeInput, verifyAdminPasscode, validateWhatsAppNumber } from './utils/security';
 import { fetchProductsFromAPI } from './utils/api';
 
+// ─────────────────────────────────────────────────────────
+// DEFAULT PRODUCT DATA (fallback when Django API is offline)
+// ─────────────────────────────────────────────────────────
 const DEFAULT_PRODUCTS = [
-  {
-    id: 1,
-    title: "Drip Irrigation Kit / சொட்டு நீர் பாசனம்",
-    desc: "Premium complete agricultural setup engineered for uniform watering spans up to 5 acres.",
-    price: "₹24,500 / Acre",
-    priceNumeric: 24500,
-    iconClass: "fa-solid fa-faucet-drip",
-    image: "/photos/drip.png"
-  },
-  {
-    id: 2,
-    title: "Sprinkler Micro Head System / தெளிப்பு நீர் பாசனம்",
-    desc: "High-pressure overhead misting systems optimized for open ground crop layouts.",
-    price: "₹18,200 / Acre",
-    priceNumeric: 18200,
-    iconClass: "fa-solid fa-sprinkler",
-    image: "/photos/sprinkler.png"
-  },
-  {
-    id: 3,
-    title: "Rain Gun Irrigation System / மழை துப்பாக்கி பாசனம்",
-    desc: "High-throw water cannon systems ideal for sugarcane, cotton, and forage grass crops.",
-    price: "₹32,000 / Acre",
-    priceNumeric: 32000,
-    iconClass: "fa-solid fa-cloud-showers-water",
-    image: "/photos/raingun.png"
-  },
-  {
-    id: 4,
-    title: "Solar Agri Pump Integration / சோலார் பம்ப் செட்",
-    desc: "Grid-independent solar power pumping systems with automatic start controls.",
-    price: "₹85,000 / Unit",
-    priceNumeric: 85000,
-    iconClass: "fa-solid fa-solar-panel",
-    image: "/photos/solar.png"
-  }
+  { id: 1, title: 'Drip Irrigation Kit / சொட்டு நீர் பாசனம்',         desc: 'Premium complete agricultural setup for uniform watering up to 5 acres.', price: '₹24,500 / Acre', priceNumeric: 24500, iconClass: 'fa-solid fa-faucet-drip',         image: '/photos/drip.png' },
+  { id: 2, title: 'Sprinkler Micro Head System / தெளிப்பு நீர் பாசனம்', desc: 'High-pressure overhead misting for open ground crop layouts.',               price: '₹18,200 / Acre', priceNumeric: 18200, iconClass: 'fa-solid fa-sprinkler',             image: '/photos/sprinkler.png' },
+  { id: 3, title: 'Rain Gun Irrigation System / மழை துப்பாக்கி பாசனம்', desc: 'High-throw water cannon for sugarcane, cotton & forage grass.',               price: '₹32,000 / Acre', priceNumeric: 32000, iconClass: 'fa-solid fa-cloud-showers-water', image: '/photos/raingun.png' },
+  { id: 4, title: 'Solar Agri Pump Integration / சோலார் பம்ப் செட்',    desc: 'Grid-free solar pump sets with auto-start controls.',                         price: '₹85,000 / Unit', priceNumeric: 85000, iconClass: 'fa-solid fa-solar-panel',          image: '/photos/solar.png' },
 ];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [products, setProducts] = useState([]);
-  const [whatsAppNumber, setWhatsAppNumber] = useState('9489528432');
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [activeTab, setActiveTab]               = useState('home');
+  const [products, setProducts]                 = useState([]);
+  const [whatsAppNumber, setWhatsAppNumber]     = useState('9489528432');
+  const [isAdmin, setIsAdmin]                   = useState(false);
   const [selectedProductName, setSelectedProductName] = useState('');
-  
-  // Modals visibility state
-  const [showAuth, setShowAuth] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [toasts, setToasts] = useState([]);
+  const [showAuth, setShowAuth]                 = useState(false);
+  const [showSettings, setShowSettings]         = useState(false);
+  const [toasts, setToasts]                     = useState([]);
 
-  // Fetch Django REST API product catalog on initial load
+  // ── Load products from Django REST API on mount ───────────
   useEffect(() => {
     async function loadProducts() {
       const apiProducts = await fetchProductsFromAPI();
       if (apiProducts && apiProducts.length > 0) {
         setProducts(apiProducts.map(p => ({
-          id: p.id,
-          title: p.title_en || p.title,
-          desc: p.desc,
-          price: `₹${p.price_numeric.toLocaleString()} ${p.price_unit_text}`,
+          id:           p.id,
+          title:        `${p.title_en} / ${p.title_ta}`,
+          desc:         p.desc,
+          price:        `₹${p.price_numeric.toLocaleString()} ${p.price_unit_text}`,
           priceNumeric: p.price_numeric,
-          iconClass: p.icon_class || "fa-solid fa-seedling",
-          image: p.image_url || "/photos/drip.png"
+          iconClass:    p.icon_class || 'fa-solid fa-seedling',
+          image:        p.image_url  || '/photos/drip.png',
         })));
       } else {
-        // Fallback to local default products
-        const savedProducts = localStorage.getItem('thozhan_products');
-        if (savedProducts) {
-          try {
-            const parsed = JSON.parse(savedProducts);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              setProducts(parsed);
-              return;
-            }
-          } catch (e) {}
-        }
+        const saved = localStorage.getItem('thozhan_products');
+        try { const parsed = JSON.parse(saved); if (Array.isArray(parsed) && parsed.length > 0) { setProducts(parsed); return; } } catch {}
         setProducts([...DEFAULT_PRODUCTS]);
       }
     }
-
     loadProducts();
 
     const savedPhone = localStorage.getItem('thozhan_whatsapp');
-    if (savedPhone) {
-      setWhatsAppNumber(savedPhone);
-    }
-
-    if (sessionStorage.getItem('isAdmin') === 'true') {
-      setIsAdmin(true);
-    }
+    if (savedPhone) setWhatsAppNumber(savedPhone);
+    if (sessionStorage.getItem('isAdmin') === 'true') setIsAdmin(true);
   }, []);
 
   useEffect(() => {
-    if (products.length > 0 && !selectedProductName) {
-      setSelectedProductName(products[0].title);
-    }
+    if (products.length > 0 && !selectedProductName) setSelectedProductName(products[0].title);
   }, [products]);
 
-  const showToast = (message, type = "success") => {
+  // ── Toast helper ─────────────────────────────────────────
+  const showToast = (message, type = 'success') => {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message: sanitizeInput(message), type }]);
-    setTimeout(() => {
-      setToasts(prev => prev.filter(t => t.id !== id));
-    }, 3000);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3500);
   };
 
-  const handleSelectProduct = (name) => {
+  // ── Handlers ─────────────────────────────────────────────
+  const handleSelectProduct = name => {
     setSelectedProductName(name);
     setActiveTab('calculator');
-    showToast(`Selected: ${name.split('/')[0]} - Subsidy Calculator Opened`, "success");
+    showToast(`Selected: ${name.split('/')[0].trim()} — Calculator opened`, 'success');
   };
 
   const handleUpdateProduct = (id, field, value) => {
-    const sanitizedValue = sanitizeInput(value);
+    const v = sanitizeInput(value);
     setProducts(prev => prev.map(p => {
-      if (p.id === id) {
-        const updated = { ...p, [field]: sanitizedValue };
-        if (field === 'price') {
-          const matches = String(sanitizedValue).replace(/,/g, '').match(/\d+/);
-          if (matches) {
-            updated.priceNumeric = parseInt(matches[0], 10);
-          }
-        }
-        return updated;
+      if (p.id !== id) return p;
+      const updated = { ...p, [field]: v };
+      if (field === 'price') {
+        const m = String(v).replace(/,/g, '').match(/\d+/);
+        if (m) updated.priceNumeric = parseInt(m[0], 10);
       }
-      return p;
+      return updated;
     }));
   };
 
   const handleAddProduct = () => {
-    const newId = Date.now();
-    setProducts(prev => [
-      ...prev,
-      {
-        id: newId,
-        title: "New Irrigation System Module",
-        desc: "Description specifications for agricultural field irrigation systems.",
-        price: "₹15,000 / Acre",
-        priceNumeric: 15000,
-        iconClass: "fa-solid fa-seedling",
-        image: "/photos/drip.png"
-      }
-    ]);
-    showToast("Added new system draft card. Edit inline.", "success");
+    setProducts(prev => [...prev, { id: Date.now(), title: 'New System Module', desc: 'Edit description here.', price: '₹15,000 / Acre', priceNumeric: 15000, iconClass: 'fa-solid fa-seedling', image: '/photos/drip.png' }]);
+    showToast('New product draft added. Edit inline.', 'success');
   };
 
-  const handleDeleteProduct = (id) => {
-    if (window.confirm("Remove this equipment module permanently from local state view?")) {
+  const handleDeleteProduct = id => {
+    if (window.confirm('Remove this product?')) {
       setProducts(prev => prev.filter(p => p.id !== id));
-      showToast("Product configuration removed.", "success");
+      showToast('Product removed.', 'success');
     }
   };
 
   const handleSaveAdminChanges = () => {
     localStorage.setItem('thozhan_products', JSON.stringify(products));
     localStorage.setItem('thozhan_whatsapp', whatsAppNumber);
-    showToast("Configurations saved in browser storage!", "success");
+    showToast('Configuration saved to local storage.', 'success');
   };
 
-  const handleApplySettings = (newNumber) => {
-    const phoneVal = validateWhatsAppNumber(newNumber);
-    if (!phoneVal.valid) {
-      showToast(phoneVal.message, "error");
-      return;
-    }
-    setWhatsAppNumber(phoneVal.value);
-    localStorage.setItem('thozhan_whatsapp', phoneVal.value);
+  const handleApplySettings = newNumber => {
+    const result = validateWhatsAppNumber(newNumber);
+    if (!result.valid) { showToast(result.message, 'error'); return; }
+    setWhatsAppNumber(result.value);
+    localStorage.setItem('thozhan_whatsapp', result.value);
     setShowSettings(false);
-    showToast("WhatsApp routing configuration updated.", "success");
+    showToast('WhatsApp number updated.', 'success');
   };
 
-  const handleVerifyPasscode = (code) => {
+  const handleVerifyPasscode = code => {
     if (verifyAdminPasscode(code)) {
       sessionStorage.setItem('isAdmin', 'true');
       setIsAdmin(true);
       setShowAuth(false);
-      showToast("Admin Verified. Edit mode activated.", "success");
+      showToast('Admin authenticated. Edit mode active.', 'success');
     } else {
-      showToast("Invalid secret passcode credentials.", "error");
+      showToast('Incorrect passcode.', 'error');
     }
   };
 
-  const handleExitAdminMode = () => {
+  const handleExitAdmin = () => {
     sessionStorage.removeItem('isAdmin');
     setIsAdmin(false);
-    showToast("Exited admin mode.", "success");
+    showToast('Exited admin mode.', 'success');
   };
 
+  // ─────────────────────────────────────────────────────────
+  // RENDER
+  // ─────────────────────────────────────────────────────────
   return (
-    <DashboardLayout 
+    <DashboardLayout
       activeTab={activeTab}
       setActiveTab={setActiveTab}
-      isAdmin={isAdmin} 
-      triggerAdmin={() => setShowAuth(true)} 
-      exitAdmin={handleExitAdminMode}
+      isAdmin={isAdmin}
+      triggerAdmin={() => setShowAuth(true)}
+      exitAdmin={handleExitAdmin}
     >
-      {/* ADMIN SYSTEM CONTROL BANNER */}
+      {/* Admin edit banner */}
       {isAdmin && (
-        <div className="bg-amber-500 text-white px-4 py-3 rounded-2xl text-xs md:text-sm font-semibold shadow-md flex justify-between items-center mb-6">
+        <div className="bg-amber-500 text-white px-4 py-3 rounded-2xl text-xs font-semibold shadow flex flex-wrap justify-between items-center gap-3 mb-4">
           <div className="flex items-center space-x-2">
-            <i className="fa-solid fa-screwdriver-wrench animate-pulse text-lg"></i>
-            <span><strong>Admin Active:</strong> Edit equipment prices & descriptions inline. Click "Save Configuration" when done.</span>
+            <i className="fa-solid fa-screwdriver-wrench animate-pulse"></i>
+            <span><strong>Admin Active:</strong> Edit product cards inline, then click Save.</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={() => setShowSettings(true)} 
-              className="bg-amber-700 hover:bg-amber-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center"
-            >
-              <i className="fa-solid fa-cog mr-1"></i> Config Manager
+          <div className="flex gap-2">
+            <button onClick={() => setShowSettings(true)} className="bg-amber-700 hover:bg-amber-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center">
+              <i className="fa-solid fa-cog mr-1"></i> Config
             </button>
-            <button 
-              onClick={handleSaveAdminChanges} 
-              className="bg-white text-amber-700 hover:bg-amber-100 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center"
-            >
-              <i className="fa-solid fa-floppy-disk mr-1"></i> Save Configuration
+            <button onClick={handleSaveAdminChanges} className="bg-white text-amber-700 hover:bg-amber-100 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center">
+              <i className="fa-solid fa-floppy-disk mr-1"></i> Save
             </button>
           </div>
         </div>
       )}
 
-      {/* MULTI-PAGE APPLICATION ROUTING VIEWS */}
+      {/* ── PAGE ROUTING ────────────────────────────────── */}
       {activeTab === 'home' && (
-        <HomePage onNavigate={(tab) => setActiveTab(tab)} />
+        <HomePage onNavigate={setActiveTab} />
       )}
 
+      {activeTab === 'about' && (
+        <AboutPage onNavigate={setActiveTab} />
+      )}
+
+      {activeTab === 'services' && (
+        <ServicesPage onNavigate={setActiveTab} />
+      )}
+
+      {activeTab === 'pricing' && (
+        <PricingPage onNavigate={setActiveTab} />
+      )}
+
+      {activeTab === 'blog' && (
+        <BlogPage onNavigate={setActiveTab} />
+      )}
+
+      {/* Legacy product catalog tab */}
       {activeTab === 'products' && (
-        <Showcase 
+        <Showcase
           products={products}
           isAdmin={isAdmin}
           onSelectProduct={handleSelectProduct}
@@ -249,26 +207,28 @@ export default function App() {
         />
       )}
 
-      {activeTab === 'calculator' && (
-        products.length > 0 && (
-          <Calculator 
-            products={products}
-            whatsAppNumber={whatsAppNumber}
-            selectedProductName={selectedProductName}
-            setSelectedProductName={setSelectedProductName}
-            showToast={showToast}
-          />
-        )
+      {/* Subsidy calculator tab */}
+      {activeTab === 'calculator' && products.length > 0 && (
+        <Calculator
+          products={products}
+          whatsAppNumber={whatsAppNumber}
+          selectedProductName={selectedProductName}
+          setSelectedProductName={setSelectedProductName}
+          showToast={showToast}
+        />
       )}
 
+      {/* Required documents tab */}
       {activeTab === 'documents' && (
         <DocsChecklist />
       )}
 
+      {/* Contact & HQ tab */}
       {activeTab === 'contact' && (
         <ContactPage showToast={showToast} />
       )}
 
+      {/* FAQ & Support tab */}
       {activeTab === 'support' && (
         <div className="space-y-8">
           <FAQ />
@@ -276,10 +236,15 @@ export default function App() {
         </div>
       )}
 
+      {/* Admin dashboard tab */}
+      {activeTab === 'admin' && (
+        <AdminPage isAdmin={isAdmin} />
+      )}
+
       <Footer />
 
-      {/* ADMIN MODALS CONTAINER */}
-      <AdminPanel 
+      {/* Auth & Settings Modals */}
+      <AdminPanel
         showAuth={showAuth}
         showSettings={showSettings}
         whatsAppNumber={whatsAppNumber}
@@ -289,17 +254,16 @@ export default function App() {
         onApplySettings={handleApplySettings}
       />
 
-      {/* TOAST MESSAGES EMITTER */}
+      {/* Toast notifications */}
       <div className="fixed bottom-6 right-6 z-[300] flex flex-col space-y-2" role="status" aria-live="polite">
-        {toasts.map(toast => (
-          <div 
-            key={toast.id}
-            className={`p-4 rounded-xl shadow-lg border text-xs font-bold text-white flex items-center space-x-2 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 ${
-              toast.type === 'success' ? 'bg-brand-900 border-brand-700' : 'bg-red-950 border-red-800'
+        {toasts.map(t => (
+          <div key={t.id}
+            className={`px-4 py-3 rounded-xl shadow-xl border text-xs font-bold text-white flex items-center space-x-2 animate-in fade-in slide-in-from-bottom-4 duration-200 ${
+              t.type === 'success' ? 'bg-brand-900 border-brand-700' : 'bg-red-950 border-red-800'
             }`}
           >
-            <i className={`fa-solid ${toast.type === 'success' ? 'fa-circle-check text-brand-400' : 'fa-circle-xmark text-red-400'} text-sm`}></i>
-            <span>{toast.message}</span>
+            <i className={`fa-solid ${t.type === 'success' ? 'fa-circle-check text-brand-400' : 'fa-circle-xmark text-red-400'}`}></i>
+            <span>{t.message}</span>
           </div>
         ))}
       </div>
