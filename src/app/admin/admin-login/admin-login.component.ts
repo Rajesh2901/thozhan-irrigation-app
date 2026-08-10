@@ -116,11 +116,12 @@ import { AuthService } from '../../core/services/auth.service';
     min-height: 100vh;
     background: var(--bg-primary);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    justify-content: flex-start;
+    padding: 3rem 1.5rem;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
   }
 
   .bg-orb {
