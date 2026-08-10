@@ -51,7 +51,7 @@ import { AuthService } from '../../core/services/auth.service';
             <input [type]="showPw() ? 'text' : 'password'" id="password"
               formControlName="password" class="form-control" placeholder="••••••••"
               autocomplete="current-password" />
-            <button type="button" class="pw-toggle" (click)="showPw.update(v => !v)" tabindex="-1">
+            <button type="button" class="pw-toggle" (click)="showPw.set(!showPw())" tabindex="-1">
               <i class="fa-solid" [class.fa-eye]="!showPw()" [class.fa-eye-slash]="showPw()"></i>
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { ContactFormData } from '../../core/models/interfaces';
@@ -7,7 +7,7 @@ import { ContactFormData } from '../../core/models/interfaces';
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AsyncPipe],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="page-content">
       <div class="hero-section text-center" style="margin-bottom: 3rem;">
