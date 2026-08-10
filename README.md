@@ -1,16 +1,103 @@
-# React + Vite
+# Thozhan Irrigation — Angular 19 & Django JWT Architecture Guide
+### Stack: Angular (Frontend) · Python Django REST Framework & SimpleJWT (Backend) · Cloudflare Pages (Hosting)
+### Repo: [Rajesh2901/thozhan-irrigation-app](https://github.com/Rajesh2901/thozhan-irrigation-app)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+---
 
-Currently, two official plugins are available:
+## 1. Full-Stack JWT Architecture Workflow
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+[ Angular 19 App ]  ────( POST /auth/token/ )────→  [ Django simplejwt ]
+        │                                                    │
+(Stores Access/Refresh)                                (Validates Creds)
+        │                                                    │
+        ├───( Attaches Bearer Token )───→ [ API Views ]       │
+        │                                (Requires JWT)      │
+        │                                      │             │
+        └───( Handles 401 & Auto-Refreshes )───┴─────────────┘
+```
 
-## React Compiler
+1. **Authentication**: The administrator accesses `/admin/login` and submits credentials.
+2. **Token Issuance**: The Django backend verifies credentials and issues two tokens:
+   - **Access Token** (expires in 8 hours): Attached as a `Bearer` authorization header on all subsequent API requests.
+   - **Refresh Token** (expires in 7 days): Saved in localStorage to request new access tokens automatically.
+3. **HTTP Interceptor**: `auth.interceptor.ts` intercepts all outgoing requests to `/api/v1/admin/*`, appending the `Authorization: Bearer <token>` header.
+4. **401 Token Refresh**: If an access token expires, the interceptor catches the `401 Unauthorized` response, issues a POST request to `/api/v1/auth/token/refresh/` using the refresh token, and replays the original API request.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 2. Administrator Credentials & Configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### A. Local Setup (SQLite)
+Create an admin user by running:
+```bash
+cd backend_django
+python manage.py createsuperuser
+```
+Follow the prompts to set:
+- **Username**: `admin`
+- **Email**: `admin@thozhan.com`
+- **Password**: (any strong password, e.g., `admin123`)
+
+### B. Production Setup (PostgreSQL)
+To configure credentials on your live Django host (e.g. Render.com):
+1. Navigate to your database configuration terminal or run SSH console.
+2. Run `python manage.py createsuperuser` or set environmental variables for automatic superuser creation in your deployment script.
+
+---
+
+## 3. Administrative Workflows
+
+### 📥 1. Lead Management
+When a farmer inputs details into the **Subsidy Cost Estimator** on the public `/pricing` page:
+1. React/Angular sends a `POST` request to `/api/v1/calculate/`.
+2. Django stores this in the database as a `QuoteRequest` (status: `PENDING`).
+3. Under `/admin/leads`, the admin can view the tabular list of leads.
+4. The admin can click the phone link to call the farmer directly, or click the WhatsApp action to trigger the auto-formatted message.
+5. In the Django admin panel at `/admin/`, the administrator can change statuses (`PENDING`, `APPROVED`, `REJECTED`, `COMPLETED`) as the government subsidy progress advances.
+
+### 📦 2. Product Catalog Management
+Under `/admin/products`:
+- **Add Product**: Click "Add Product", input title (English + Tamil), numeric price, unit (e.g., `/ Acre`), icon class (FontAwesome), image path, and check whether it qualifies for government subsidy.
+- **Edit Product**: Click "Edit", modify fields, and save.
+- **Delete Product**: Click the trash icon.
+*Note: All actions connect live to `/api/v1/admin/products/`. If the backend API goes offline, the UI falls back to localStorage.*
+
+### 📰 3. Blog & Agricultural Guides
+Under `/admin/blog`:
+- Write article titles, summaries, and Markdown content.
+- Use **Auto-slug Generation** (updates slug dynamically from the title).
+- Toggle the "Publish immediately" checkbox to make the post public on the main blog feed instantly.
+
+---
+
+## 4. Local Development Setup (Beginner Step-by-Step)
+
+### Backend (Django)
+```bash
+cd backend_django
+python -m venv venv
+.\venv\Scripts\activate       # Windows
+source venv/bin/activate     # Mac/Linux
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py loaddata irrigation_app/fixtures/sample_data.json
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+### Frontend (Angular 19)
+```bash
+bun install                  # or: npm install
+bun run start                # or: npm run start
+# Website live at: http://localhost:4200/
+```
+
+---
+
+## 5. Production Build Settings for Cloudflare Pages
+
+Wrangler configuration file [wrangler.jsonc](file:///C:/Users/rajes/.gemini/antigravity/scratch/cloned_repos/thozhan-irrigation-app/wrangler.jsonc) has been adjusted for Angular:
+- **Build command**: `ng build` (compiles production bundle)
+- **Output directory**: `./dist/browser` (target path for Cloudflare assets)
+- **Fallback routing**: `not_found_handling = "single-page-application"` (ensures Angular router works perfectly on deep page reloads)
