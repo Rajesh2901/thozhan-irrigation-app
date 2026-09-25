@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -6,222 +6,260 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   template: `
-    <div class="page-content px-6 py-12 max-w-7xl mx-auto animate-fade">
-      
-      <!-- Section Header -->
-      <div class="section-header text-center mb-16">
-        <div class="badge badge-brand mb-4 d-inline-block">About Us / எங்களைப் பற்றி</div>
-        <h1 class="text-4xl font-bold mb-6">Empowering Tamil Nadu Farmers Since 2012</h1>
-        <p class="text-xl text-muted max-w-3xl mx-auto">
-          Thozhan Irrigation has been at the forefront of agricultural transformation, bringing advanced water-saving technologies directly to the fields of hardworking farmers across Tamil Nadu.
-        </p>
-      </div>
+    <div class="about-wrapper">
+      <!-- Header Banner -->
+      <section class="section section-dark text-center about-header">
+        <div class="container-narrow">
+          <span class="section-eyebrow eyebrow-dark">
+            <i class="fa-solid fa-seedling"></i> About Thozhan Irrigation / எங்களைப் பற்றி
+          </span>
+          <h1 class="section-title">Empowering Tamil Nadu Farmers Since 2012</h1>
+          <p class="section-subtitle">
+            Founded in Dindigul, Thozhan Irrigation has spent over a decade delivering dependable micro-irrigation systems, government subsidy guidance, and dedicated on-field support to farming families.
+          </p>
+        </div>
+      </section>
 
-      <!-- Mission/Vision Grid -->
-      <div class="grid-2 mb-16">
-        <div class="glass-card mission-card hover-lift p-8 relative">
-          <div class="d-flex align-items-start gap-4">
-            <div class="icon-wrap bg-brand-900 rounded-circle p-4 flex-shrink-0">
-              <i class="fa-solid fa-bullseye fa-2x text-brand-400"></i>
+      <!-- Mission & Vision (Light Section) -->
+      <section class="section section-light">
+        <div class="container-wide">
+          <div class="grid-2 mission-vision-grid">
+            <div class="card-cream p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="icon-box-mint">
+                  <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h2 class="text-xl font-bold text-forest">Our Mission</h2>
+              </div>
+              <p class="text-secondary leading-relaxed">
+                To make efficient, water-saving micro-irrigation accessible to every small, marginal, and commercial farmer across Tamil Nadu. We bridge the gap between technical engineering and government subsidy assistance to secure higher yields with lower water consumption.
+              </p>
             </div>
-            <div>
-              <h2 class="text-2xl font-bold mb-3 text-brand-300">Our Mission</h2>
-              <p class="text-muted leading-relaxed">
-                To provide affordable, high-quality micro-irrigation systems to every farmer in Tamil Nadu, maximizing their yield while minimizing water usage, and ensuring seamless access to government subsidies.
+
+            <div class="card-cream p-8">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="icon-box-mint">
+                  <i class="fa-solid fa-eye"></i>
+                </div>
+                <h2 class="text-xl font-bold text-forest">Our Vision</h2>
+              </div>
+              <p class="text-secondary leading-relaxed">
+                To build a drought-resilient agricultural ecosystem in South India where every drop of irrigation water is utilized to its highest potential through precision technology, honest guidance, and generational farmer trust.
               </p>
             </div>
           </div>
         </div>
-        
-        <div class="glass-card vision-card hover-lift p-8 relative">
-          <div class="d-flex align-items-start gap-4">
-            <div class="icon-wrap bg-brand-900 rounded-circle p-4 flex-shrink-0">
-              <i class="fa-solid fa-eye fa-2x text-brand-400"></i>
+      </section>
+
+      <!-- Core Values (Warm Cream Section) -->
+      <section class="section section-cream">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-handshake"></i> Our Guiding Principles
+            </span>
+            <h2 class="section-title">Core Values That Drive Us</h2>
+            <p class="section-subtitle">
+              We operate on transparency, reliable engineering standards, and long-term farmer relationships.
+            </p>
+          </div>
+
+          <div class="grid-4 values-grid">
+            <div class="card-light text-center p-6 hover-lift">
+              <div class="value-icon"><i class="fa-solid fa-handshake-simple"></i></div>
+              <h3 class="text-base font-bold mb-2">Integrity & Transparency</h3>
+              <p class="text-xs text-secondary">Honest subsidy calculations with no hidden fees or false promises.</p>
             </div>
-            <div>
-              <h2 class="text-2xl font-bold mb-3 text-brand-300">Our Vision</h2>
-              <p class="text-muted leading-relaxed">
-                To create a drought-resilient agricultural ecosystem in South India where technology and tradition work hand in hand for sustainable and prosperous farming communities.
+
+            <div class="card-light text-center p-6 hover-lift">
+              <div class="value-icon"><i class="fa-solid fa-leaf"></i></div>
+              <h3 class="text-base font-bold mb-2">Water Stewardship</h3>
+              <p class="text-xs text-secondary">Conserving groundwater reserves while optimizing crop moisture.</p>
+            </div>
+
+            <div class="card-light text-center p-6 hover-lift">
+              <div class="value-icon"><i class="fa-solid fa-award"></i></div>
+              <h3 class="text-base font-bold mb-2">BIS-Grade Quality</h3>
+              <p class="text-xs text-secondary">Supplying only tested, UV-resistant, and clog-protected components.</p>
+            </div>
+
+            <div class="card-light text-center p-6 hover-lift">
+              <div class="value-icon"><i class="fa-solid fa-phone-volume"></i></div>
+              <h3 class="text-base font-bold mb-2">Responsive Support</h3>
+              <p class="text-xs text-secondary">Quick field visits and routine maintenance guidance after setup.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leadership & Team (Light Section) -->
+      <section class="section section-light">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-users"></i> Experienced Agricultural Team
+            </span>
+            <h2 class="section-title">Leadership & Field Technicians</h2>
+            <p class="section-subtitle">
+              Combining practical farming wisdom with precision agricultural engineering.
+            </p>
+          </div>
+
+          <div class="grid-3 team-grid">
+            <div class="card-light team-card text-center p-8 hover-lift">
+              <div class="team-avatar-box mx-auto mb-4">
+                <i class="fa-solid fa-user-tie"></i>
+              </div>
+              <h3 class="text-lg font-bold">ஜெயசந்திரன் (Jayachandran)</h3>
+              <span class="team-role text-brand">Founder & Managing Director</span>
+              <p class="text-xs text-secondary mt-3">
+                Over 15 years of grassroots agricultural technology and micro-irrigation layout expertise across Dindigul, Madurai, and central Tamil Nadu.
+              </p>
+            </div>
+
+            <div class="card-light team-card text-center p-8 hover-lift">
+              <div class="team-avatar-box mx-auto mb-4">
+                <i class="fa-solid fa-wrench"></i>
+              </div>
+              <h3 class="text-lg font-bold">Field Engineering Team</h3>
+              <span class="team-role text-brand">Certified Installation Mechanics</span>
+              <p class="text-xs text-secondary mt-3">
+                Skilled field technicians ensuring proper trenching, lateral alignment, pressure testing, and filter calibrations on your land.
+              </p>
+            </div>
+
+            <div class="card-light team-card text-center p-8 hover-lift">
+              <div class="team-avatar-box mx-auto mb-4">
+                <i class="fa-solid fa-file-signature"></i>
+              </div>
+              <h3 class="text-lg font-bold">Subsidy Documentation Cell</h3>
+              <span class="team-role text-brand">Horticulture Liaison Specialists</span>
+              <p class="text-xs text-secondary mt-3">
+                Dedicated documentation team coordinating revenue records, Patta verifications, and direct liaison with district ADH offices.
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Core Values -->
-      <div class="mb-16">
-        <h2 class="text-3xl font-bold mb-8 text-center">Our Core Values</h2>
-        <div class="grid-4">
-          <div class="glass-card-sm hover-lift text-center p-6">
-            <i class="fa-solid fa-handshake fa-2x text-brand-400 mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Integrity</h3>
-            <p class="text-sm text-muted">Transparent pricing and honest guidance in all our dealings.</p>
-          </div>
-          <div class="glass-card-sm hover-lift text-center p-6">
-            <i class="fa-solid fa-seedling fa-2x text-brand-400 mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Sustainability</h3>
-            <p class="text-sm text-muted">Promoting water conservation and eco-friendly farming practices.</p>
-          </div>
-          <div class="glass-card-sm hover-lift text-center p-6">
-            <i class="fa-solid fa-award fa-2x text-brand-400 mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">Quality</h3>
-            <p class="text-sm text-muted">Supplying only ISI certified, durable irrigation components.</p>
-          </div>
-          <div class="glass-card-sm hover-lift text-center p-6">
-            <i class="fa-solid fa-phone-volume fa-2x text-brand-400 mb-4"></i>
-            <h3 class="text-xl font-semibold mb-2">After-Sales</h3>
-            <p class="text-sm text-muted">Prompt service and maintenance support when you need it most.</p>
+      <!-- Certifications & Credentials -->
+      <section class="section section-cream">
+        <div class="container-narrow text-center">
+          <span class="section-eyebrow eyebrow-light">
+            <i class="fa-solid fa-stamp"></i> Official Empanelment
+          </span>
+          <h2 class="section-title">Government Recognitions & Empanelment</h2>
+          <div class="grid-2 cert-grid mt-6">
+            <div class="card-light cert-item">
+              <i class="fa-solid fa-circle-check text-brand"></i>
+              <div>
+                <strong>TN Horticulture Dept Authorized</strong>
+                <p class="text-xs text-secondary">Authorized supplier and installer for state micro-irrigation schemes.</p>
+              </div>
+            </div>
+            <div class="card-light cert-item">
+              <i class="fa-solid fa-circle-check text-brand"></i>
+              <div>
+                <strong>PMKSY Registered Vendor</strong>
+                <p class="text-xs text-secondary">Direct beneficiary linkage for 100% and 75% central subsidy grants.</p>
+              </div>
+            </div>
+            <div class="card-light cert-item">
+              <i class="fa-solid fa-circle-check text-brand"></i>
+              <div>
+                <strong>Registered GST Entity</strong>
+                <p class="text-xs text-secondary">GSTIN: 33BSXPJ5723P1ZX · Compliant billing and verifiable records.</p>
+              </div>
+            </div>
+            <div class="card-light cert-item">
+              <i class="fa-solid fa-circle-check text-brand"></i>
+              <div>
+                <strong>BIS Certified Materials</strong>
+                <p class="text-xs text-secondary">Pipes, fittings, drippers, and sprinklers matching national standards.</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Team Section -->
-      <div class="mb-16">
-        <h2 class="text-3xl font-bold mb-8 text-center">Meet the Team</h2>
-        <div class="grid-3">
-          <div class="glass-card team-card-brand text-center p-8 hover-lift">
-            <div class="team-icon-wrap mb-4 mx-auto bg-brand-900 rounded-circle d-flex align-items-center justify-content-center">
-              <i class="fa-solid fa-user-tie fa-3x text-brand-400"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-1">Jayachandran</h3>
-            <p class="text-brand-400 mb-3 text-sm">Founder & Managing Director</p>
-            <p class="text-muted text-sm">With over 15 years in agriculture tech, leading the vision to modernize TN farming.</p>
-          </div>
-          
-          <div class="glass-card team-card-amber text-center p-8 hover-lift">
-            <div class="team-icon-wrap mb-4 mx-auto bg-amber-900 rounded-circle d-flex align-items-center justify-content-center">
-              <i class="fa-solid fa-hard-hat fa-3x text-amber-400"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-1">Field Installation Team</h3>
-            <p class="text-amber-400 mb-3 text-sm">Expert Technicians</p>
-            <p class="text-muted text-sm">Skilled engineers and technicians ensuring perfect system setup in your fields.</p>
-          </div>
-          
-          <div class="glass-card team-card-sky text-center p-8 hover-lift">
-            <div class="team-icon-wrap mb-4 mx-auto bg-sky-900 rounded-circle d-flex align-items-center justify-content-center">
-              <i class="fa-solid fa-file-signature fa-3x text-sky-400"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-1">Subsidy Documentation Cell</h3>
-            <p class="text-sky-400 mb-3 text-sm">Administrative Support</p>
-            <p class="text-muted text-sm">Dedicated staff navigating government paperwork to secure your subsidies quickly.</p>
+      <!-- Bottom CTA Banner -->
+      <section class="section section-darker text-center">
+        <div class="container-narrow">
+          <h2 class="section-title">Work with Tamil Nadu's Trusted Irrigation Partner</h2>
+          <p class="section-subtitle mb-6">
+            Get in touch today to schedule an on-field survey or consult on your subsidy documents.
+          </p>
+          <div class="flex-center gap-4 flex-wrap">
+            <a routerLink="/contact" class="btn btn-amber btn-lg">
+              <i class="fa-solid fa-calculator"></i> Request Farm Assessment
+            </a>
+            <a href="https://wa.me/919489528432" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-lg">
+              <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+            </a>
           </div>
         </div>
-      </div>
-
-      <!-- Certifications -->
-      <div class="glass-card p-8 mb-16">
-        <h2 class="text-2xl font-bold mb-6 text-center border-b border-gray-800 pb-4">Our Credentials & Certifications</h2>
-        <div class="d-flex flex-wrap gap-4 justify-content-center">
-          <div class="certification-item bg-secondary px-4 py-3 rounded d-flex align-items-center gap-3">
-            <i class="fa-solid fa-circle-check text-brand-500 fa-lg"></i>
-            <span class="font-medium">TN Horticulture Dept Authorized</span>
-          </div>
-          <div class="certification-item bg-secondary px-4 py-3 rounded d-flex align-items-center gap-3">
-            <i class="fa-solid fa-circle-check text-brand-500 fa-lg"></i>
-            <span class="font-medium">PMKSY Registered</span>
-          </div>
-          <div class="certification-item bg-secondary px-4 py-3 rounded d-flex align-items-center gap-3">
-            <i class="fa-solid fa-circle-check text-brand-500 fa-lg"></i>
-            <span class="font-medium">NABARD Empaneled</span>
-          </div>
-          <div class="certification-item bg-secondary px-4 py-3 rounded d-flex align-items-center gap-3">
-            <i class="fa-solid fa-circle-check text-brand-500 fa-lg"></i>
-            <span class="font-medium">GSTIN: 33BSXPJ5723P1ZX</span>
-          </div>
-          <div class="certification-item bg-secondary px-4 py-3 rounded d-flex align-items-center gap-3">
-            <i class="fa-solid fa-circle-check text-brand-500 fa-lg"></i>
-            <span class="font-medium">ISO 9001 Compliant</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="glass-card text-center p-12 bg-gradient-brand">
-        <h2 class="text-3xl font-bold mb-4">Want to learn more about our services?</h2>
-        <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">Get in touch with our team today to discuss how we can help improve your farm's irrigation infrastructure.</p>
-        <a routerLink="/contact" class="btn btn-primary btn-lg hover-lift">
-          Contact Us Now <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
-      </div>
-
+      </section>
     </div>
   `,
   styles: [`
-    .mission-card, .vision-card {
-      border-left: 4px solid var(--brand-500);
-      overflow: hidden;
+    .about-header { padding: 4.5rem 1.5rem 4rem; }
+    .icon-box-mint {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background-color: var(--mint-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
     }
-    
-    .mission-card::before, .vision-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, rgba(34, 197, 94, 0.05) 0%, transparent 100%);
-      pointer-events: none;
-      z-index: 0;
+    .text-forest { color: var(--forest-deep); }
+    .text-secondary { color: var(--text-secondary); }
+    .text-brand { color: var(--brand-main); }
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background-color: var(--mint-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin: 0 auto 1rem;
     }
-
-    .vision-card {
-      border-left-color: var(--gold, #fbbf24);
+    .team-avatar-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background-color: var(--cream-warm);
+      border: 2px solid var(--mint-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
     }
-    
-    .vision-card::before {
-      background: linear-gradient(90deg, rgba(251, 191, 36, 0.05) 0%, transparent 100%);
+    .team-role {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
     }
-
-    .mission-card > *, .vision-card > * {
-      position: relative;
-      z-index: 1;
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      text-align: left;
+      padding: 1.25rem;
     }
-
-    .team-icon-wrap {
-      width: 80px;
-      height: 80px;
-    }
-    
-    .bg-amber-900 { background-color: rgba(245, 158, 11, 0.1); }
-    .text-amber-400 { color: #fbbf24; }
-    
-    .bg-sky-900 { background-color: rgba(14, 165, 233, 0.1); }
-    .text-sky-400 { color: #38bdf8; }
-
-    .team-card-brand { border-top: 3px solid var(--brand-500); }
-    .team-card-amber { border-top: 3px solid #fbbf24; }
-    .team-card-sky { border-top: 3px solid #38bdf8; }
-
-    .border-gray-800 { border-color: rgba(255, 255, 255, 0.1); }
-
-    .certification-item {
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.2s ease;
-    }
-    
-    .certification-item:hover {
-      border-color: var(--brand-500);
-      background-color: rgba(34, 197, 94, 0.05);
-    }
-
-    .bg-gradient-brand {
-      background: linear-gradient(135deg, rgba(3, 23, 14, 0.9) 0%, rgba(4, 31, 20, 0.9) 100%);
-      border: 1px solid rgba(34, 197, 94, 0.2);
-    }
-
-    /* Additional Utility Classes if needed locally */
-    .font-medium { font-weight: 500; }
-    .leading-relaxed { line-height: 1.625; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .page-content { padding-top: 2rem; padding-bottom: 2rem; }
-      .certification-item { width: 100%; justify-content: center; }
+    .cert-item i {
+      font-size: 1.25rem;
+      margin-top: 0.2rem;
+      flex-shrink: 0;
     }
   `]
 })
-export class AboutComponent implements OnInit {
-  ngOnInit(): void {
-    // Component initialized
-  }
-}
+export class AboutComponent {}

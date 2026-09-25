@@ -1,21 +1,20 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, HostListener } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 interface NavItem {
   path: string;
   label: string;
-  icon: string;
-  section: 'main' | 'tools';
+  labelTa?: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { path: '/',         label: 'Home',              icon: 'fa-house',           section: 'main' },
-  { path: '/about',    label: 'About Us',           icon: 'fa-circle-info',    section: 'main' },
-  { path: '/services', label: 'Services',           icon: 'fa-border-all',     section: 'main' },
-  { path: '/pricing',  label: 'Pricing & Subsidy',  icon: 'fa-tags',           section: 'main' },
-  { path: '/blog',     label: 'Blog & Guides',      icon: 'fa-newspaper',      section: 'main' },
-  { path: '/contact',  label: 'Contact & HQ',       icon: 'fa-location-dot',   section: 'main' },
+const PUBLIC_NAV: NavItem[] = [
+  { path: '/',         label: 'Home' },
+  { path: '/about',    label: 'About Us' },
+  { path: '/services', label: 'Solutions' },
+  { path: '/pricing',  label: 'Pricing & Subsidy' },
+  { path: '/blog',     label: 'Blog & Guides' },
+  { path: '/contact',  label: 'Contact' },
 ];
 
 @Component({
@@ -23,364 +22,692 @@ const NAV_ITEMS: NavItem[] = [
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-  <div class="app-shell">
+  <div class="site-wrapper">
 
-    <!-- ── SIDEBAR ──────────────────────────────────────────── -->
-    <aside class="sidebar" [class.open]="sidebarOpen()">
-      <div class="sidebar-inner">
+    <!-- ── TOP ANNOUNCEMENT STRIP ──────────────────────────── -->
+    <div class="top-announcement">
+      <div class="container-wide top-announcement-inner">
+        <div class="announcement-left">
+          <span class="badge-tag">
+            <i class="fa-solid fa-certificate"></i> Government Authorized
+          </span>
+          <span class="announcement-text">
+            PMKSY & TN Horticulture Micro-Irrigation Subsidy Assistance Partner
+          </span>
+        </div>
+        <div class="announcement-right">
+          <a href="tel:9489528432" class="phone-link">
+            <i class="fa-solid fa-phone"></i>
+            <span>Farmer Hotline: <strong>94895 28432</strong></span>
+          </a>
+          <span class="divider">|</span>
+          <span class="location-text"><i class="fa-solid fa-location-dot"></i> Dindigul, Tamil Nadu</span>
+        </div>
+      </div>
+    </div>
 
-        <!-- Brand Logo -->
-        <a routerLink="/" class="logo-wrap" (click)="closeSidebar()">
-          <div class="logo-box">
-            <img src="logo.png" alt="Thozhan Irrigation" class="logo-img" />
+    <!-- ── STICKY MAIN HEADER / TOP NAVIGATION ─────────────── -->
+    <header class="main-header" [class.scrolled]="isScrolled()">
+      <div class="container-wide header-container">
+
+        <!-- Company Logo -->
+        <a routerLink="/" class="brand-logo" (click)="closeMobileMenu()">
+          <div class="logo-wrapper">
+            <img src="logo.png" alt="Thozhan Irrigation Logo" class="logo-image" />
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">தோழன் இரிகேஷன்</span>
+            <span class="brand-tagline">Thozhan Irrigation · Smart Farm Solutions</span>
           </div>
         </a>
 
-        <!-- Navigation -->
-        <nav class="sidebar-nav" aria-label="Main navigation">
-          <span class="nav-section-label">Website</span>
-          @for (item of mainNav; track item.path) {
+        <!-- Desktop Navigation Links -->
+        <nav class="desktop-nav" aria-label="Main Navigation">
+          @for (item of navItems; track item.path) {
             <a [routerLink]="item.path"
                routerLinkActive="active"
                [routerLinkActiveOptions]="{ exact: item.path === '/' }"
-               class="nav-item"
-               (click)="closeSidebar()">
-              <i class="fa-solid {{ item.icon }} nav-icon"></i>
-              <span>{{ item.label }}</span>
+               class="nav-link">
+              {{ item.label }}
             </a>
           }
         </nav>
 
-        <!-- Admin Quick Link -->
-        <nav aria-label="Admin navigation" class="sidebar-nav mt-4">
-          <span class="nav-section-label">Admin</span>
-          @if (auth.isAuthenticated()) {
-            <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item gold">
-              <i class="fa-solid fa-gauge nav-icon"></i>
-              <span>Admin Dashboard</span>
-            </a>
-          } @else {
-            <a routerLink="/admin/login" class="nav-item">
-              <i class="fa-solid fa-user-shield nav-icon"></i>
-              <span>Admin Portal</span>
-            </a>
-          }
-        </nav>
-      </div>
-
-      <!-- Sidebar Bottom -->
-      <div class="sidebar-bottom">
-        <a href="tel:9489528432" class="hotline-btn">
-          <i class="fa-solid fa-phone animate-pulse"></i>
-          <span>94895 28432</span>
-        </a>
-        <a href="https://wa.me/919489528432" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
-          <i class="fa-brands fa-whatsapp"></i>
-          <span>WhatsApp Us</span>
-        </a>
-      </div>
-    </aside>
-
-    <!-- Sidebar backdrop (mobile) -->
-    @if (sidebarOpen()) {
-      <div class="sidebar-backdrop" (click)="closeSidebar()" aria-hidden="true"></div>
-    }
-
-    <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
-    <div class="main-content">
-
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-left">
-          <button class="hamburger" (click)="toggleSidebar()" [attr.aria-expanded]="sidebarOpen()" aria-label="Toggle menu">
-            <i class="fa-solid" [class.fa-bars]="!sidebarOpen()" [class.fa-xmark]="sidebarOpen()"></i>
-          </button>
-          <img src="logo.png" alt="Thozhan" class="header-logo-mobile" />
-          <div class="header-title">
-            <span class="header-brand">Thozhan Irrigation — Smart Farm Portal</span>
-            <span class="header-sub">விவசாயக் கட்டுப்பாட்டு மையம் · Dindigul, TN</span>
-          </div>
-        </div>
-
-        <div class="header-right">
-          <span class="govt-badge">
-            <i class="fa-solid fa-certificate"></i>
-            TN Govt Authorized
-          </span>
-          @if (auth.isAuthenticated()) {
-            <div class="admin-user-chip">
-              <i class="fa-solid fa-user-shield"></i>
-              <span>{{ auth.username() }}</span>
-            </div>
-          }
-          <a routerLink="/contact" class="header-cta">
-            <i class="fa-solid fa-paper-plane"></i>
-            Get Quote
+        <!-- Right Header Actions -->
+        <div class="header-actions">
+          <!-- WhatsApp Contact Button -->
+          <a href="https://wa.me/919489528432?text=Hello%20Thozhan%20Irrigation,%20I%20would%20like%20to%20inquire%20about%20irrigation%20systems%20and%20subsidy."
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn-nav-whatsapp"
+             title="Chat with our agricultural engineer on WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="desktop-only">WhatsApp</span>
           </a>
-        </div>
-      </header>
 
-      <!-- Page content -->
-      <main class="page-main" id="main-content">
-        <router-outlet />
-      </main>
+          <!-- Primary Get Quote CTA -->
+          <a routerLink="/contact" class="btn btn-amber btn-sm">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Get a Quote</span>
+          </a>
 
-      <!-- Footer -->
-      <footer class="site-footer">
-        <div class="footer-inner">
-          <div class="footer-brand">
-            <img src="logo.png" alt="Thozhan Irrigation" style="height:48px;background:#fff;border-radius:8px;padding:4px;" />
-            <p>Premium irrigation solutions for Tamil Nadu farmers since 2012.</p>
+          <!-- Admin Portal Secondary Link -->
+          <a [routerLink]="auth.isAuthenticated() ? '/admin/dashboard' : '/admin/login'"
+             class="btn-admin-subtle"
+             title="Administrative Portal Access">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span class="desktop-only">Admin</span>
+          </a>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button class="hamburger-btn"
+                  (click)="toggleMobileMenu()"
+                  [attr.aria-expanded]="mobileMenuOpen()"
+                  aria-label="Toggle navigation menu">
+            <i class="fa-solid" [class.fa-bars]="!mobileMenuOpen()" [class.fa-xmark]="mobileMenuOpen()"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      @if (mobileMenuOpen()) {
+        <div class="mobile-drawer animate-fade">
+          <nav class="mobile-nav" aria-label="Mobile Navigation">
+            @for (item of navItems; track item.path) {
+              <a [routerLink]="item.path"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+                 class="mobile-nav-link"
+                 (click)="closeMobileMenu()">
+                <span>{{ item.label }}</span>
+                <i class="fa-solid fa-chevron-right arrow-icon"></i>
+              </a>
+            }
+
+            <div class="mobile-drawer-footer">
+              <a routerLink="/contact" class="btn btn-amber btn-full mb-3" (click)="closeMobileMenu()">
+                <i class="fa-solid fa-calculator"></i> Get a Free Quote
+              </a>
+              <a href="tel:9489528432" class="btn btn-primary btn-full mb-3">
+                <i class="fa-solid fa-phone"></i> Call 94895 28432
+              </a>
+              <a [routerLink]="auth.isAuthenticated() ? '/admin/dashboard' : '/admin/login'"
+                 class="mobile-admin-link"
+                 (click)="closeMobileMenu()">
+                <i class="fa-solid fa-shield-halved"></i> Staff Admin Portal
+              </a>
+            </div>
+          </nav>
+        </div>
+      }
+    </header>
+
+    <!-- ── PAGE CONTENT OUTLET ─────────────────────────────── -->
+    <main class="main-body" id="main-content">
+      <router-outlet />
+    </main>
+
+    <!-- ── PROFESSIONAL ENTERPRISE FOOTER ──────────────────── -->
+    <footer class="site-footer">
+      <div class="container-wide footer-grid">
+
+        <!-- Column 1: Brand & Purpose -->
+        <div class="footer-col brand-col">
+          <div class="footer-logo-wrap">
+            <img src="logo.png" alt="Thozhan Irrigation" class="footer-logo" />
           </div>
-          <div class="footer-links">
-            <h4>Quick Links</h4>
-            <a routerLink="/">Home</a>
-            <a routerLink="/services">Services</a>
-            <a routerLink="/pricing">Pricing</a>
-            <a routerLink="/blog">Blog</a>
-            <a routerLink="/contact">Contact</a>
+          <p class="footer-desc">
+            Government-authorized micro-irrigation systems, subsidy processing, professional farm engineering, and reliable after-sales support across Tamil Nadu since 2012.
+          </p>
+          <div class="footer-badge">
+            <i class="fa-solid fa-certificate"></i>
+            <span>TN Horticulture & PMKSY Registered</span>
           </div>
-          <div class="footer-contact">
-            <h4>Contact</h4>
-            <p><i class="fa-solid fa-phone"></i> 94895 28432</p>
-            <p><i class="fa-brands fa-whatsapp"></i> +91 94895 28432</p>
-            <p><i class="fa-solid fa-envelope"></i> thozhanirrigation&#64;gmail.com</p>
-            <p><i class="fa-solid fa-location-dot"></i> 21-A Vijaya Nagar, Seelapadi, Dindigul — 624 004</p>
+          <div class="gstin-tag">GSTIN: 33BSXPJ5723P1ZX</div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-list">
+            <li><a routerLink="/">Home</a></li>
+            <li><a routerLink="/about">About Us & Team</a></li>
+            <li><a routerLink="/services">Irrigation Solutions</a></li>
+            <li><a routerLink="/pricing">Pricing & Subsidy Plans</a></li>
+            <li><a routerLink="/blog">Farmer Guides & Blog</a></li>
+            <li><a routerLink="/contact">Contact & Site Visit</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Solutions -->
+        <div class="footer-col">
+          <h4 class="footer-title">Solutions</h4>
+          <ul class="footer-list">
+            <li><a routerLink="/services">Drip Irrigation Kits</a></li>
+            <li><a routerLink="/services">Micro Sprinkler Systems</a></li>
+            <li><a routerLink="/services">High-Throw Rain Guns</a></li>
+            <li><a routerLink="/services">Solar Agri Pumping</a></li>
+            <li><a routerLink="/pricing">100% Subsidy Small Farmer</a></li>
+            <li><a routerLink="/pricing">75% Subsidy Other Farmer</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact & Office -->
+        <div class="footer-col contact-col">
+          <h4 class="footer-title">Head Office & Support</h4>
+          <div class="contact-entry">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>21-A, Vijaya Nagar, SSI ITI College Road, Seelapadi, Dindigul — 624 004, Tamil Nadu</span>
+          </div>
+          <div class="contact-entry">
+            <i class="fa-solid fa-phone"></i>
+            <a href="tel:9489528432">94895 28432</a> / <a href="tel:9443224855">94432 24855</a>
+          </div>
+          <div class="contact-entry">
+            <i class="fa-brands fa-whatsapp"></i>
+            <a href="https://wa.me/919489528432" target="_blank" rel="noopener noreferrer">+91 94895 28432</a>
+          </div>
+          <div class="contact-entry">
+            <i class="fa-solid fa-envelope"></i>
+            <a href="mailto:thozhanirrigation@gmail.com">thozhanirrigation&#64;gmail.com</a>
+          </div>
+          <div class="contact-entry">
+            <i class="fa-regular fa-clock"></i>
+            <span>Mon – Sat: 9:00 AM – 6:00 PM IST</span>
           </div>
         </div>
-        <div class="footer-bottom">
-          <span>© 2026 Thozhan Irrigation. All rights reserved.</span>
-          <span>GSTIN: 33BSXPJ5723P1ZX</span>
+      </div>
+
+      <!-- Footer Bottom Strip -->
+      <div class="footer-bottom">
+        <div class="container-wide footer-bottom-inner">
+          <p class="copyright">
+            © 2026 Thozhan Irrigation. All rights reserved.
+          </p>
+          <p class="subsidy-disclaimer">
+            *Note: Government subsidies are subject to land verification (Patta/Chitta) and guidelines issued by the Tamil Nadu Horticulture Department & PMKSY scheme.
+          </p>
+          <div class="footer-meta-links">
+            <a routerLink="/about">Privacy</a>
+            <span>·</span>
+            <a routerLink="/about">Terms</a>
+            <span>·</span>
+            <a [routerLink]="auth.isAuthenticated() ? '/admin/dashboard' : '/admin/login'">Admin</a>
+          </div>
         </div>
-      </footer>
+      </div>
+    </footer>
+
+    <!-- ── STICKY MOBILE ACTION BAR ────────────────────────── -->
+    <div class="sticky-mobile-bar">
+      <a href="tel:9489528432" class="mobile-action-btn phone">
+        <i class="fa-solid fa-phone"></i>
+        <span>Call</span>
+      </a>
+      <a href="https://wa.me/919489528432?text=Hello%20Thozhan%20Irrigation,%20I%20would%20like%20subsidy%20and%20quotation%20information."
+         target="_blank"
+         rel="noopener noreferrer"
+         class="mobile-action-btn whatsapp">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>WhatsApp</span>
+      </a>
+      <a routerLink="/pricing" class="mobile-action-btn quote">
+        <i class="fa-solid fa-calculator"></i>
+        <span>Subsidy Calculator</span>
+      </a>
     </div>
+
   </div>
   `,
   styles: [`
-  .app-shell { display: flex; min-height: 100vh; background: var(--bg-primary); }
-
-  /* ── Sidebar ── */
-  .sidebar {
-    width: 248px;
-    background: var(--bg-secondary);
-    border-right: 1px solid rgba(255,255,255,0.06);
+  .site-wrapper {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden;
-    flex-shrink: 0;
-    z-index: 100;
-    transition: transform 0.3s ease;
+    min-height: 100vh;
+    background-color: var(--white);
+    color: var(--text-primary);
   }
 
-  .sidebar-inner {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  /* ── Top Announcement Strip ── */
+  .top-announcement {
+    background-color: var(--forest-dark);
+    color: var(--text-dark-sub);
+    font-size: 0.8125rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
-
-  .logo-wrap { display: block; }
-  .logo-box {
-    background: rgba(255,255,255,0.95);
-    border-radius: 14px;
-    padding: 10px 12px;
-    border: 1px solid rgba(251,191,36,0.3);
+  .top-announcement-inner {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
-  .logo-box:hover { transform: scale(1.02); }
-  .logo-img { width: 100%; height: 56px; object-fit: contain; }
-
-  .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
-  .nav-section-label {
-    font-size: 0.6rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #3d6b4e;
-    padding: 0 0.75rem;
-    margin-bottom: 4px;
-    display: block;
-  }
-
-  .nav-item {
+  .announcement-left, .announcement-right {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #64748b;
-    transition: all 0.15s ease;
-    text-decoration: none;
   }
-  .nav-item:hover { color: #fff; background: rgba(34,197,94,0.1); }
-  .nav-item.active { background: linear-gradient(135deg, #15803d, #166534); color: #fff; box-shadow: 0 4px 12px rgba(21,128,61,0.3); }
-  .nav-item.active .nav-icon { color: #fbbf24; }
-  .nav-item.gold.active, .nav-item.gold:hover { background: linear-gradient(135deg, #92400e, #78350f); color: #fbbf24; }
-  .nav-icon { width: 16px; text-align: center; font-size: 0.875rem; color: #475569; transition: color 0.15s ease; }
-  .nav-item:hover .nav-icon { color: var(--brand-400); }
-  .mt-4 { margin-top: 1rem; }
-
-  .sidebar-bottom {
-    padding: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .hotline-btn, .whatsapp-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.65rem;
-    border-radius: 10px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    transition: all 0.15s ease;
-    text-decoration: none;
-  }
-  .hotline-btn { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #4ade80; }
-  .hotline-btn:hover { background: rgba(34,197,94,0.2); }
-  .whatsapp-btn { background: rgba(22,163,74,0.9); color: #fff; }
-  .whatsapp-btn:hover { background: #15803d; }
-
-  /* ── Main ── */
-  .main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
-
-  .top-header {
-    background: rgba(3,23,14,0.96);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    gap: 1rem;
-  }
-
-  .header-left { display: flex; align-items: center; gap: 0.75rem; }
-  .hamburger {
-    display: none;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #94a3b8;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: all 0.15s ease;
-    font-size: 1rem;
-  }
-  .hamburger:hover { color: #fff; background: rgba(255,255,255,0.1); }
-  .header-logo-mobile { height: 32px; background: #fff; border-radius: 6px; padding: 3px; display: none; }
-  .header-title { display: flex; flex-direction: column; }
-  .header-brand { font-size: 0.8rem; font-weight: 900; color: #fff; }
-  .header-sub { font-size: 0.65rem; color: var(--brand-400); font-weight: 700; }
-
-  .header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-  .govt-badge {
+  .badge-tag {
+    background-color: rgba(39, 196, 106, 0.2);
+    color: var(--brand-bright);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    background: rgba(251,191,36,0.08);
-    border: 1px solid rgba(251,191,36,0.2);
-    color: var(--gold);
-    font-size: 0.65rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
   }
-  .admin-user-chip {
+  .phone-link {
+    color: var(--text-dark);
+    font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(245,158,11,0.1);
-    border: 1px solid rgba(245,158,11,0.25);
-    color: #fcd34d;
-    padding: 0.35rem 0.75rem;
-    border-radius: 999px;
-    font-size: 0.7rem;
+    gap: 0.4rem;
+  }
+  .phone-link:hover { color: var(--brand-bright); }
+  .phone-link strong { color: var(--cta-amber); }
+  .divider { color: rgba(255, 255, 255, 0.2); }
+  .location-text { font-size: 0.75rem; color: var(--text-dark-sub); }
+
+  /* ── Main Sticky Header ── */
+  .main-header {
+    background-color: var(--white);
+    border-bottom: 1.5px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.25s ease;
+  }
+  .main-header.scrolled {
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(16, 35, 27, 0.08);
+  }
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    gap: 1.5rem;
+  }
+
+  /* Logo */
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    text-decoration: none;
+  }
+  .logo-wrapper {
+    background: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-image {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-name {
+    font-size: 1.0625rem;
+    font-weight: 800;
+    color: var(--forest-deep);
+    line-height: 1.2;
+  }
+  .brand-tagline {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  /* Desktop Nav */
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .nav-link {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding: 0.5rem 0.25rem;
+    position: relative;
+    transition: color 0.15s ease;
+    text-decoration: none;
+  }
+  .nav-link:hover {
+    color: var(--brand-main);
+  }
+  .nav-link.active {
+    color: var(--brand-main);
     font-weight: 700;
   }
-  .header-cta {
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background-color: var(--brand-main);
+    border-radius: 2px;
+  }
+
+  /* Right Action Items */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .btn-nav-whatsapp {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: var(--brand-700);
-    color: #fff;
-    font-size: 0.75rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-md);
+    background-color: rgba(37, 211, 102, 0.12);
+    color: #1A9E48;
+    font-size: 0.875rem;
     font-weight: 700;
-    padding: 0.45rem 1rem;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.15s ease;
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    transition: var(--transition-fast);
   }
-  .header-cta:hover { background: var(--brand-600); transform: translateY(-1px); }
+  .btn-nav-whatsapp:hover {
+    background-color: #25D366;
+    color: var(--white);
+  }
+  .btn-admin-subtle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: var(--radius-md);
+    background-color: #F0F4F2;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: var(--transition-fast);
+  }
+  .btn-admin-subtle:hover {
+    background-color: var(--forest-deep);
+    color: var(--white);
+  }
+  .hamburger-btn {
+    display: none;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+  }
 
-  .page-main { flex: 1; overflow-y: auto; }
+  /* Mobile Drawer */
+  .mobile-drawer {
+    border-top: 1px solid var(--border-light);
+    background-color: var(--white);
+    padding: 1rem 1.5rem 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  }
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 0.5rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid #F0F4F2;
+    text-decoration: none;
+  }
+  .mobile-nav-link:hover, .mobile-nav-link.active {
+    color: var(--brand-main);
+  }
+  .arrow-icon {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+  .mobile-drawer-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-admin-link {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  /* Main Body */
+  .main-body {
+    flex: 1;
+  }
 
   /* ── Footer ── */
-  .site-footer { background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.06); padding: 3rem 2rem 1.5rem; }
-  .footer-inner { display: grid; grid-template-columns: 2fr 1fr 2fr; gap: 2rem; max-width: 1200px; margin: 0 auto 2rem; }
-  .footer-brand p { color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem; }
-  .footer-links, .footer-contact { display: flex; flex-direction: column; gap: 0.5rem; }
-  .footer-links h4, .footer-contact h4 { color: #fff; font-size: 0.8rem; font-weight: 900; margin-bottom: 0.25rem; }
-  .footer-links a { color: var(--text-muted); font-size: 0.8rem; transition: color 0.15s; text-decoration: none; }
-  .footer-links a:hover { color: var(--brand-400); }
-  .footer-contact p { color: var(--text-muted); font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
-  .footer-contact i { color: var(--brand-400); width: 14px; }
-  .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.06);
-    padding-top: 1.25rem;
-    display: flex;
-    justify-content: space-between;
+  .site-footer {
+    background-color: var(--forest-dark);
+    color: var(--text-dark);
+    padding-top: 5rem;
+    margin-top: auto;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.25fr 2fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+  .footer-logo-wrap {
+    background: #FFFFFF;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
+  }
+  .footer-logo {
+    height: 48px;
+    object-fit: contain;
+  }
+  .footer-desc {
+    color: var(--text-dark-sub);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    max-width: 380px;
+  }
+  .footer-badge {
+    display: inline-flex;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: 0.5rem;
+    background: rgba(39, 196, 106, 0.15);
+    color: var(--brand-bright);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    padding: 0.35rem 0.875rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(39, 196, 106, 0.3);
+    margin-bottom: 0.75rem;
+  }
+  .gstin-tag {
     font-size: 0.75rem;
-    color: #3d6b4e;
+    color: var(--text-dark-sub);
+    font-family: monospace;
   }
 
-  /* ── Mobile ── */
-  .sidebar-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 90;
-    backdrop-filter: blur(2px);
+  .footer-title {
+    font-size: 1.0625rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+  .footer-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .footer-list a {
+    color: var(--text-dark-sub);
+    font-size: 0.9375rem;
+    transition: color 0.15s ease;
+  }
+  .footer-list a:hover {
+    color: var(--brand-bright);
   }
 
+  .contact-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  .contact-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--text-dark-sub);
+    line-height: 1.5;
+  }
+  .contact-entry i {
+    color: var(--brand-bright);
+    font-size: 1rem;
+    margin-top: 0.25rem;
+    width: 18px;
+    flex-shrink: 0;
+  }
+  .contact-entry a {
+    color: var(--text-dark);
+    font-weight: 600;
+  }
+  .contact-entry a:hover {
+    color: var(--brand-bright);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.75rem 0;
+    background-color: #051A13;
+  }
+  .footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.8125rem;
+    color: var(--text-dark-sub);
+  }
+  .subsidy-disclaimer {
+    max-width: 580px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #7E9B8D;
+  }
+  .footer-meta-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .footer-meta-links a {
+    color: var(--text-dark-sub);
+  }
+  .footer-meta-links a:hover {
+    color: var(--white);
+  }
+
+  /* ── Sticky Mobile Bottom Action Bar ── */
+  .sticky-mobile-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    border-top: 1.5px solid var(--border-light);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    z-index: 999;
+    padding: 0.5rem 0.75rem;
+  }
+  .mobile-action-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.5rem 0.25rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+  .mobile-action-btn i { font-size: 1.1rem; }
+  .mobile-action-btn.phone { color: var(--forest-deep); }
+  .mobile-action-btn.whatsapp { color: #128C7E; }
+  .mobile-action-btn.quote {
+    background-color: var(--cta-amber);
+    color: #10231B;
+    border-radius: var(--radius-md);
+  }
+
+  /* Responsive Rules */
   @media (max-width: 1024px) {
-    .sidebar { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); z-index: 100; }
-    .sidebar.open { transform: translateX(0); }
-    .hamburger { display: flex; align-items: center; justify-content: center; }
-    .header-logo-mobile { display: block; }
-    .header-title .header-brand { display: none; }
-    .header-title .header-sub { display: none; }
-    .govt-badge { display: none; }
-    .footer-inner { grid-template-columns: 1fr; }
+    .desktop-nav { display: none; }
+    .hamburger-btn { display: block; }
+    .desktop-only { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .top-announcement { display: none; }
+    .brand-name { font-size: 0.9375rem; }
+    .brand-tagline { font-size: 0.7rem; }
+  }
+
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .sticky-mobile-bar { display: flex; gap: 0.5rem; }
+    .site-footer { padding-bottom: 5rem; /* space for mobile bar */ }
   }
   `]
 })
 export class LayoutComponent {
   auth = inject(AuthService);
-  sidebarOpen = signal(false);
+  navItems = PUBLIC_NAV;
+  mobileMenuOpen = signal(false);
+  isScrolled = signal(false);
 
-  mainNav = NAV_ITEMS.filter(n => n.section === 'main');
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled.set(window.scrollY > 20);
+  }
 
-  toggleSidebar() { this.sidebarOpen.update(v => !v); }
-  closeSidebar()  { this.sidebarOpen.set(false); }
+  toggleMobileMenu() {
+    this.mobileMenuOpen.update(v => !v);
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen.set(false);
+  }
 }
