@@ -20,6 +20,7 @@
   --water-blue:     #2686D9;
   --water-light:    #EBF4FC;
   --cta-amber:      #F5A623;
+  --cta-amber-text:  #0F1F17;
   --cta-amber-hover:#E09214;
   --danger:         #EF4444;
   --success:        #27C46A;
@@ -27,7 +28,7 @@
   /* Text & Border Neutrals */
   --text-primary:   #10231B;
   --text-secondary: #61736A;
-  --text-muted:     #82958B;
+  --text-muted:     #4B6358;
   --text-dark:      #F5FFF8;
   --text-dark-sub:  #B4D1C2;
   --border-light:   #D8E5DC;
@@ -245,7 +246,7 @@ img {
 /* Primary CTA Amber (Quote & Subsidy) */
 .btn-amber {
   background-color: var(--cta-amber);
-  color: #10231B;
+  color: var(--cta-amber-text);
   box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
   border: 1px solid #E59515;
 }

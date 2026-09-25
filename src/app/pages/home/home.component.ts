@@ -94,7 +94,7 @@ const FAQS: FaqItem[] = [
   template: `
   <div class="home-wrapper">
 
-    <!-- ── 1. HERO SECTION (Dark Forest Green with Agricultural Visual) ──── -->
+    <!-- ── 1. HERO SECTION (Prototype A: Daylight Clean & High Contrast) ──── -->
     <section class="hero-section">
       <div class="container-wide hero-container">
         <div class="hero-content">
@@ -106,7 +106,8 @@ const FAQS: FaqItem[] = [
 
           <!-- Main Headline -->
           <h1 class="hero-headline">
-            Smarter Irrigation for <span class="text-highlight">Better Yields</span>
+            Smart Irrigation Systems <br />
+            <span class="text-highlight">For Better Yields & Lower Water Usage</span>
           </h1>
 
           <!-- Tamil translation subtitle -->
@@ -116,7 +117,7 @@ const FAQS: FaqItem[] = [
 
           <!-- Supporting Text -->
           <p class="hero-description">
-            Explore reliable drip, sprinkler, rain gun, and solar irrigation systems with subsidy assistance, professional installation, and ongoing support for farmers across Tamil Nadu.
+            Government-approved micro-irrigation solutions with subsidy support, precision engineering, and after-sales service for farmers across Tamil Nadu.
           </p>
 
           <!-- Action CTAs -->
@@ -125,7 +126,7 @@ const FAQS: FaqItem[] = [
               <i class="fa-solid fa-calculator"></i>
               <span>Check Subsidy Eligibility</span>
             </a>
-            <a routerLink="/services" class="btn btn-outline-dark btn-lg">
+            <a routerLink="/services" class="btn btn-outline-light btn-lg">
               <i class="fa-solid fa-faucet-drip"></i>
               <span>Explore Solutions</span>
             </a>
@@ -135,15 +136,15 @@ const FAQS: FaqItem[] = [
           <div class="hero-trust-points">
             <div class="trust-point">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Government Assistance</span>
+              <span>Government Authorized</span>
             </div>
             <div class="trust-point">
               <i class="fa-solid fa-circle-check"></i>
-              <span>Professional Installation</span>
+              <span>Subsidy Assistance</span>
             </div>
             <div class="trust-point">
               <i class="fa-solid fa-circle-check"></i>
-              <span>After-Sales Support</span>
+              <span>End-to-End Support</span>
             </div>
           </div>
         </div>
@@ -750,13 +751,14 @@ const FAQS: FaqItem[] = [
   </div>
   `,
   styles: [`
-  /* ── 1. Hero Section ── */
+  /* ── 1. Hero Section (Prototype A: Daylight Theme) ── */
   .hero-section {
-    background: linear-gradient(145deg, var(--forest-dark) 0%, var(--forest-deep) 60%, #0A4A33 100%);
-    color: var(--text-dark);
+    background: linear-gradient(180deg, #F3F7F4 0%, #FFFFFF 100%);
+    color: var(--text-primary);
     padding: 5.5rem 1.5rem 5rem;
     position: relative;
     overflow: hidden;
+    border-bottom: 1px solid var(--border-light);
   }
   .hero-section::before {
     content: '';
@@ -765,7 +767,7 @@ const FAQS: FaqItem[] = [
     right: -100px;
     width: 450px;
     height: 450px;
-    background: radial-gradient(circle, rgba(39, 196, 106, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(13, 107, 61, 0.08) 0%, transparent 70%);
     pointer-events: none;
   }
   .hero-container {
@@ -781,22 +783,22 @@ const FAQS: FaqItem[] = [
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(39, 196, 106, 0.15);
-    color: var(--brand-bright);
+    background: var(--mint-soft);
+    color: var(--brand-main);
     font-size: 0.8125rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     padding: 0.4rem 0.9rem;
     border-radius: var(--radius-full);
-    border: 1px solid rgba(39, 196, 106, 0.3);
+    border: 1px solid var(--border-light);
     margin-bottom: 1.25rem;
   }
   .badge-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--brand-bright);
+    background-color: var(--brand-main);
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
@@ -808,22 +810,22 @@ const FAQS: FaqItem[] = [
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    color: var(--text-dark);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
   }
   .text-highlight {
-    color: var(--brand-bright);
+    color: var(--brand-main);
   }
   .hero-tamil-sub {
     font-size: 1.0625rem;
     font-weight: 600;
-    color: #C3E3D2;
+    color: var(--brand-main);
     margin-bottom: 1.25rem;
   }
   .hero-description {
     font-size: 1.0625rem;
     line-height: 1.65;
-    color: var(--text-dark-sub);
+    color: var(--text-secondary);
     margin-bottom: 2rem;
   }
   .hero-actions {
@@ -837,7 +839,7 @@ const FAQS: FaqItem[] = [
     flex-wrap: wrap;
     gap: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid var(--border-light);
   }
   .trust-point {
     display: flex;
@@ -845,10 +847,10 @@ const FAQS: FaqItem[] = [
     gap: 0.45rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--text-dark-sub);
+    color: var(--text-primary);
   }
   .trust-point i {
-    color: var(--brand-bright);
+    color: var(--brand-main);
   }
 
   /* Hero Visual Card */
@@ -859,15 +861,15 @@ const FAQS: FaqItem[] = [
     position: relative;
     border-radius: var(--radius-xl);
     padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    background: var(--white);
+    border: 1.5px solid var(--border-light);
+    box-shadow: 0 16px 36px rgba(16, 35, 27, 0.08);
   }
   .visual-image-wrapper {
     position: relative;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    background-color: #0F3D2C;
+    background-color: var(--mint-soft);
     aspect-ratio: 4/3;
   }
   .hero-img {

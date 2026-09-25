@@ -25,3 +25,12 @@ dist-ssr
 
 .vercel
 .angular/
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+.venv/
+venv/
+staticfiles/

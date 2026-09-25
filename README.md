@@ -101,3 +101,62 @@ Wrangler configuration file [wrangler.jsonc](file:///C:/Users/rajes/.gemini/anti
 - **Build command**: `ng build` (compiles production bundle)
 - **Output directory**: `./dist/browser` (target path for Cloudflare assets)
 - **Fallback routing**: `not_found_handling = "single-page-application"` (ensures Angular router works perfectly on deep page reloads)
+
+---
+
+## 6. Subsidy Calculation API (`/api/v1/calculate/`)
+
+The backend provides a public calculation and lead-generation endpoint aligned with the **Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)** and **Tamil Nadu Horticulture Department** subsidy frameworks.
+
+### Endpoint Details
+- **URL**: `POST /api/v1/calculate/`
+- **Authentication**: None (`AllowAny` public access)
+- **Rate Limit**: Standard API limits
+
+### Subsidy Eligibility Brackets
+| Landholding Size | Govt. Subsidy % | Category Classification | Scheme Guidelines |
+| :--- | :---: | :--- | :--- |
+| **0.1 – 5.0 Acres** | **100%** | Small & Marginal Farmer (சிறு/குறு விவசாயி) | 100% equipment & installation covered under PMKSY small farmer grant. |
+| **5.1 – 12.0 Acres** | **75%** | Other Farmer | 75% cost covered under TN Horticulture Dept scheme; farmer pays 25%. |
+| **> 12.0 Acres** | **50%** | Large Farm / Commercial | 50% subsidy on permissible limit with custom phased deployment. |
+
+### Request Format
+```json
+{
+  "farmer_name": "K. Murugesan",
+  "phone_number": "9489528432",
+  "district": "Dindigul",
+  "product_id": 1,
+  "land_size_acres": 3.0
+}
+```
+
+### Response Format
+```json
+{
+  "status": "success",
+  "quote_id": 142,
+  "farmer_name": "K. Murugesan",
+  "product_title": "Drip Irrigation Kit",
+  "land_acres": 3.0,
+  "project_cost": 73500.0,
+  "subsidy_amount": 73500.0,
+  "farmer_contribution": 0.0,
+  "subsidy_percent": 100,
+  "tier_label": "100% Grant — Small Farmer (சிறு/குறு விவசாயி)",
+  "explanation": "Under 5 Acres: Tamil Nadu Govt covers the full installation cost under the PMKSY small farmer scheme."
+}
+```
+
+### Example cURL
+```bash
+curl -X POST https://your-backend-domain.com/api/v1/calculate/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "farmer_name": "K. Murugesan",
+    "phone_number": "9489528432",
+    "district": "Dindigul",
+    "product_id": 1,
+    "land_size_acres": 3.0
+  }'
+```

@@ -12,6 +12,8 @@ export const routes: Routes = [
       { path: 'services',  loadComponent: () => import('./pages/services/services.component').then(m => m.ServicesComponent),   title: 'Services & Equipment — Thozhan Irrigation' },
       { path: 'solutions', redirectTo: 'services', pathMatch: 'full' },
       { path: 'pricing',   loadComponent: () => import('./pages/pricing/pricing.component').then(m => m.PricingComponent),      title: 'Pricing & Subsidy — Thozhan Irrigation' },
+      { path: 'calculator', loadComponent: () => import('./pages/subsidy-calculator/subsidy-calculator.component').then(m => m.SubsidyCalculatorComponent), title: 'Subsidy Calculator — Thozhan Irrigation' },
+      { path: 'subsidy-calculator', redirectTo: 'calculator', pathMatch: 'full' },
       { path: 'blog',      loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent),               title: 'Blog & Guides — Thozhan Irrigation' },
       { path: 'contact',   loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent),      title: 'Contact Us — Thozhan Irrigation' },
     ]

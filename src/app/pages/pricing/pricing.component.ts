@@ -1,11 +1,11 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
+import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calculator.component';
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, SubsidyCalculatorComponent],
   template: `
     <div class="pricing-wrapper">
       <!-- Header Banner -->
@@ -131,111 +131,8 @@ import { DecimalPipe } from '@angular/common';
 
       <!-- Live Interactive Cost Estimator -->
       <section class="section section-cream" id="calculator">
-        <div class="container-narrow">
-          <div class="section-header text-center">
-            <span class="section-eyebrow eyebrow-light">
-              <i class="fa-solid fa-sliders"></i> Interactive Estimation
-            </span>
-            <h2 class="section-title">Live Subsidy Cost Estimator</h2>
-            <p class="section-subtitle">
-              Adjust your land acreage and select your system type to see your estimated subsidy amount and net contribution in real-time.
-            </p>
-          </div>
-
-          <div class="card-light estimator-card">
-            <div class="estimator-grid">
-              <!-- Left Inputs -->
-              <div class="estimator-inputs">
-                <!-- Land Range Slider -->
-                <div class="form-group mb-6">
-                  <div class="flex-between items-center mb-2">
-                    <label class="font-bold text-sm">Farm Land Size:</label>
-                    <span class="land-val-badge">{{ land() }} Acres</span>
-                  </div>
-                  <input type="range"
-                         class="custom-range"
-                         min="0.5"
-                         max="25"
-                         step="0.5"
-                         [value]="land()"
-                         (input)="onLandSliderChange($event)" />
-                  <div class="range-marks flex-between">
-                    <span>0.5 Acre</span>
-                    <span>5 Acres (100% Limit)</span>
-                    <span>12.5 Acres</span>
-                    <span>25 Acres</span>
-                  </div>
-                </div>
-
-                <!-- System Selection -->
-                <div class="form-group">
-                  <label class="font-bold text-sm mb-2">Select Irrigation Type:</label>
-                  <div class="system-pills-grid">
-                    <button class="sys-pill" [class.active]="pricePerAcre() === 24500" (click)="pricePerAcre.set(24500)">
-                      <i class="fa-solid fa-faucet-drip"></i>
-                      <span>Drip Kit</span>
-                      <small>₹24,500/Ac</small>
-                    </button>
-                    <button class="sys-pill" [class.active]="pricePerAcre() === 18200" (click)="pricePerAcre.set(18200)">
-                      <i class="fa-solid fa-sprinkler"></i>
-                      <span>Sprinkler</span>
-                      <small>₹18,200/Ac</small>
-                    </button>
-                    <button class="sys-pill" [class.active]="pricePerAcre() === 32000" (click)="pricePerAcre.set(32000)">
-                      <i class="fa-solid fa-cloud-showers-water"></i>
-                      <span>Rain Gun</span>
-                      <small>₹32,000/Unit</small>
-                    </button>
-                    <button class="sys-pill" [class.active]="pricePerAcre() === 85000" (click)="pricePerAcre.set(85000)">
-                      <i class="fa-solid fa-solar-panel"></i>
-                      <span>Solar Pump</span>
-                      <small>₹85,000/Unit</small>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right Calculation Summary -->
-              <div class="estimator-summary card-cream">
-                <h4 class="summary-title">
-                  <i class="fa-solid fa-receipt text-brand"></i> Estimated Breakdown
-                </h4>
-
-                <div class="breakdown-row">
-                  <span>Gross Project Cost:</span>
-                  <strong>₹ {{ projectCost() | number }}</strong>
-                </div>
-
-                <div class="breakdown-row subsidy-highlight">
-                  <span>
-                    Govt. Subsidy ({{ subsidyPct() }}%):
-                    <small class="block text-xs" style="color: #0D6B3D;">
-                      {{ subsidyPct() === 100 ? 'Small Farmer Tier' : subsidyPct() === 75 ? 'Other Farmer Tier' : 'Large Farm Tier' }}
-                    </small>
-                  </span>
-                  <strong class="text-brand">- ₹ {{ subsidy() | number }}</strong>
-                </div>
-
-                <div class="breakdown-divider"></div>
-
-                <div class="breakdown-row final-row">
-                  <span>Your Net Contribution:</span>
-                  <strong class="final-amt">₹ {{ contribution() | number }}</strong>
-                </div>
-
-                @if (subsidyPct() === 100) {
-                  <div class="small-farmer-note">
-                    <i class="fa-solid fa-star text-gold"></i>
-                    <span>Eligible for 100% Free Setup under Tamil Nadu PMKSY guidelines!</span>
-                  </div>
-                }
-
-                <a routerLink="/contact" class="btn btn-amber btn-full mt-4">
-                  <i class="fa-solid fa-paper-plane"></i> Proceed with this Quote
-                </a>
-              </div>
-            </div>
-          </div>
+        <div class="container-wide">
+          <app-subsidy-calculator></app-subsidy-calculator>
         </div>
       </section>
 
@@ -383,124 +280,6 @@ import { DecimalPipe } from '@angular/common';
       flex-shrink: 0;
     }
 
-    /* Estimator */
-    .estimator-card {
-      padding: 2.25rem 2rem;
-    }
-    .estimator-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 2.5rem;
-      align-items: center;
-    }
-    .land-val-badge {
-      background-color: var(--mint-soft);
-      color: var(--brand-main);
-      padding: 0.3rem 0.75rem;
-      border-radius: var(--radius-full);
-      font-size: 0.9375rem;
-      font-weight: 800;
-    }
-    .custom-range {
-      width: 100%;
-      height: 8px;
-      border-radius: 4px;
-      background: var(--border-light);
-      outline: none;
-      margin: 1rem 0 0.5rem;
-      cursor: pointer;
-      accent-color: var(--brand-main);
-    }
-    .range-marks {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    .system-pills-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-    }
-    .sys-pill {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.875rem 0.5rem;
-      border-radius: var(--radius-md);
-      background-color: var(--white);
-      border: 1.5px solid var(--border-light);
-      color: var(--text-primary);
-      transition: var(--transition-fast);
-      cursor: pointer;
-    }
-    .sys-pill:hover {
-      border-color: var(--brand-bright);
-      background-color: var(--mint-subtle);
-    }
-    .sys-pill.active {
-      border-color: var(--brand-main);
-      background-color: var(--mint-soft);
-      color: var(--forest-deep);
-      font-weight: 700;
-      box-shadow: 0 2px 8px rgba(13, 107, 61, 0.15);
-    }
-    .sys-pill i { font-size: 1.25rem; margin-bottom: 0.35rem; color: var(--brand-main); }
-    .sys-pill span { font-size: 0.875rem; font-weight: 700; }
-    .sys-pill small { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.15rem; }
-
-    /* Summary Panel */
-    .estimator-summary {
-      padding: 1.75rem;
-      border-radius: var(--radius-lg);
-    }
-    .summary-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .breakdown-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.875rem;
-      font-size: 0.9375rem;
-      color: var(--text-secondary);
-    }
-    .breakdown-row strong {
-      color: var(--text-primary);
-    }
-    .breakdown-divider {
-      height: 1px;
-      background-color: var(--border-light);
-      margin: 1rem 0;
-    }
-    .final-row {
-      font-size: 1.0625rem;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-    .final-amt {
-      font-size: 1.35rem;
-      color: var(--forest-deep);
-    }
-    .small-farmer-note {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #0D6B3D;
-      background: var(--mint-soft);
-      padding: 0.5rem 0.75rem;
-      border-radius: var(--radius-md);
-      margin-top: 1rem;
-    }
-
     /* Docs */
     .docs-grid {
       margin-top: 1rem;
@@ -528,30 +307,6 @@ import { DecimalPipe } from '@angular/common';
       color: var(--text-secondary);
       line-height: 1.5;
     }
-
-    @media (max-width: 1024px) {
-      .estimator-grid { grid-template-columns: 1fr; }
-    }
   `]
 })
-export class PricingComponent {
-  land = signal(3);
-  pricePerAcre = signal(24500);
-
-  projectCost = computed(() => Math.round(this.land() * this.pricePerAcre()));
-  
-  subsidyPct = computed(() => {
-    const l = this.land();
-    if (l <= 5) return 100;
-    if (l <= 12.5) return 75;
-    return 50;
-  });
-
-  subsidy = computed(() => Math.round(this.projectCost() * this.subsidyPct() / 100));
-  contribution = computed(() => this.projectCost() - this.subsidy());
-
-  onLandSliderChange(event: Event) {
-    const val = Number((event.target as HTMLInputElement).value);
-    this.land.set(val);
-  }
-}
+export class PricingComponent {}
