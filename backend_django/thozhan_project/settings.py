@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'thozhan_project.wsgi'
+WSGI_APPLICATION = 'thozhan_project.wsgi.application'
 
 DATABASES = {
     'default': {
