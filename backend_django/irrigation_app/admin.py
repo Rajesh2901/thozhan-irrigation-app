@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, SubsidyRule, QuoteRequest, BlogPost, Testimonial
+from .models import Product, SubsidyRule, QuoteRequest, ContactInquiry, BlogPost, Testimonial
 
 
 @admin.register(Product)
@@ -42,3 +42,12 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_display  = ['name', 'role', 'district', 'rating', 'is_active', 'order']
     list_editable = ['is_active', 'order', 'rating']
     search_fields = ['name', 'district']
+
+
+@admin.register(ContactInquiry)
+class ContactInquiryAdmin(admin.ModelAdmin):
+    list_display  = ['id', 'name', 'phone', 'district', 'subject', 'status', 'created_at']
+    list_filter   = ['status', 'district', 'created_at']
+    list_editable = ['status']
+    search_fields = ['name', 'phone', 'email', 'district', 'subject', 'message']
+    date_hierarchy = 'created_at'

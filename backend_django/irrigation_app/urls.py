@@ -4,8 +4,10 @@ from . import views
 
 # Admin-only router (requires staff auth)
 admin_router = DefaultRouter()
-admin_router.register(r'blog',   views.BlogAdminViewSet,    basename='admin-blog')
-admin_router.register(r'quotes', views.QuoteRequestViewSet, basename='admin-quotes')
+admin_router.register(r'products', views.ProductAdminViewSet, basename='admin-products')
+admin_router.register(r'quotes',   views.QuoteRequestViewSet, basename='admin-quotes')
+admin_router.register(r'contacts', views.ContactInquiryViewSet, basename='admin-contacts')
+admin_router.register(r'blog',     views.BlogAdminViewSet,    basename='admin-blog')
 
 urlpatterns = [
     # ── Public Endpoints ────────────────────────────

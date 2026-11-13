@@ -23,8 +23,8 @@ FROM nginx:alpine-slim
 # Copy custom security-hardened Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy build artifacts from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy build artifacts from builder stage (Angular 19 application builder outputs to dist/browser)
+COPY --from=builder /app/dist/browser /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80

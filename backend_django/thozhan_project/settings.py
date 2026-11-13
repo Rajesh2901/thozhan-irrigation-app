@@ -8,7 +8,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-thozhan-irrigation-sm
 
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',') if DEBUG else os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,9 +97,31 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon':      '60/minute',
+        'user':      '120/minute',
+        'calculate': '30/minute',
+        'contact':   '15/minute',
+    },
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
 }
+
+# ── Security Headers & Hardening ──────────────────────────────────────────
+SECURE_BROWSER_XSS_FILTER   = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS             = 'DENY'
+SECURE_REFERRER_POLICY      = 'strict-origin-when-cross-origin'
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT   = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE    = True
+
 
 # ── JWT Configuration ─────────────────────────────────────────────────────
 SIMPLE_JWT = {

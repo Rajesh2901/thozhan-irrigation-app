@@ -3,9 +3,10 @@ from rest_framework import viewsets, status, generics, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, AllowAny
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
-from .models import Product, SubsidyRule, QuoteRequest, BlogPost, Testimonial
+from .models import Product, SubsidyRule, QuoteRequest, ContactInquiry, BlogPost, Testimonial
 from .serializers import (
     ProductSerializer,
     SubsidyRuleSerializer,
@@ -16,9 +17,24 @@ from .serializers import (
     BlogPostWriteSerializer,
     TestimonialSerializer,
     ContactFormSerializer,
+    ContactInquiryAdminSerializer,
 )
 
 logger = logging.getLogger(__name__)
+
+
+# ─────────────────────────────────────────────
+# RATE LIMITING THROTTLES
+# ─────────────────────────────────────────────
+
+class SubsidyCalculateThrottle(AnonRateThrottle):
+    rate = '30/minute'
+    scope = 'calculate'
+
+
+class ContactFormThrottle(AnonRateThrottle):
+    rate = '15/minute'
+    scope = 'contact'
 
 
 # ─────────────────────────────────────────────
@@ -30,7 +46,7 @@ class ProductListView(generics.ListAPIView):
     GET /api/v1/products/
     Returns the full irrigation equipment catalog.
     """
-    queryset         = Product.objects.all()
+    queryset         = Product.objects.all().order_by('order', 'id')
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
@@ -45,6 +61,25 @@ class ProductDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
 
+class ProductAdminViewSet(viewsets.ModelViewSet):
+    """
+    Admin CRUD for products.
+    GET    /api/v1/admin/products/
+    POST   /api/v1/admin/products/
+    GET    /api/v1/admin/products/<id>/
+    PUT    /api/v1/admin/products/<id>/
+    PATCH  /api/v1/admin/products/<id>/
+    DELETE /api/v1/admin/products/<id>/
+    """
+    queryset           = Product.objects.all().order_by('order', 'id')
+    serializer_class   = ProductSerializer
+    permission_classes = [IsAdminUser]
+    filter_backends    = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields      = ['title_en', 'title_ta', 'desc']
+    ordering_fields    = ['order', 'price_numeric', 'id']
+    ordering           = ['order', 'id']
+
+
 # ─────────────────────────────────────────────
 # SUBSIDY CALCULATOR
 # ─────────────────────────────────────────────
@@ -53,14 +88,9 @@ class CalculateSubsidyAPIView(APIView):
     """
     POST /api/v1/calculate/
     Computes Tamil Nadu Government subsidy brackets and saves a lead quote.
-
-    Request body:
-        { farmer_name, phone_number, district, product_id, land_size_acres }
-
-    Response:
-        { quote_id, project_cost, subsidy_amount, farmer_contribution, tier_label, explanation }
     """
     permission_classes = [AllowAny]
+    throttle_classes    = [SubsidyCalculateThrottle]
 
     def post(self, request):
         serializer = CalculateSubsidyInputSerializer(data=request.data)
@@ -179,16 +209,17 @@ class TestimonialListView(generics.ListAPIView):
 
 
 # ─────────────────────────────────────────────
-# CONTACT FORM
+# CONTACT FORM & INQUIRIES
 # ─────────────────────────────────────────────
 
 class ContactFormView(APIView):
     """
     POST /api/v1/contact/
-    Validates and records a contact form submission.
+    Validates and records a contact form submission into ContactInquiry.
     Returns success confirmation or field-level validation errors.
     """
     permission_classes = [AllowAny]
+    throttle_classes   = [ContactFormThrottle]
 
     def post(self, request):
         serializer = ContactFormSerializer(data=request.data)
@@ -196,31 +227,53 @@ class ContactFormView(APIView):
             return Response({"status": "error", "errors": serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        d = serializer.validated_data
-        # Log submission (Phase 2: add email notification via django-anymail)
-        logger.info("Contact form from %s <%s> — %s", d['name'], d['email'], d['subject'])
+        inquiry = serializer.save()
+        logger.info("Saved contact inquiry #%s from %s <%s> — %s (%s)",
+                    inquiry.id, inquiry.name, inquiry.email, inquiry.subject, inquiry.district)
 
         return Response({
             "status":  "success",
             "message": "நன்றி! We'll contact you within 24 hours.",
+            "inquiry_id": inquiry.id,
         }, status=status.HTTP_201_CREATED)
+
+
+class ContactInquiryViewSet(viewsets.ModelViewSet):
+    """
+    Admin CRUD for inbound farmer/customer inquiries.
+    GET    /api/v1/admin/contacts/
+    GET    /api/v1/admin/contacts/<id>/
+    PATCH  /api/v1/admin/contacts/<id>/
+    DELETE /api/v1/admin/contacts/<id>/
+    """
+    queryset           = ContactInquiry.objects.all().order_by('-created_at')
+    serializer_class   = ContactInquiryAdminSerializer
+    permission_classes = [IsAdminUser]
+    filter_backends    = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields      = ['name', 'phone', 'district', 'subject', 'status']
+    ordering_fields    = ['created_at', 'status', 'district']
+    ordering           = ['-created_at']
 
 
 # ─────────────────────────────────────────────
 # ADMIN — QUOTES DASHBOARD
 # ─────────────────────────────────────────────
 
-class QuoteRequestViewSet(viewsets.ReadOnlyModelViewSet):
+class QuoteRequestViewSet(viewsets.ModelViewSet):
     """
-    GET /api/v1/admin/quotes/         — list all farmer leads
-    GET /api/v1/admin/quotes/<id>/    — single lead detail
-    Restricted to Django admin/staff users.
+    Admin CRUD for farmer subsidy quotes and lead lifecycle.
+    GET    /api/v1/admin/quotes/         — list all farmer leads
+    GET    /api/v1/admin/quotes/<id>/    — single lead detail
+    PATCH  /api/v1/admin/quotes/<id>/    — update status (PENDING->APPROVED->COMPLETED)
+    DELETE /api/v1/admin/quotes/<id>/    — remove lead
     """
-    queryset         = QuoteRequest.objects.all()
-    serializer_class = QuoteRequestSerializer
+    queryset           = QuoteRequest.objects.all().order_by('-created_at')
+    serializer_class   = QuoteRequestSerializer
     permission_classes = [IsAdminUser]
-    filter_backends  = [filters.SearchFilter]
-    search_fields    = ['farmer_name', 'phone_number', 'district', 'status']
+    filter_backends    = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields      = ['farmer_name', 'phone_number', 'district', 'status']
+    ordering_fields    = ['created_at', 'status', 'land_size_acres', 'estimated_project_cost']
+    ordering           = ['-created_at']
 
 
 # ─────────────────────────────────────────────

@@ -93,6 +93,10 @@ export class ApiService {
     );
   }
 
+  updateQuoteLeadStatus(id: number, status: string): Observable<QuoteLead> {
+    return this.http.patch<QuoteLead>(`${API_BASE}/admin/quotes/${id}/`, { status });
+  }
+
   // ── Dashboard Stats ───────────────────────────────────────
   getDashboardStats(): Observable<DashboardStats> {
     return this.http.get<DashboardStats>(`${API_BASE}/stats/`).pipe(

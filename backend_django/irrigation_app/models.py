@@ -46,21 +46,44 @@ class QuoteRequest(models.Model):
     ]
     farmer_name              = models.CharField(max_length=200)
     phone_number             = models.CharField(max_length=15, default="9489528432")
-    district                 = models.CharField(max_length=100, default="Dindigul")
+    district                 = models.CharField(max_length=100, default="Dindigul", db_index=True)
     product                  = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="quote_requests")
     land_size_acres          = models.FloatField(validators=[MinValueValidator(0.1), MaxValueValidator(500.0)])
     estimated_project_cost   = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     projected_subsidy_amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     farmer_contribution      = models.DecimalField(max_digits=12, decimal_places=2, default=0.0)
     subsidy_percent          = models.IntegerField(default=100)
-    status                   = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
-    created_at               = models.DateTimeField(auto_now_add=True)
+    status                   = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING', db_index=True)
+    created_at               = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return f"Quote #{self.id} — {self.farmer_name} ({self.land_size_acres} Acres)"
+
+
+class ContactInquiry(models.Model):
+    """Inbound customer and farmer consultation inquiries."""
+    STATUS_CHOICES = [
+        ('NEW',         'New Inquiry'),
+        ('IN_PROGRESS', 'In Follow-up'),
+        ('RESOLVED',    'Resolved'),
+    ]
+    name       = models.CharField(max_length=200)
+    email      = models.EmailField(blank=True, default='')
+    phone      = models.CharField(max_length=20)
+    district   = models.CharField(max_length=100, default="Dindigul", db_index=True)
+    subject    = models.CharField(max_length=300)
+    message    = models.TextField()
+    status     = models.CharField(max_length=20, choices=STATUS_CHOICES, default='NEW', db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} ({self.district}) — {self.subject}"
 
 
 class BlogPost(models.Model):
