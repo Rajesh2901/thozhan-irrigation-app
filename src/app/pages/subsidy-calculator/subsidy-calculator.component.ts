@@ -183,6 +183,38 @@ import { Product, SubsidyCalculationInput, SubsidyCalculationResult } from '../.
                 <strong>{{ res.tier_label }}</strong>
               </div>
 
+              <!-- Visual Cost Share Donut Breakdown -->
+              <div class="visual-cost-chart-wrap">
+                <div class="chart-flex">
+                  <div class="donut-box">
+                    <svg viewBox="0 0 36 36" class="circular-chart">
+                      <path class="circle-bg"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path class="circle-fill"
+                        [attr.stroke-dasharray]="res.subsidy_percent + ', 100'"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <text x="18" y="20.35" class="chart-percent">{{ res.subsidy_percent }}%</text>
+                    </svg>
+                  </div>
+                  <div class="chart-legend">
+                    <div class="legend-row">
+                      <span class="legend-dot dot-grant"></span>
+                      <span>Govt. Aid: <strong>{{ res.subsidy_percent }}% (₹{{ res.subsidy_amount | number }})</strong></span>
+                    </div>
+                    <div class="legend-row">
+                      <span class="legend-dot dot-farmer"></span>
+                      <span>Farmer Share: <strong>{{ 100 - res.subsidy_percent }}% (₹{{ res.farmer_contribution | number }})</strong></span>
+                    </div>
+                    <div class="water-save-badge">
+                      <i class="fa-solid fa-droplet text-blue"></i>
+                      <span>Estimated Water Saved: <strong>~70% vs Flood</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div class="quote-breakdown">
                 <div class="breakdown-item">
                   <span class="label">Gross Estimated Cost:</span>
@@ -493,6 +525,82 @@ import { Product, SubsidyCalculationInput, SubsidyCalculationResult } from '../.
       margin-bottom: 1.25rem;
       font-size: 0.875rem;
       color: var(--forest-deep);
+    }
+
+    /* Donut Chart Visualizer */
+    .visual-cost-chart-wrap {
+      background: #FAFCFA;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .chart-flex {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .donut-box {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+    .circular-chart {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .circle-bg {
+      fill: none;
+      stroke: #FFCC00;
+      stroke-width: 3.8;
+    }
+    .circle-fill {
+      fill: none;
+      stroke: #238636;
+      stroke-width: 4.2;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.5s ease;
+    }
+    .chart-percent {
+      fill: var(--forest-deep);
+      font-family: inherit;
+      font-size: 0.55rem;
+      font-weight: 800;
+      text-anchor: middle;
+    }
+    .chart-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-grant { background: #238636; }
+    .dot-farmer { background: #FFCC00; }
+    .water-save-badge {
+      margin-top: 0.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      color: var(--authority-blue);
+      background: #EBF3FA;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
     }
     .quote-breakdown {
       background: var(--white);

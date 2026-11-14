@@ -53,16 +53,22 @@ import { Product } from '../../core/models/interfaces';
             </div>
           </div>
 
-          <!-- Filter Tabs -->
-          <div class="filter-bar">
-            @for (filter of filters; track filter) {
-              <button 
-                class="filter-btn" 
-                [class.active]="activeFilter() === filter"
-                (click)="setFilter(filter)">
-                {{ filter }}
-              </button>
-            }
+          <!-- Filter Tabs & Catalog Download -->
+          <div class="filter-bar-row">
+            <div class="filter-bar">
+              @for (filter of filters; track filter) {
+                <button 
+                  class="filter-btn" 
+                  [class.active]="activeFilter() === filter"
+                  (click)="setFilter(filter)">
+                  {{ filter }}
+                </button>
+              }
+            </div>
+            <a href="docs/Thozhan_Irrigation_Catalog_2026.pdf" download="Thozhan_Irrigation_Catalog_2026.pdf" class="btn btn-outline-light btn-sm catalog-btn">
+              <i class="fa-solid fa-file-arrow-down"></i>
+              <span>Download 2026 Catalog (PDF)</span>
+            </a>
           </div>
 
           <!-- Product Cards Grid -->
@@ -125,6 +131,9 @@ import { Product } from '../../core/models/interfaces';
 
                   <!-- Card Action CTAs -->
                   <div class="product-actions">
+                    <button type="button" class="btn btn-outline-light btn-sm btn-icon" (click)="downloadBrochure(product)" title="Download Engineering Spec Sheet">
+                      <i class="fa-solid fa-file-pdf"></i>
+                    </button>
                     <a routerLink="/pricing" class="btn btn-amber btn-sm flex-1">
                       <i class="fa-solid fa-calculator"></i> Get Estimate
                     </a>
@@ -196,6 +205,9 @@ import { Product } from '../../core/models/interfaces';
                 </ul>
 
                 <div class="modal-actions">
+                  <button type="button" (click)="downloadBrochure(modalP)" class="btn btn-outline-light btn-md">
+                    <i class="fa-solid fa-file-pdf"></i> Spec Sheet
+                  </button>
                   <a routerLink="/pricing" (click)="activeModalProduct.set(null)" class="btn btn-amber btn-md flex-1">
                     <i class="fa-solid fa-calculator"></i> Calculate Subsidy Tier
                   </a>
@@ -211,6 +223,217 @@ import { Product } from '../../core/models/interfaces';
           </div>
         </div>
       }
+
+      <!-- Engineering Cross-Section & Component Diagram Section -->
+      <section class="section section-soft technical-diagram-section">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-microchip"></i> Internal Engineering Architecture
+            </span>
+            <h2 class="section-title">Anatomy of a High-Uniformity Irrigation System</h2>
+            <p class="section-subtitle">
+              Built with precision-molded polymers, UV inhibitors, and hydrodynamic labyrinth channels that maintain uniform discharge even on undulating terrain.
+            </p>
+          </div>
+
+          <div class="grid-2 diagram-layout-grid items-center">
+            <!-- Left: PC Emitter Cross-Section Visualizer -->
+            <div class="card-light diagram-card p-8">
+              <div class="diagram-tag-row">
+                <span class="tag tag-mint"><i class="fa-solid fa-circle-check"></i> BIS IS 13487 Certified</span>
+                <span class="diagram-label">Inline Drip Emitter Cutaway</span>
+              </div>
+              <h3 class="text-xl font-bold text-forest mb-4">Pressure-Compensating (PC) Labyrinth Core</h3>
+              <p class="text-secondary text-sm mb-6 leading-relaxed">
+                Unlike simple drilled holes that over-water at lower slopes and starve elevated plants, our emitters utilize dynamic silicone diaphragms that flex under changing inlet pressures to deliver an exact 4.0 LPH droplet volume.
+              </p>
+
+              <!-- SVG Technical Cutaway Diagram -->
+              <div class="svg-schematic-box">
+                <svg viewBox="0 0 460 160" class="cutaway-svg">
+                  <!-- Pipe Wall -->
+                  <rect x="20" y="20" width="420" height="30" rx="6" fill="#132E15" />
+                  <rect x="20" y="110" width="420" height="30" rx="6" fill="#132E15" />
+                  <!-- Water Channel -->
+                  <rect x="20" y="50" width="420" height="60" fill="#EBF3FA" />
+                  <line x1="20" y1="80" x2="440" y2="80" stroke="#0066CC" stroke-width="2" stroke-dasharray="6,4" />
+
+                  <!-- Emitter Body Embedded in Pipe -->
+                  <rect x="130" y="60" width="200" height="40" rx="8" fill="#1E4620" stroke="#FFCC00" stroke-width="2" />
+                  <!-- Labyrinth Teeth -->
+                  <path d="M140 70 L150 90 L160 70 L170 90 L180 70 L190 90 L200 70" fill="none" stroke="#FFCC00" stroke-width="2.5" />
+                  <!-- Flexible Diaphragm -->
+                  <line x1="215" y1="72" x2="265" y2="72" stroke="#238636" stroke-width="4" stroke-linecap="round" />
+                  <!-- Regulated Droplet Exit -->
+                  <circle cx="295" cy="80" r="5" fill="#00E5FF" />
+                  <path d="M295 105 L295 135" stroke="#0066CC" stroke-width="2.5" stroke-dasharray="3,3" />
+                  <circle cx="295" cy="145" r="4" fill="#0066CC" />
+
+                  <!-- Labels -->
+                  <text x="50" y="40" fill="#FFFFFF" font-size="10" font-weight="700">16mm HDPE Pipe</text>
+                  <text x="145" y="55" fill="#FFCC00" font-size="9" font-weight="800">Turbulent Labyrinth</text>
+                  <text x="215" y="62" fill="#238636" font-size="9" font-weight="800">Silicone Diaphragm</text>
+                  <text x="310" y="148" fill="#0066CC" font-size="10" font-weight="800">4 LPH Constant</text>
+                </svg>
+              </div>
+
+              <div class="schematic-specs-strip mt-6">
+                <div class="spec-col">
+                  <span class="label">Operating Pressure</span>
+                  <strong>0.8 – 3.5 Bar</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="label">Discharge Tolerance</span>
+                  <strong>± 3% Uniformity</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="label">UV Stabilization</span>
+                  <strong>Carbon Black 2.5%</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Disc Filtration Cutaway -->
+            <div class="card-light diagram-card p-8">
+              <div class="diagram-tag-row">
+                <span class="tag tag-mint"><i class="fa-solid fa-filter"></i> 130 Micron Mesh</span>
+                <span class="diagram-label">Filtration Assembly</span>
+              </div>
+              <h3 class="text-xl font-bold text-forest mb-4">Grooved Disc Depth Filtration</h3>
+              <p class="text-secondary text-sm mb-6 leading-relaxed">
+                Stacked circular polypropylene rings with micro-grooves compress together under hydraulic pressure to trap inorganic silt, sand particles, and organic algae before they reach farm emitters.
+              </p>
+
+              <div class="filter-flow-steps">
+                <div class="flow-step-box">
+                  <div class="step-num-pill">1</div>
+                  <div>
+                    <strong class="text-forest text-sm">Borewell Raw Inlet</strong>
+                    <p class="text-xs text-secondary">High-velocity water enters tangential spin chamber.</p>
+                  </div>
+                </div>
+                <div class="flow-step-box">
+                  <div class="step-num-pill">2</div>
+                  <div>
+                    <strong class="text-forest text-sm">Disc Stack Trapping</strong>
+                    <p class="text-xs text-secondary">Silt is captured across three-dimensional disc groove intersections.</p>
+                  </div>
+                </div>
+                <div class="flow-step-box">
+                  <div class="step-num-pill">3</div>
+                  <div>
+                    <strong class="text-forest text-sm">Rapid Manual / Auto Flush</strong>
+                    <p class="text-xs text-secondary">Quarter-turn ball valve ejects collected particulates in seconds.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-8 flex gap-3">
+                <a routerLink="/pricing" class="btn btn-amber btn-sm flex-1">
+                  <i class="fa-solid fa-calculator"></i> Calculate Subsidy for this Setup
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Comparison Matrix Section -->
+      <section class="section section-light">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-code-compare"></i> Equipment Comparison
+            </span>
+            <h2 class="section-title">Irrigation Technologies Comparison Matrix</h2>
+            <p class="section-subtitle">
+              Compare water conservation efficiencies, operating pressure metrics, and government grant qualifications to pick the right engineering package for your crops.
+            </p>
+          </div>
+
+          <div class="comparison-table-wrap card-light">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Irrigation Technology</th>
+                  <th>Water Savings</th>
+                  <th>Operating Pressure</th>
+                  <th>Recommended Crops</th>
+                  <th>Govt. Subsidy Tier</th>
+                  <th>Direct Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="tech-cell">
+                      <i class="fa-solid fa-faucet-drip text-brand"></i>
+                      <div>
+                        <strong>Inline Drip Irrigation</strong>
+                        <span class="text-xs text-muted">Micro-irrigation</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stat-highlight text-brand">60% – 70%</span></td>
+                  <td>1.0 – 2.0 Bar</td>
+                  <td>Banana, Coconut, Vegetables, Mango, Cotton</td>
+                  <td><span class="tag tag-mint">100% / 75% PMKSY</span></td>
+                  <td><a routerLink="/pricing" class="btn btn-amber btn-xs">Estimate</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="tech-cell">
+                      <i class="fa-solid fa-sprinkler text-blue"></i>
+                      <div>
+                        <strong>Micro Sprinklers</strong>
+                        <span class="text-xs text-muted">Overhead misting</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stat-highlight text-blue">40% – 50%</span></td>
+                  <td>2.0 – 3.0 Bar</td>
+                  <td>Groundnut, Pulses, Tea, Nursery beds</td>
+                  <td><span class="tag tag-mint">100% / 75% PMKSY</span></td>
+                  <td><a routerLink="/pricing" class="btn btn-outline-light btn-xs">Estimate</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="tech-cell">
+                      <i class="fa-solid fa-cloud-showers-water text-amber"></i>
+                      <div>
+                        <strong>Rain Gun Cannons</strong>
+                        <span class="text-xs text-muted">High-throw radius</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stat-highlight">30% – 40%</span></td>
+                  <td>3.0 – 5.0 Bar</td>
+                  <td>Sugarcane, Fodder Grass, Maize</td>
+                  <td><span class="tag tag-amber">Direct Purchase</span></td>
+                  <td><a routerLink="/contact" class="btn btn-outline-light btn-xs">Inquire</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="tech-cell">
+                      <i class="fa-solid fa-solar-panel text-amber"></i>
+                      <div>
+                        <strong>Solar Agri Pumping</strong>
+                        <span class="text-xs text-muted">Off-grid renewable</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="stat-highlight text-brand">Zero Grid Power</span></td>
+                  <td>1.5 – 4.0 Bar</td>
+                  <td>Borewells & Open Wells in remote acreage</td>
+                  <td><span class="tag tag-mint">PM-KUSUM Subsidy</span></td>
+                  <td><a routerLink="/pricing" class="btn btn-amber btn-xs">Estimate</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <!-- Bottom Consultation Strip -->
       <section class="section section-cream text-center">
@@ -235,7 +458,34 @@ import { Product } from '../../core/models/interfaces';
     .services-header {
       padding: 4.5rem 1.5rem 4rem;
     }
-    .filter-bar {
+    
+  .filter-bar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .catalog-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border-color: var(--brand-forest);
+    color: var(--brand-forest);
+  }
+  .catalog-btn:hover {
+    background-color: var(--forest-light);
+    border-color: var(--brand-forest);
+    color: var(--brand-forest);
+  }
+  .btn-icon {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  .filter-bar {
       display: flex;
       gap: 0.5rem;
       margin-bottom: 2.5rem;
@@ -561,6 +811,138 @@ import { Product } from '../../core/models/interfaces';
     @media (max-width: 640px) {
       .modal-actions { flex-direction: column; }
     }
+
+    /* Technical Schematics & Diagrams */
+    .technical-diagram-section {
+      padding: 5rem 1.5rem;
+    }
+    .diagram-layout-grid {
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .diagram-card {
+      border: 1px solid var(--border-light);
+    }
+    .diagram-tag-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .diagram-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .svg-schematic-box {
+      background: #F1F6F0;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      overflow: hidden;
+    }
+    .cutaway-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .schematic-specs-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      border-top: 1px solid var(--border-light);
+      padding-top: 1rem;
+    }
+    .spec-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .spec-col .label {
+      font-size: 0.6875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .spec-col strong {
+      font-size: 0.8125rem;
+      color: var(--forest-deep);
+    }
+
+    .filter-flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .flow-step-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      background: #FAFCFA;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+    .step-num-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--forest-deep);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Comparison Table */
+    .comparison-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      margin-top: 1.5rem;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .comparison-table th {
+      background: var(--soft-green);
+      padding: 1rem 1.25rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--forest-deep);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .comparison-table td {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+    }
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+    .tech-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+    .tech-cell i {
+      font-size: 1.25rem;
+      width: 28px;
+      text-align: center;
+    }
+    .stat-highlight {
+      font-weight: 800;
+      font-size: 0.9375rem;
+    }
   `]
 })
 export class ServicesComponent implements OnInit {
@@ -705,6 +1087,107 @@ export class ServicesComponent implements OnInit {
     this.searchQuery.set('');
     this.activeFilter.set('All');
     this.sortBy.set('default');
+  }
+
+  downloadBrochure(product?: Product) {
+    if (!product) {
+      window.open('docs/Thozhan_Irrigation_Catalog_2026.pdf', '_blank');
+      return;
+    }
+
+    const specs = this.getProductSpecs(product);
+    const category = this.getProductCategory(product);
+    const printWindow = window.open('', '_blank', 'width=800,height=900');
+    if (!printWindow) {
+      window.open('docs/Thozhan_Irrigation_Catalog_2026.pdf', '_blank');
+      return;
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Technical Specification - ${product.title_en} | Thozhan Irrigation</title>
+        <style>
+          body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 40px; color: #202820; background: #fff; line-height: 1.5; }
+          .header { border-bottom: 2px solid #1E4620; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
+          .logo-title { font-size: 24px; font-weight: 800; color: #1E4620; margin: 0; }
+          .logo-sub { font-size: 13px; color: #667085; margin: 4px 0 0 0; }
+          .gst-badge { background: #EFF4EF; color: #1E4620; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-align: right; }
+          .product-hero { margin-bottom: 25px; }
+          .badge { display: inline-block; background: #EBF3FA; color: #0066CC; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+          .title { font-size: 26px; font-weight: 800; color: #10231B; margin: 0 0 4px 0; }
+          .tamil-title { font-size: 17px; color: #1E4620; font-weight: 600; margin-bottom: 12px; }
+          .price-box { background: #F7F9F7; border: 1px solid #E3E9E3; border-radius: 8px; padding: 15px 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+          .price-val { font-size: 22px; font-weight: 800; color: #10231B; }
+          .subsidy-tag { background: #238636; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+          .section-title { font-size: 15px; font-weight: 700; color: #10231B; border-bottom: 1px solid #E3E9E3; padding-bottom: 8px; margin-top: 25px; margin-bottom: 15px; }
+          .specs-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+          .specs-table td { padding: 10px 14px; border-bottom: 1px solid #E3E9E3; font-size: 13.5px; }
+          .specs-table tr:nth-child(even) { background-color: #F7F9F7; }
+          .specs-table td:first-child { font-weight: 600; color: #1E4620; width: 35%; }
+          .footer { margin-top: 40px; border-top: 1px solid #E3E9E3; padding-top: 20px; font-size: 12px; color: #667085; display: flex; justify-content: space-between; }
+          @media print {
+            body { padding: 20px; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <h1 class="logo-title">தோழன் இரிகேஷன் · THOZHAN IRRIGATION</h1>
+            <p class="logo-sub">Smart Agricultural Irrigation Systems & PMKSY Subsidy Support</p>
+          </div>
+          <div class="gst-badge">
+            Govt Authorized Dealer<br>GSTIN: 33BSXPJ5723P1ZX
+          </div>
+        </div>
+
+        <div class="product-hero">
+          <span class="badge">${category}</span>
+          <h2 class="title">${product.title_en}</h2>
+          <div class="tamil-title">${product.title_ta || ''}</div>
+          <p style="color: #667085; font-size: 14px; margin-bottom: 15px;">${product.desc}</p>
+        </div>
+
+        <div class="price-box">
+          <div>
+            <span style="font-size: 12px; color: #667085; text-transform: uppercase; font-weight: 600;">Government Quoted Rate:</span><br>
+            <span class="price-val">₹${product.price_numeric.toLocaleString('en-IN')} <span style="font-size: 14px; font-weight: 500; color: #667085;">${product.price_unit_text}</span></span>
+          </div>
+          ${product.is_subsidy_eligible ? '<span class="subsidy-tag">Up to 100% PMKSY Subsidy Available</span>' : ''}
+        </div>
+
+        <div class="section-title">ENGINEERING SPECIFICATIONS & COMPLIANCE</div>
+        <table class="specs-table">
+          ${specs.map((s, idx) => `<tr><td>Specification #${idx + 1}</td><td>${s}</td></tr>`).join('')}
+          <tr><td>Quality Standards</td><td>Bureau of Indian Standards (BIS Certified) · ISI Marked</td></tr>
+          <tr><td>Subsidy Schemes</td><td>PMKSY (Per Drop More Crop), TN Horticultural Dept Empaneled</td></tr>
+          <tr><td>Warranty & Life</td><td>5-Year On-Site Equipment & Piping Warranty · 10+ Year Field Durability</td></tr>
+        </table>
+
+        <div class="footer">
+          <div>
+            <strong>Thozhan Irrigation Central Hub</strong><br>
+            21-A, Vijaya Nagar, SSI ITI College Road, Seelapadi, Dindigul - 624 004<br>
+            Farmer Helpline: +91 94895 28432 | Email: thozhanirrigation@gmail.com
+          </div>
+          <div style="text-align: right;">
+            Official Spec Sheet · Generated on ${new Date().toLocaleDateString('en-IN')}<br>
+            Serving 18 Tamil Nadu Districts
+          </div>
+        </div>
+
+        <div class="no-print" style="margin-top: 30px; text-align: center;">
+          <button onclick="window.print()" style="background: #1E4620; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer;">
+            Print / Save as PDF
+          </button>
+        </div>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
   }
 
   getProductCategory(p: Product): string {

@@ -270,6 +270,74 @@ import { ContactFormData } from '../../core/models/interfaces';
               <i class="fa-solid fa-phone"></i> Call Farmer Desk
             </a>
           </div>
+
+          <!-- Interactive Head Office Location & Directions Map -->
+          <div class="card-light head-office-map-card mt-8">
+            <div class="map-card-header">
+              <div>
+                <span class="section-eyebrow eyebrow-light mb-1">
+                  <i class="fa-solid fa-building-flag"></i> Headquarters & Central Warehouse
+                </span>
+                <h3 class="text-xl font-bold text-forest">Dindigul Central Operations Center</h3>
+                <p class="text-xs text-secondary">
+                  21-A, Vijaya Nagar, SSI ITI College Road, Seelapadi, Dindigul — 624 004, Tamil Nadu
+                </p>
+              </div>
+              <a href="https://maps.google.com/?q=Seelapadi,+Dindigul,+Tamil+Nadu+624004"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn btn-outline-light btn-sm">
+                <i class="fa-solid fa-diamond-turn-right"></i> Open in Google Maps
+              </a>
+            </div>
+
+            <div class="map-frame-container">
+              <iframe
+                title="Thozhan Irrigation Dindigul Central Office Map"
+                src="https://maps.google.com/maps?q=Seelapadi,+Dindigul,+Tamil+Nadu+624004&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="320"
+                style="border:0;"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+
+            <!-- Support Process Infographic (4-Step Assessment Workflow) -->
+            <div class="support-workflow-bar mt-6">
+              <div class="workflow-step">
+                <span class="wf-num">1</span>
+                <div>
+                  <strong>Inquiry & Triage</strong>
+                  <p>Farmer details verified against subsidy database within 2 hours.</p>
+                </div>
+              </div>
+              <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="workflow-step">
+                <span class="wf-num">2</span>
+                <div>
+                  <strong>Revenue Audit</strong>
+                  <p>Patta, Chitta, and FMB sketch checked by documentation cell.</p>
+                </div>
+              </div>
+              <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="workflow-step">
+                <span class="wf-num">3</span>
+                <div>
+                  <strong>Field Survey</strong>
+                  <p>48-Hour hydraulic pressure, pump flow, and soil test visit.</p>
+                </div>
+              </div>
+              <div class="wf-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div class="workflow-step">
+                <span class="wf-num">4</span>
+                <div>
+                  <strong>Sanction & Setup</strong>
+                  <p>Turnkey BIS pipe fusion, trenching, and ADH inspection sign-off.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -541,6 +609,76 @@ import { ContactFormData } from '../../core/models/interfaces';
       justify-content: center;
       font-size: 1.35rem;
       flex-shrink: 0;
+    }
+
+    /* Head Office Map & Support Workflow */
+    .head-office-map-card {
+      padding: 2rem;
+      border: 1px solid var(--border-light);
+    }
+    .map-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .map-frame-container {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: #E8F2EC;
+    }
+    .support-workflow-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: var(--soft-green);
+      border-radius: var(--radius-md);
+    }
+    @media (max-width: 900px) {
+      .support-workflow-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .wf-arrow { display: none; }
+    }
+    .workflow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      flex: 1;
+    }
+    .workflow-step strong {
+      font-size: 0.875rem;
+      color: var(--forest-deep);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .workflow-step p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .wf-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--forest-deep);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .wf-arrow {
+      color: var(--brand-main);
+      font-size: 0.875rem;
     }
   `]
 })

@@ -129,70 +129,81 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
         </div>
       </section>
 
-      <!-- Step-by-Step Subsidy Application Process -->
+      <!-- Official 7-Step PMKSY & TN Horti Subsidy Application Journey -->
       <section class="section section-light subsidy-process-section">
         <div class="container-wide">
           <div class="section-header text-center">
             <span class="section-eyebrow eyebrow-light">
-              <i class="fa-solid fa-route"></i> Streamlined 4-Step Journey
+              <i class="fa-solid fa-route"></i> Official 7-Step Workflow
             </span>
-            <h2 class="section-title">How Tamil Nadu Government Subsidy Works</h2>
+            <h2 class="section-title">Government Subsidy Sanction & Installation Journey</h2>
             <p class="section-subtitle">
-              From land verification to final field testing, our engineering and documentation cells handle every technical and administrative phase.
+              Fully compliant with Tamil Nadu Horticulture Department & Pradhan Mantri Krishi Sinchayee Yojana (PMKSY) administrative standards.
             </p>
           </div>
 
-          <div class="grid-4 process-steps-grid">
-            <!-- Step 1 -->
-            <div class="card-light process-step-card hover-lift">
-              <div class="step-num-badge">01</div>
-              <div class="step-icon-wrap">
-                <i class="fa-solid fa-calculator"></i>
+          <div class="process-flow-container">
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">01</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-user-check"></i></div>
+                <h4 class="step-heading">1. Eligibility Assessment</h4>
+                <p class="step-desc">Verification of farmer category based on total land registered in Revenue records (Small/Marginal $\le$ 5 Acres for 100% Free Grant, Other Farmers for 75%).</p>
               </div>
-              <h3 class="step-title">1. Acreage Assessment</h3>
-              <p class="step-desc">
-                Use our calculator or call our Dindigul desk with your registered Patta acreage to determine whether you qualify for 100%, 75%, or 50% assistance.
-              </p>
-              <span class="step-highlight">Zero Registration Fee</span>
             </div>
 
-            <!-- Step 2 -->
-            <div class="card-light process-step-card hover-lift">
-              <div class="step-num-badge">02</div>
-              <div class="step-icon-wrap">
-                <i class="fa-solid fa-file-shield"></i>
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">02</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-file-contract"></i></div>
+                <h4 class="step-heading">2. Document Verification</h4>
+                <p class="step-desc">Compilation of legal Patta, Chitta, VAO-attested Adangal, FMB field sketch, Aadhaar card, and bank passbook with IFSC code.</p>
               </div>
-              <h3 class="step-title">2. Document Verification</h3>
-              <p class="step-desc">
-                Provide copies of Patta, Chitta, FMB sketch, and Aadhaar. Our documentation desk files the beneficiary application with the Assistant Director of Horticulture (ADH).
-              </p>
-              <span class="step-highlight">Full Paperwork Assistance</span>
             </div>
 
-            <!-- Step 3 -->
-            <div class="card-light process-step-card hover-lift">
-              <div class="step-num-badge">03</div>
-              <div class="step-icon-wrap">
-                <i class="fa-solid fa-compass-drafting"></i>
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">03</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-faucet-drip"></i></div>
+                <h4 class="step-heading">3. Hydraulic CAD Layout</h4>
+                <p class="step-desc">On-site technical survey measuring ground elevation, soil infiltration rate, and borewell discharge (LPH) to engineer the pipe manifold.</p>
               </div>
-              <h3 class="step-title">3. Hydraulic Survey & CAD</h3>
-              <p class="step-desc">
-                Our certified technicians visit your farm to measure ground slope, soil permeability, and borewell water discharge (LPH) to design an optimized pipe network.
-              </p>
-              <span class="step-highlight">Custom Field Blueprint</span>
             </div>
 
-            <!-- Step 4 -->
-            <div class="card-light process-step-card hover-lift">
-              <div class="step-num-badge">04</div>
-              <div class="step-icon-wrap">
-                <i class="fa-solid fa-truck-ramp-box"></i>
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">04</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-paper-plane"></i></div>
+                <h4 class="step-heading">4. Official Application Filing</h4>
+                <p class="step-desc">Direct electronic filing through Tamil Nadu Horticulture e-Services portal and physical docket submission to the local Assistant Director of Horticulture (ADH) office.</p>
               </div>
-              <h3 class="step-title">4. Sanction & Installation</h3>
-              <p class="step-desc">
-                Upon official subsidy sanction order release, our field crew delivers BIS-certified components, trenches lines, fuses main manifolds, and executes full commissioning.
-              </p>
-              <span class="step-highlight">Free 1-Year Maintenance</span>
+            </div>
+
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">05</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-building-shield"></i></div>
+                <h4 class="step-heading">5. Department Field Inspection</h4>
+                <p class="step-desc">District Horticulture Officer on-site verification inspecting water source viability, crop suitability, and land boundaries against revenue maps.</p>
+              </div>
+            </div>
+
+            <div class="process-step-item">
+              <div class="step-circle"><span class="step-num">06</span></div>
+              <div class="step-card-content card-light">
+                <div class="step-icon-wrap"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                <h4 class="step-heading">6. Sanction & Installation</h4>
+                <p class="step-desc">Release of administrative work order sanction. Certified mechanics trench lines, fuse BIS virgin HDPE pipes, install disc filters, and execute pressure test.</p>
+              </div>
+            </div>
+
+            <div class="process-step-item">
+              <div class="step-circle highlight-step"><span class="step-num">07</span></div>
+              <div class="step-card-content card-light highlight-card">
+                <div class="step-icon-wrap"><i class="fa-solid fa-circle-dollar-to-slot"></i></div>
+                <h4 class="step-heading">7. DBT Subsidy Disbursement</h4>
+                <p class="step-desc">Joint post-installation GPS geo-tagging, final field sign-off, and direct subsidy grant clearance from government accounts with zero out-of-pocket leakage.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -380,66 +391,77 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
       flex-shrink: 0;
     }
 
-    /* Process Steps Grid */
+    /* 7-Step Process Flow Container */
     .subsidy-process-section {
       background-color: var(--white);
     }
-    .process-steps-grid {
-      margin-top: 1.5rem;
+    .process-flow-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
+      margin-top: 2rem;
     }
-    .process-step-card {
-      position: relative;
-      padding: 2rem 1.5rem 1.75rem;
+    .process-step-item {
       display: flex;
       flex-direction: column;
-      border-radius: var(--radius-lg);
+      position: relative;
     }
-    .step-num-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1.25rem;
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: rgba(13, 107, 61, 0.12);
-      line-height: 1;
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--forest-deep);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8125rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 4px 10px rgba(30, 70, 32, 0.2);
+    }
+    .step-circle.highlight-step {
+      background: var(--golden-yellow);
+      color: var(--forest-deep);
+    }
+    .step-card-content {
+      flex: 1;
+      padding: 1.5rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
+    }
+    .step-card-content:hover {
+      border-color: var(--brand-main);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(30, 70, 32, 0.08);
+    }
+    .step-card-content.highlight-card {
+      border-left: 4px solid var(--golden-yellow);
+      background: #FFFCF2;
     }
     .step-icon-wrap {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background-color: var(--mint-soft);
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background-color: var(--soft-green);
       color: var(--brand-main);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
-      margin-bottom: 1.25rem;
+      font-size: 1.15rem;
+      margin-bottom: 1rem;
     }
-    .step-title {
-      font-size: 1.05rem;
+    .step-heading {
+      font-size: 0.9375rem;
       font-weight: 800;
       color: var(--forest-deep);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
     .step-desc {
       font-size: 0.8125rem;
       color: var(--text-secondary);
       line-height: 1.55;
-      margin-bottom: 1.25rem;
-      flex: 1;
-    }
-    .step-highlight {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--brand-main);
-      background-color: var(--mint-subtle);
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
-      border: 1px solid rgba(39, 196, 106, 0.25);
     }
 
     /* Docs */
