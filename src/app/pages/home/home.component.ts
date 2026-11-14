@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ThreeDIrrigationComponent } from '../../shared/components/three-d-irrigation/three-d-irrigation.component';
 
 interface SolutionItem {
   id: string;
@@ -90,7 +91,7 @@ const FAQS: FaqItem[] = [
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ThreeDIrrigationComponent],
   template: `
   <div class="home-wrapper">
 
@@ -181,56 +182,10 @@ const FAQS: FaqItem[] = [
               </button>
             </div>
 
-            <!-- View 1: 3D Drip Field Layout Simulation -->
+            <!-- View 1: 3D Drip Field Layout Simulation (Hardware-Accelerated WebGL) -->
             @if (activeShowcase() === '3d-drip') {
               <div class="sim-view-container animate-fade">
-                <div class="schematic-canvas">
-                  <!-- Header Filter Unit -->
-                  <div class="schematic-node node-filter">
-                    <div class="node-icon"><i class="fa-solid fa-filter"></i></div>
-                    <span class="node-tag">Disc Filter & Venturi</span>
-                  </div>
-
-                  <!-- Animated Main Pipe Line -->
-                  <div class="schematic-pipe-line pipe-main">
-                    <div class="pipe-water-flow"></div>
-                  </div>
-
-                  <!-- Lateral Lines & Emitter Drops -->
-                  <div class="schematic-laterals-grid">
-                    <div class="lateral-row">
-                      <span class="lat-label">Lateral 1 (16mm)</span>
-                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
-                      <span class="crop-tag">Row Crops</span>
-                    </div>
-                    <div class="lateral-row">
-                      <span class="lat-label">Lateral 2 (16mm)</span>
-                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
-                      <span class="crop-tag">Vegetables</span>
-                    </div>
-                    <div class="lateral-row">
-                      <span class="lat-label">Lateral 3 (16mm)</span>
-                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
-                      <span class="crop-tag">Banana / Coconut</span>
-                    </div>
-                  </div>
-
-                  <!-- Telemetry Metrics Bar -->
-                  <div class="schematic-metrics-bar">
-                    <div class="metric-item">
-                      <span class="m-val">70%</span>
-                      <span class="m-lbl">Water Conserved</span>
-                    </div>
-                    <div class="metric-item">
-                      <span class="m-val">1.2 Bar</span>
-                      <span class="m-lbl">Operating Pressure</span>
-                    </div>
-                    <div class="metric-item">
-                      <span class="m-val">4 LPH</span>
-                      <span class="m-lbl">PC Dripper Flow</span>
-                    </div>
-                  </div>
-                </div>
+                <app-three-d-irrigation></app-three-d-irrigation>
               </div>
             }
 

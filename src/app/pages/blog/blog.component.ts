@@ -134,26 +134,21 @@ const DEFAULT_BLOG_POSTS: BlogPost[] = [
                         <span class="tag tag-mint">{{ t }}</span>
                       }
                     </div>
-                    <span class="blog-date">
-                      <i class="fa-regular fa-calendar"></i>
-                      {{ post.created_at | date:'mediumDate' }}
+                    <span class="blog-read-time">
+                      <i class="fa-regular fa-clock"></i> 4 min read
                     </span>
                   </div>
 
-                  <h3 class="blog-card-title">{{ post.title }}</h3>
+                  <h3 class="blog-card-title" (click)="openPost(post)">{{ post.title }}</h3>
                   <p class="blog-card-summary">{{ post.summary }}</p>
 
                   <div class="blog-card-footer">
                     <span class="author-name">
                       <i class="fa-solid fa-pen-nib"></i> {{ post.author }}
                     </span>
-                    <a href="https://wa.me/919489528432?text=Hello,%20I%20have%20a%20question%20regarding%20the%20article:%20{{ post.title }}"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="read-more-link">
-                      <span>Ask on WhatsApp</span>
-                      <i class="fa-brands fa-whatsapp"></i>
-                    </a>
+                    <button class="btn btn-outline-light btn-xs" (click)="openPost(post)">
+                      Read Guide <i class="fa-solid fa-arrow-right"></i>
+                    </button>
                   </div>
                 </div>
               }
@@ -172,6 +167,70 @@ const DEFAULT_BLOG_POSTS: BlogPost[] = [
           }
         </div>
       </section>
+
+      <!-- Detailed Article Modal Reader -->
+      @if (selectedPost(); as article) {
+        <div class="modal-backdrop animate-fade" (click)="selectedPost.set(null)">
+          <div class="modal-dialog card-light article-modal" (click)="$event.stopPropagation()">
+            <div class="article-modal-header">
+              <div class="flex items-center gap-2 mb-3">
+                @for (t of article.tags; track t) {
+                  <span class="tag tag-mint">{{ t }}</span>
+                }
+                <span class="blog-read-time ml-auto">
+                  <i class="fa-regular fa-clock"></i> 4 min read · {{ article.created_at | date:'mediumDate' }}
+                </span>
+              </div>
+              <h2 class="article-modal-title">{{ article.title }}</h2>
+              <div class="article-meta-row">
+                <span class="text-sm font-bold text-forest">
+                  <i class="fa-solid fa-user-check text-brand mr-1"></i> {{ article.author }}
+                </span>
+                <button class="modal-close-btn" (click)="selectedPost.set(null)">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="article-modal-body">
+              <div class="summary-callout mb-6">
+                <strong>Executive Summary:</strong>
+                <p class="text-sm mt-1">{{ article.summary }}</p>
+              </div>
+
+              <div class="article-section mb-6">
+                <h4 class="text-base font-bold text-forest mb-2">1. Technical Overview & Regulatory Compliance</h4>
+                <p class="text-secondary text-sm leading-relaxed mb-3">
+                  Under Tamil Nadu Micro-Irrigation guidelines and central PMKSY norms, system designs must strictly align with designated crop spacing and water source discharge capacities. Small and marginal farmers with verified Patta titles under 5 acres (2 hectares) qualify for full 100% subsidy coverage on BIS-approved lateral piping and filtration manifolds.
+                </p>
+              </div>
+
+              <div class="article-section mb-6">
+                <h4 class="text-base font-bold text-forest mb-2">2. Engineering Checklist & Best Practices</h4>
+                <ul class="article-checklist">
+                  <li><i class="fa-solid fa-check text-brand"></i> Verify pump head and static suction flow before choosing pipe diameter.</li>
+                  <li><i class="fa-solid fa-check text-brand"></i> Install differential pressure gauges before and after screen filters.</li>
+                  <li><i class="fa-solid fa-check text-brand"></i> Flush all sub-main manifolds bi-weekly to prevent silt settlement.</li>
+                  <li><i class="fa-solid fa-check text-brand"></i> Ensure proper air release valves are situated at the highest field contours.</li>
+                </ul>
+              </div>
+
+              <div class="article-cta-box card-cream p-4 flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <h5 class="font-bold text-forest text-sm">Need Consultation on this Topic?</h5>
+                  <p class="text-xs text-secondary">Our agricultural engineers are available on WhatsApp for direct questions.</p>
+                </div>
+                <a [href]="'https://wa.me/919489528432?text=Hello,%20I%20have%20a%20question%20regarding%20the%20article:%20' + article.title"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-whatsapp btn-sm">
+                  <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
       <!-- Bottom WhatsApp Newsletter Banner -->
       <section class="section section-cream text-center">
@@ -320,12 +379,101 @@ const DEFAULT_BLOG_POSTS: BlogPost[] = [
     .read-more-link:hover {
       color: #075E54;
     }
+
+    .blog-read-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Modal Dialog & Article View */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .article-modal {
+      max-width: 720px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.25rem;
+      border-radius: var(--radius-lg);
+    }
+    .article-modal-header {
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .article-modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cream-warm);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .modal-close-btn:hover {
+      background: var(--mint-soft);
+      color: var(--brand-main);
+    }
+    .summary-callout {
+      background: var(--mint-soft);
+      border-left: 4px solid var(--brand-main);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      color: var(--forest-deep);
+    }
+    .article-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .article-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .article-checklist li i {
+      margin-top: 0.2rem;
+      flex-shrink: 0;
+    }
   `]
 })
 export class BlogComponent implements OnInit {
   private apiService = inject(ApiService);
 
   posts = signal<BlogPost[]>(DEFAULT_BLOG_POSTS);
+  selectedPost = signal<BlogPost | null>(null);
   searchQuery = '';
   activeTag = signal<string>('All');
   loading = signal<boolean>(false);
@@ -352,5 +500,9 @@ export class BlogComponent implements OnInit {
       },
       error: () => console.log('Using default blog posts')
     });
+  }
+
+  openPost(post: BlogPost) {
+    this.selectedPost.set(post);
   }
 }

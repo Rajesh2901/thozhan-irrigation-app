@@ -25,6 +25,34 @@ import { Product } from '../../core/models/interfaces';
       <!-- Main Solutions Catalog -->
       <section class="section section-light">
         <div class="container-wide">
+          <!-- Search & Controls Bar -->
+          <div class="catalog-controls-bar">
+            <div class="search-input-wrap">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Search irrigation systems, crop suitability, or components..."
+                [value]="searchQuery()"
+                (input)="onSearchInput($event)" />
+              @if (searchQuery()) {
+                <button class="clear-search-btn" (click)="searchQuery.set('')">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              }
+            </div>
+
+            <div class="sort-select-wrap">
+              <label class="sort-label"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort by:</label>
+              <select class="sort-select" (change)="onSortChange($event)">
+                <option value="default">Recommended</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name">Alphabetical (A-Z)</option>
+              </select>
+            </div>
+          </div>
+
           <!-- Filter Tabs -->
           <div class="filter-bar">
             @for (filter of filters; track filter) {
@@ -42,15 +70,18 @@ import { Product } from '../../core/models/interfaces';
             @for (product of filteredProducts(); track product.id) {
               <div class="card-light product-card hover-lift">
                 <!-- Product Image -->
-                <div class="product-img-box">
+                <div class="product-img-box" (click)="openProductModal(product)">
                   <img [src]="getProductImage(product)" [alt]="product.title_en" class="product-img" />
                   <span class="category-badge">{{ getProductCategory(product) }}</span>
+                  <div class="img-hover-overlay">
+                    <span class="overlay-pill"><i class="fa-solid fa-magnifying-glass-plus"></i> View Full Specs</span>
+                  </div>
                 </div>
 
                 <div class="product-content">
                   <!-- Header: Title & Tamil Name -->
                   <div class="product-title-wrap">
-                    <h3 class="product-title">{{ product.title_en }}</h3>
+                    <h3 class="product-title" (click)="openProductModal(product)">{{ product.title_en }}</h3>
                     <span class="product-ta">{{ product.title_ta }}</span>
                   </div>
 
@@ -108,8 +139,78 @@ import { Product } from '../../core/models/interfaces';
               </div>
             }
           </div>
+
+          @if (filteredProducts().length === 0) {
+            <div class="no-results-box text-center p-12">
+              <i class="fa-solid fa-seedling text-4xl text-secondary mb-3"></i>
+              <h3 class="text-lg font-bold">No matching equipment found</h3>
+              <p class="text-secondary text-sm mb-4">Try clearing your search query or switching category filters.</p>
+              <button class="btn btn-outline-light btn-sm" (click)="resetFilters()">
+                Reset All Filters
+              </button>
+            </div>
+          }
         </div>
       </section>
+
+      <!-- Detailed Product Specification Modal -->
+      @if (activeModalProduct(); as modalP) {
+        <div class="modal-backdrop animate-fade" (click)="activeModalProduct.set(null)">
+          <div class="modal-dialog card-light" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <div>
+                <span class="category-badge modal-cat">{{ getProductCategory(modalP) }}</span>
+                <h3 class="modal-title">{{ modalP.title_en }}</h3>
+                <span class="modal-ta">{{ modalP.title_ta }}</span>
+              </div>
+              <button class="modal-close-btn" (click)="activeModalProduct.set(null)">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <div class="modal-img-wrap">
+                <img [src]="getProductImage(modalP)" [alt]="modalP.title_en" class="modal-img" />
+              </div>
+
+              <div class="modal-info">
+                <div class="price-val mb-4">
+                  <span class="currency">₹</span>
+                  <span class="amount">{{ modalP.price_numeric.toLocaleString('en-IN') }}</span>
+                  <span class="unit">{{ modalP.price_unit_text }}</span>
+                  @if (modalP.is_subsidy_eligible) {
+                    <span class="tag tag-mint ml-2">Up to 100% Subsidy Eligible</span>
+                  }
+                </div>
+
+                <p class="text-secondary text-sm mb-6">{{ modalP.desc }}</p>
+
+                <h4 class="text-sm font-bold uppercase tracking-wider text-muted mb-3">Engineering Specifications</h4>
+                <ul class="specs-box mb-6">
+                  @for (spec of getProductSpecs(modalP); track spec) {
+                    <li>
+                      <i class="fa-solid fa-circle-check text-brand"></i>
+                      <span>{{ spec }}</span>
+                    </li>
+                  }
+                </ul>
+
+                <div class="modal-actions">
+                  <a routerLink="/pricing" (click)="activeModalProduct.set(null)" class="btn btn-amber btn-md flex-1">
+                    <i class="fa-solid fa-calculator"></i> Calculate Subsidy Tier
+                  </a>
+                  <a [href]="'https://wa.me/919489528432?text=Hello,%20I%20would%20like%20a%20detailed%20quotation%20for%20' + modalP.title_en"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     class="btn btn-whatsapp btn-md flex-1">
+                    <i class="fa-brands fa-whatsapp"></i> Request Official Quote
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
       <!-- Bottom Consultation Strip -->
       <section class="section section-cream text-center">
@@ -286,6 +387,180 @@ import { Product } from '../../core/models/interfaces';
       border-top: 1px solid var(--border-subtle);
       padding-top: 1rem;
     }
+
+    /* Controls Bar & Search */
+    .catalog-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-light);
+      background: var(--white);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: var(--transition-fast);
+    }
+    .search-input:focus {
+      border-color: var(--brand-main);
+      box-shadow: 0 0 0 3px rgba(30, 70, 32, 0.12);
+    }
+    .clear-search-btn {
+      position: absolute;
+      right: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .sort-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .sort-label {
+      color: var(--text-secondary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .sort-select {
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      background: var(--white);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .img-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 36, 16, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: var(--transition-fast);
+      cursor: pointer;
+    }
+    .product-img-box:hover .img-hover-overlay {
+      opacity: 1;
+    }
+    .overlay-pill {
+      background: var(--white);
+      color: var(--forest-deep);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Modal Dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-dialog {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      margin-top: 0.25rem;
+    }
+    .modal-ta {
+      font-size: 0.875rem;
+      color: var(--brand-main);
+      font-weight: 600;
+    }
+    .modal-close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cream-warm);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .modal-close-btn:hover {
+      background: var(--mint-soft);
+      color: var(--brand-main);
+    }
+    .modal-img-wrap {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: var(--cream-warm);
+      margin-bottom: 1.5rem;
+    }
+    .modal-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    @media (max-width: 640px) {
+      .modal-actions { flex-direction: column; }
+    }
   `]
 })
 export class ServicesComponent implements OnInit {
@@ -335,18 +610,70 @@ export class ServicesComponent implements OnInit {
       icon_class: 'fa-solar-panel',
       image_url: 'photos/solar.png',
       is_subsidy_eligible: true
+    },
+    {
+      id: 5,
+      title_en: 'Disc Filtration & Fertigation Unit',
+      title_ta: 'வடிகட்டி மற்றும் உர பாசன அலகு',
+      desc: 'Heavy-duty 2" dual disc filter with integrated Venturi chemical injector and differential pressure gauges for clog-free flow.',
+      price_numeric: 14500,
+      price_unit_text: '/ Unit',
+      icon_class: 'fa-filter',
+      image_url: 'photos/drip.png',
+      is_subsidy_eligible: true
+    },
+    {
+      id: 6,
+      title_en: 'BIS HDPE Mainline Pipes & Couplers',
+      title_ta: 'HDPE பிரதான குழாய்கள்',
+      desc: 'ISI certified 63mm & 75mm UV-stabilized virgin polyethylene delivery conduits with leak-proof quick compression couplers.',
+      price_numeric: 8200,
+      price_unit_text: '/ Bundle',
+      icon_class: 'fa-lines-leaning',
+      image_url: 'photos/sprinkler.png',
+      is_subsidy_eligible: true
     }
   ];
 
   products = signal<Product[]>(this.defaultProducts);
   expanded = signal<number | null>(null);
   activeFilter = signal<string>('All');
-  filters = ['All', 'Drip', 'Sprinkler', 'Rain Gun', 'Solar'];
+  searchQuery = signal<string>('');
+  sortBy = signal<string>('default');
+  activeModalProduct = signal<Product | null>(null);
+
+  filters = ['All', 'Drip', 'Sprinkler', 'Rain Gun', 'Solar', 'Filtration'];
 
   filteredProducts = computed(() => {
+    let list = this.products();
     const filter = this.activeFilter();
-    if (filter === 'All') return this.products();
-    return this.products().filter(p => this.getProductCategory(p) === filter);
+    const query = this.searchQuery().trim().toLowerCase();
+
+    // 1. Category Filter
+    if (filter !== 'All') {
+      list = list.filter(p => this.getProductCategory(p) === filter);
+    }
+
+    // 2. Search query filter
+    if (query) {
+      list = list.filter(p =>
+        p.title_en.toLowerCase().includes(query) ||
+        (p.title_ta && p.title_ta.toLowerCase().includes(query)) ||
+        p.desc.toLowerCase().includes(query)
+      );
+    }
+
+    // 3. Sorting
+    const sort = this.sortBy();
+    if (sort === 'price-asc') {
+      return [...list].sort((a, b) => a.price_numeric - b.price_numeric);
+    } else if (sort === 'price-desc') {
+      return [...list].sort((a, b) => b.price_numeric - a.price_numeric);
+    } else if (sort === 'name') {
+      return [...list].sort((a, b) => a.title_en.localeCompare(b.title_en));
+    }
+
+    return list;
   });
 
   ngOnInit() {
@@ -360,12 +687,33 @@ export class ServicesComponent implements OnInit {
     });
   }
 
+  onSearchInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(val);
+  }
+
+  onSortChange(event: Event) {
+    const val = (event.target as HTMLSelectElement).value;
+    this.sortBy.set(val);
+  }
+
+  openProductModal(product: Product) {
+    this.activeModalProduct.set(product);
+  }
+
+  resetFilters() {
+    this.searchQuery.set('');
+    this.activeFilter.set('All');
+    this.sortBy.set('default');
+  }
+
   getProductCategory(p: Product): string {
     const title = p.title_en.toLowerCase();
     if (title.includes('drip')) return 'Drip';
     if (title.includes('sprinkler')) return 'Sprinkler';
     if (title.includes('rain gun') || title.includes('raingun')) return 'Rain Gun';
     if (title.includes('solar')) return 'Solar';
+    if (title.includes('filter') || title.includes('pipe') || title.includes('fertigation')) return 'Filtration';
     return 'Equipment';
   }
 
@@ -376,6 +724,7 @@ export class ServicesComponent implements OnInit {
     if (cat === 'Sprinkler') return 'photos/sprinkler.png';
     if (cat === 'Rain Gun') return 'photos/raingun.png';
     if (cat === 'Solar') return 'photos/solar.png';
+    if (cat === 'Filtration') return 'photos/drip.png';
     return 'photos/drip.png';
   }
 
@@ -411,6 +760,14 @@ export class ServicesComponent implements OnInit {
         'Tier-1 polycrystalline / monocrystalline solar PV panels',
         'MPPT hybrid inverter controller with auto-run timer',
         'Dry run sensor and borehole lightning surge protection'
+      ];
+    }
+    if (cat === 'Filtration') {
+      return [
+        'Dual disc cartridge element with 130-micron mesh',
+        'Venturi chemical injector with suction rate adjustment',
+        'Dual glycerine-filled pressure monitoring gauges',
+        'Manual flush ball valve for swift debris cleansing'
       ];
     }
     return [

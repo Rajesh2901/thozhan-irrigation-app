@@ -5,48 +5,60 @@
 
 /* ── CSS Custom Properties (Design Tokens) ───────────────── */
 :root {
-  /* Brand Greens */
-  --forest-deep:    #063B29;
-  --forest-dark:    #08271D;
-  --brand-main:     #0D6B3D;
-  --brand-bright:   #27C46A;
-  --mint-soft:      #DDF5E5;
-  --mint-subtle:    #EEF9F1;
-  --cream-warm:     #F7F4EA;
-  --cream-light:    #FCFAF5;
-  --white:          #FFFFFF;
+  /* Master Official Color Palette */
+  --primary-green:    #1E4620; /* Primary Agricultural Green */
+  --authority-blue:   #0066CC; /* Authority Blue */
+  --golden-yellow:    #FFCC00; /* Golden CTA Yellow */
+  --white:            #FFFFFF; /* Pure White */
+  --bg-light:         #F7F9F7; /* Light Background */
+  --surface-secondary:#EFF4EF; /* Secondary Surface */
+  --text-primary:     #202820; /* Primary Text */
+  --text-secondary:   #667085; /* Secondary Text */
+  --border-color:     #E3E9E3; /* Border Color */
+  --color-success:    #238636; /* Success */
+  --color-warning:    #E5A000; /* Warning */
+  --color-error:      #D92D20; /* Error */
 
-  /* Accent Colors */
-  --water-blue:     #2686D9;
-  --water-light:    #EBF4FC;
-  --cta-amber:      #F5A623;
-  --cta-amber-text:  #0F1F17;
-  --cta-amber-hover:#E09214;
-  --danger:         #EF4444;
-  --success:        #27C46A;
+  /* Aliased Design Tokens for Full Component Compatibility */
+  --forest-deep:      #1E4620;
+  --forest-dark:      #132E15;
+  --brand-main:       #1E4620;
+  --brand-bright:     #2E6E32;
+  --mint-soft:        #EFF4EF;
+  --mint-subtle:      #F7F9F7;
+  --cream-warm:       #EFF4EF;
+  --cream-light:      #F7F9F7;
+
+  /* Accent & Action Tokens */
+  --water-blue:       #0066CC;
+  --water-light:      #EBF3FA;
+  --cta-amber:        #FFCC00;
+  --cta-amber-text:   #202820;
+  --cta-amber-hover:  #E6B800;
+  --danger:           #D92D20;
+  --success:          #238636;
+  --warning:          #E5A000;
 
   /* Text & Border Neutrals */
-  --text-primary:   #10231B;
-  --text-secondary: #61736A;
-  --text-muted:     #4B6358;
-  --text-dark:      #F5FFF8;
-  --text-dark-sub:  #B4D1C2;
-  --border-light:   #D8E5DC;
-  --border-subtle:  #E8EFEA;
-  --border-dark:    rgba(255, 255, 255, 0.12);
+  --text-muted:       #667085;
+  --text-dark:        #FFFFFF;
+  --text-dark-sub:    #D5E0D5;
+  --border-light:     #E3E9E3;
+  --border-subtle:    #EFF4EF;
+  --border-dark:      rgba(255, 255, 255, 0.15);
 
   /* Legacy variables for Admin compatibility */
-  --bg-primary:     #08271D;
-  --bg-secondary:   #063B29;
-  --bg-card:        rgba(6, 46, 30, 0.85);
-  --border-color:   rgba(255, 255, 255, 0.10);
-  --brand-400:      #27C46A;
-  --brand-500:      #0D6B3D;
-  --brand-600:      #0B5C34;
-  --brand-700:      #063B29;
-  --brand-800:      #08271D;
-  --brand-900:      #041A13;
-  --gold:           #F5A623;
+  --bg-primary:       #132E15;
+  --bg-secondary:     #1E4620;
+  --bg-card:          rgba(30, 70, 32, 0.85);
+  --border-color-sub: rgba(255, 255, 255, 0.10);
+  --brand-400:        #2E6E32;
+  --brand-500:        #1E4620;
+  --brand-600:        #173819;
+  --brand-700:        #132E15;
+  --brand-800:        #0E210F;
+  --brand-900:        #081409;
+  --gold:             #FFCC00;
 
   /* Sizing & Radius */
   --radius-sm:      8px;
@@ -80,13 +92,63 @@ html {
 }
 
 body {
-  font-family: 'Poppins', 'Mukta Malar', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', 'Poppins', 'Mukta Malar', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--white);
   color: var(--text-primary);
+  font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+/* ── Typography Scale (Inter Primary) ─────────────────────── */
+h1, .h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2.5rem, 4.5vw, 4rem); /* 40px - 64px */
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+h2, .h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(2rem, 3.2vw, 2.75rem); /* 32px - 44px */
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+h3, .h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.5rem, 2.2vw, 1.875rem); /* 24px - 30px */
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+
+h4, .h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem); /* 18px - 22px */
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+p {
+  font-size: 16px; /* 15px - 17px */
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.text-supporting, .text-sm, small {
+  font-size: 14px; /* 13px - 14px */
+  font-weight: 400;
+  color: var(--text-secondary);
 }
 
 a {
