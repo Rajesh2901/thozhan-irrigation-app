@@ -115,7 +115,8 @@ import { AuthService } from '../../core/services/auth.service';
   .login-shell {
     min-height: 100vh;
     min-height: 100dvh;
-    background: radial-gradient(circle at 50% 20%, #0A3D29 0%, #06271C 60%, #031811 100%);
+    background: radial-gradient(circle at 50% 20%, #23272D 0%, #1A1C1E 60%, #121416 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,22 +132,21 @@ import { AuthService } from '../../core/services/auth.service';
     border-radius: 50%;
     pointer-events: none;
     filter: blur(80px);
-    opacity: 0.25;
+    opacity: 0.2;
   }
-  .bg-orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, #14532d, transparent); top: -100px; right: -100px; }
-  .bg-orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, #1a6b3a, transparent); bottom: -50px; left: -50px; }
-  .bg-orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, #fbbf24, transparent); top: 40%; left: 10%; opacity: 0.1; }
+  .bg-orb-1 { width: 400px; height: 400px; background: radial-gradient(circle, #059669, transparent); top: -100px; right: -100px; }
+  .bg-orb-2 { width: 300px; height: 300px; background: radial-gradient(circle, #10B981, transparent); bottom: -50px; left: -50px; }
+  .bg-orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, #3B82F6, transparent); top: 40%; left: 10%; opacity: 0.12; }
 
   .login-card {
     margin: auto 0;
-    background: rgba(6, 46, 30, 0.94);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 24px;
+    background: #22252A;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
     padding: 2.25rem;
     width: 100%;
     max-width: 440px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -204,20 +204,20 @@ import { AuthService } from '../../core/services/auth.service';
     padding: 0.75rem 1rem;
     font-size: 0.9375rem;
     font-family: inherit;
-    background: #FFFFFF;
-    color: #10231B;
-    border: 1.5px solid #D8E5DC;
-    border-radius: 12px;
+    background: #17191C;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
     outline: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
   }
   .form-control:focus {
-    border-color: var(--brand-bright, #27C46A);
-    box-shadow: 0 0 0 3px rgba(39, 196, 106, 0.25);
+    border-color: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
   }
   .form-control::placeholder {
-    color: #82958B;
+    color: #64748B;
   }
 
   .form-error {
@@ -237,7 +237,7 @@ import { AuthService } from '../../core/services/auth.service';
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #61736A;
+    color: #94A3B8;
     cursor: pointer;
     padding: 0.35rem;
     font-size: 0.95rem;
@@ -246,7 +246,7 @@ import { AuthService } from '../../core/services/auth.service';
     justify-content: center;
     transition: color 0.15s;
   }
-  .pw-toggle:hover { color: #10231B; }
+  .pw-toggle:hover { color: #FFFFFF; }
 
   .error-alert {
     display: flex;

@@ -595,3 +595,117 @@ img {
 .hover-lift:hover {
   transform: translateY(-4px);
 }
+
+/* ============================================================
+   ADMIN PREMIUM DARK THEME (Deep Charcoal & Refined Accents)
+   Backgrounds: #141618 (base), #1A1C1E (surface), #22252A (cards), #282C32 (elevated)
+   Grid lines: rgba(255, 255, 255, 0.07)
+   Font: 'Inter', -apple-system, sans-serif
+   ============================================================ */
+:root {
+  --admin-charcoal-base:     #141618;
+  --admin-charcoal-surface:  #1A1C1E;
+  --admin-charcoal-card:     #22252A;
+  --admin-charcoal-elevated: #282C33;
+  --admin-charcoal-input:    #16181B;
+  --admin-grid-line:         rgba(255, 255, 255, 0.07);
+  --admin-grid-border:       rgba(255, 255, 255, 0.10);
+  --admin-grid-highlight:    rgba(255, 255, 255, 0.16);
+
+  --admin-font:              'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --admin-text-white:        #FFFFFF;
+  --admin-text-main:         #F1F5F9;
+  --admin-text-secondary:    #94A3B8;
+  --admin-text-muted:        #64748B;
+
+  --admin-emerald:           #10B981;
+  --admin-emerald-subtle:    rgba(16, 185, 129, 0.12);
+  --admin-emerald-border:    rgba(16, 185, 129, 0.30);
+  --admin-amber:             #F59E0B;
+  --admin-amber-subtle:      rgba(245, 158, 11, 0.12);
+  --admin-amber-border:      rgba(245, 158, 11, 0.30);
+  --admin-blue:              #3B82F6;
+  --admin-blue-subtle:       rgba(59, 130, 246, 0.12);
+  --admin-blue-border:       rgba(59, 130, 246, 0.30);
+  --admin-purple:            #8B5CF6;
+  --admin-purple-subtle:     rgba(139, 92, 246, 0.12);
+  --admin-purple-border:     rgba(139, 92, 246, 0.30);
+  --admin-danger:            #EF4444;
+  --admin-danger-subtle:     rgba(239, 68, 68, 0.12);
+  --admin-danger-border:     rgba(239, 68, 68, 0.30);
+
+  --admin-shadow-card:       0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
+  --admin-shadow-elevated:   0 12px 36px -4px rgba(0, 0, 0, 0.6), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+}
+
+.admin-shell,
+.admin-shell * {
+  font-family: var(--admin-font);
+}
+
+.admin-card {
+  background: var(--admin-charcoal-card);
+  border: 1px solid var(--admin-grid-line);
+  border-radius: 14px;
+  box-shadow: var(--admin-shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-card:hover {
+  border-color: var(--admin-grid-border);
+}
+
+/* Modern status badges */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+.admin-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.admin-badge-emerald {
+  background: var(--admin-emerald-subtle);
+  color: #34D399;
+  border: 1px solid var(--admin-emerald-border);
+}
+.admin-badge-emerald .admin-badge-dot { background: #34D399; box-shadow: 0 0 6px #34D399; }
+
+.admin-badge-amber {
+  background: var(--admin-amber-subtle);
+  color: #FBBF24;
+  border: 1px solid var(--admin-amber-border);
+}
+.admin-badge-amber .admin-badge-dot { background: #FBBF24; box-shadow: 0 0 6px #FBBF24; }
+
+.admin-badge-blue {
+  background: var(--admin-blue-subtle);
+  color: #60A5FA;
+  border: 1px solid var(--admin-blue-border);
+}
+.admin-badge-blue .admin-badge-dot { background: #60A5FA; box-shadow: 0 0 6px #60A5FA; }
+
+.admin-badge-purple {
+  background: var(--admin-purple-subtle);
+  color: #A78BFA;
+  border: 1px solid var(--admin-purple-border);
+}
+.admin-badge-purple .admin-badge-dot { background: #A78BFA; box-shadow: 0 0 6px #A78BFA; }
+
+.admin-badge-danger {
+  background: var(--admin-danger-subtle);
+  color: #F87171;
+  border: 1px solid var(--admin-danger-border);
+}
+.admin-badge-danger .admin-badge-dot { background: #F87171; box-shadow: 0 0 6px #F87171; }
+
