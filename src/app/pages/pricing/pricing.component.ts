@@ -129,6 +129,75 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
         </div>
       </section>
 
+      <!-- Step-by-Step Subsidy Application Process -->
+      <section class="section section-light subsidy-process-section">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-route"></i> Streamlined 4-Step Journey
+            </span>
+            <h2 class="section-title">How Tamil Nadu Government Subsidy Works</h2>
+            <p class="section-subtitle">
+              From land verification to final field testing, our engineering and documentation cells handle every technical and administrative phase.
+            </p>
+          </div>
+
+          <div class="grid-4 process-steps-grid">
+            <!-- Step 1 -->
+            <div class="card-light process-step-card hover-lift">
+              <div class="step-num-badge">01</div>
+              <div class="step-icon-wrap">
+                <i class="fa-solid fa-calculator"></i>
+              </div>
+              <h3 class="step-title">1. Acreage Assessment</h3>
+              <p class="step-desc">
+                Use our calculator or call our Dindigul desk with your registered Patta acreage to determine whether you qualify for 100%, 75%, or 50% assistance.
+              </p>
+              <span class="step-highlight">Zero Registration Fee</span>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="card-light process-step-card hover-lift">
+              <div class="step-num-badge">02</div>
+              <div class="step-icon-wrap">
+                <i class="fa-solid fa-file-shield"></i>
+              </div>
+              <h3 class="step-title">2. Document Verification</h3>
+              <p class="step-desc">
+                Provide copies of Patta, Chitta, FMB sketch, and Aadhaar. Our documentation desk files the beneficiary application with the Assistant Director of Horticulture (ADH).
+              </p>
+              <span class="step-highlight">Full Paperwork Assistance</span>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="card-light process-step-card hover-lift">
+              <div class="step-num-badge">03</div>
+              <div class="step-icon-wrap">
+                <i class="fa-solid fa-compass-drafting"></i>
+              </div>
+              <h3 class="step-title">3. Hydraulic Survey & CAD</h3>
+              <p class="step-desc">
+                Our certified technicians visit your farm to measure ground slope, soil permeability, and borewell water discharge (LPH) to design an optimized pipe network.
+              </p>
+              <span class="step-highlight">Custom Field Blueprint</span>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="card-light process-step-card hover-lift">
+              <div class="step-num-badge">04</div>
+              <div class="step-icon-wrap">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+              </div>
+              <h3 class="step-title">4. Sanction & Installation</h3>
+              <p class="step-desc">
+                Upon official subsidy sanction order release, our field crew delivers BIS-certified components, trenches lines, fuses main manifolds, and executes full commissioning.
+              </p>
+              <span class="step-highlight">Free 1-Year Maintenance</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Live Interactive Cost Estimator -->
       <section class="section section-cream" id="calculator">
         <div class="container-wide">
@@ -136,16 +205,16 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
         </div>
       </section>
 
-      <!-- Required Documents Section -->
+      <!-- Enhanced Required Documents Section -->
       <section class="section section-light">
         <div class="container-narrow">
           <div class="section-header text-center">
             <span class="section-eyebrow eyebrow-light">
-              <i class="fa-solid fa-folder-open"></i> Document Checklist
+              <i class="fa-solid fa-folder-open"></i> Complete Document Checklist
             </span>
-            <h2 class="section-title">Required Documents for Subsidy Verification</h2>
+            <h2 class="section-title">Required Documents for Subsidy Clearance</h2>
             <p class="section-subtitle">
-              Have these documents handy. Our documentation cell will review and submit them directly to your district's Horticulture department.
+              Prepare these 6 essential documents. Our dedicated documentation cell handles verification and submission to the Horticulture department on your behalf.
             </p>
           </div>
 
@@ -153,31 +222,62 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
             <div class="card-cream doc-item">
               <i class="fa-solid fa-file-contract doc-icon"></i>
               <div>
-                <strong>Patta & Chitta Copies</strong>
-                <p>Latest revenue record copy proving ownership of the registered agricultural land.</p>
+                <strong>1. Patta & Chitta Extract</strong>
+                <p>Latest revenue record copy downloaded from Any-time Anywhere e-Services proving land title ownership in Tamil Nadu.</p>
               </div>
             </div>
             <div class="card-cream doc-item">
               <i class="fa-solid fa-map-location-dot doc-icon"></i>
               <div>
-                <strong>Adangal / FMB Sketch</strong>
-                <p>Village Administrative Officer (VAO) certified crop cultivation extract or field map.</p>
+                <strong>2. FMB Sketch & Adangal</strong>
+                <p>Field Measurement Book (FMB) map and VAO-certified crop adangal copy showing survey subdivision numbers.</p>
               </div>
             </div>
             <div class="card-cream doc-item">
               <i class="fa-solid fa-id-card doc-icon"></i>
               <div>
-                <strong>Aadhaar Card Copy</strong>
-                <p>Farmer's Aadhaar identification for central PMKSY beneficiary registration.</p>
+                <strong>3. Aadhaar Card (Beneficiary)</strong>
+                <p>Clear photocopy of applicant farmer's Aadhaar card for central PMKSY DBT database linkage.</p>
               </div>
             </div>
             <div class="card-cream doc-item">
               <i class="fa-solid fa-building-columns doc-icon"></i>
               <div>
-                <strong>Bank Passbook Copy</strong>
-                <p>Front page copy showing active account number and IFSC code for grant processing.</p>
+                <strong>4. Bank Passbook with IFSC</strong>
+                <p>Active bank savings account passbook front page copy with IFSC code for Direct Benefit Transfer records.</p>
               </div>
             </div>
+            <div class="card-cream doc-item">
+              <i class="fa-solid fa-certificate doc-icon"></i>
+              <div>
+                <strong>5. Small/Marginal Farmer Certificate</strong>
+                <p>VAO certificate verifying total landholding is under 5 Acres (2 Hectares) for 100% full grant eligibility.</p>
+              </div>
+            </div>
+            <div class="card-cream doc-item">
+              <i class="fa-solid fa-vial-circle-check doc-icon"></i>
+              <div>
+                <strong>6. Water & Soil Test Report</strong>
+                <p>Borewell/well water pH and EC test extract. (Our technical team can conduct complimentary on-site sampling).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documentation Hotline Assistance Banner -->
+          <div class="docs-help-banner card-light mt-8">
+            <div class="docs-help-left">
+              <i class="fa-brands fa-whatsapp text-2xl text-success"></i>
+              <div>
+                <h4 class="font-bold text-forest">Need Help Gathering Documents?</h4>
+                <p class="text-xs text-secondary">Send photos of your documents to our documentation cell on WhatsApp for free pre-verification.</p>
+              </div>
+            </div>
+            <a href="https://wa.me/919489528432?text=Hello%20Thozhan,%20I%20need%20help%20verifying%20my%20subsidy%20documents."
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-whatsapp btn-sm">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Documentation Help
+            </a>
           </div>
         </div>
       </section>
@@ -280,6 +380,68 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
       flex-shrink: 0;
     }
 
+    /* Process Steps Grid */
+    .subsidy-process-section {
+      background-color: var(--white);
+    }
+    .process-steps-grid {
+      margin-top: 1.5rem;
+      gap: 1.5rem;
+    }
+    .process-step-card {
+      position: relative;
+      padding: 2rem 1.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-lg);
+    }
+    .step-num-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: rgba(13, 107, 61, 0.12);
+      line-height: 1;
+    }
+    .step-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background-color: var(--mint-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      margin-bottom: 0.5rem;
+    }
+    .step-desc {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+    .step-highlight {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--brand-main);
+      background-color: var(--mint-subtle);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(39, 196, 106, 0.25);
+    }
+
     /* Docs */
     .docs-grid {
       margin-top: 1rem;
@@ -306,6 +468,22 @@ import { SubsidyCalculatorComponent } from '../subsidy-calculator/subsidy-calcul
       font-size: 0.8125rem;
       color: var(--text-secondary);
       line-height: 1.5;
+    }
+
+    .docs-help-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.5rem 1.75rem;
+      flex-wrap: wrap;
+      border: 1px solid rgba(39, 196, 106, 0.3);
+      border-radius: var(--radius-lg);
+    }
+    .docs-help-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
   `]
 })

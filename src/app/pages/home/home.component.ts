@@ -98,10 +98,10 @@ const FAQS: FaqItem[] = [
     <section class="hero-section">
       <div class="container-wide hero-container">
         <div class="hero-content">
-          <!-- Eyebrow Badge -->
+          <!-- Eyebrow Badge & Govt Ribbon -->
           <div class="hero-eyebrow">
             <span class="badge-dot"></span>
-            <span>Government Authorized Irrigation Solutions</span>
+            <span>TN Horticulture Dept Authorized · PMKSY Empaneled · GSTIN: 33BSXPJ5723P1ZX</span>
           </div>
 
           <!-- Main Headline -->
@@ -149,21 +149,164 @@ const FAQS: FaqItem[] = [
           </div>
         </div>
 
-        <!-- Hero Visual Card -->
+        <!-- High-Tech Interactive 3D & Video Simulation Showcase -->
         <div class="hero-visual">
-          <div class="visual-card">
-            <div class="visual-image-wrapper">
-              <img src="photos/drip.png" alt="Agricultural Irrigation System in Field" class="hero-img" />
-              <div class="visual-badge">
-                <i class="fa-solid fa-droplet"></i>
-                <div>
-                  <span class="badge-title">Micro-Irrigation Setup</span>
-                  <span class="badge-sub">BIS Certified Components</span>
-                </div>
-              </div>
+          <div class="visual-card interactive-showcase">
+
+            <!-- Showcase Mode Navigation Bar -->
+            <div class="showcase-nav-bar">
+              <button class="showcase-tab-btn"
+                      [class.active]="activeShowcase() === '3d-drip'"
+                      (click)="activeShowcase.set('3d-drip')">
+                <i class="fa-solid fa-cube"></i>
+                <span>3D Drip Field</span>
+              </button>
+              <button class="showcase-tab-btn"
+                      [class.active]="activeShowcase() === 'sprinkler'"
+                      (click)="activeShowcase.set('sprinkler')">
+                <i class="fa-solid fa-circle-notch"></i>
+                <span>Sprinkler Sim</span>
+              </button>
+              <button class="showcase-tab-btn"
+                      [class.active]="activeShowcase() === 'solar'"
+                      (click)="activeShowcase.set('solar')">
+                <i class="fa-solid fa-solar-panel"></i>
+                <span>Solar Array</span>
+              </button>
+              <button class="showcase-tab-btn video-pill"
+                      [class.active]="activeShowcase() === 'video'"
+                      (click)="activeShowcase.set('video')">
+                <i class="fa-solid fa-play"></i>
+                <span>Field Video</span>
+              </button>
             </div>
 
-            <!-- Floating Stat Card -->
+            <!-- View 1: 3D Drip Field Layout Simulation -->
+            @if (activeShowcase() === '3d-drip') {
+              <div class="sim-view-container animate-fade">
+                <div class="schematic-canvas">
+                  <!-- Header Filter Unit -->
+                  <div class="schematic-node node-filter">
+                    <div class="node-icon"><i class="fa-solid fa-filter"></i></div>
+                    <span class="node-tag">Disc Filter & Venturi</span>
+                  </div>
+
+                  <!-- Animated Main Pipe Line -->
+                  <div class="schematic-pipe-line pipe-main">
+                    <div class="pipe-water-flow"></div>
+                  </div>
+
+                  <!-- Lateral Lines & Emitter Drops -->
+                  <div class="schematic-laterals-grid">
+                    <div class="lateral-row">
+                      <span class="lat-label">Lateral 1 (16mm)</span>
+                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
+                      <span class="crop-tag">Row Crops</span>
+                    </div>
+                    <div class="lateral-row">
+                      <span class="lat-label">Lateral 2 (16mm)</span>
+                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
+                      <span class="crop-tag">Vegetables</span>
+                    </div>
+                    <div class="lateral-row">
+                      <span class="lat-label">Lateral 3 (16mm)</span>
+                      <div class="lat-pipe"><div class="droplets-pulse"></div></div>
+                      <span class="crop-tag">Banana / Coconut</span>
+                    </div>
+                  </div>
+
+                  <!-- Telemetry Metrics Bar -->
+                  <div class="schematic-metrics-bar">
+                    <div class="metric-item">
+                      <span class="m-val">70%</span>
+                      <span class="m-lbl">Water Conserved</span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="m-val">1.2 Bar</span>
+                      <span class="m-lbl">Operating Pressure</span>
+                    </div>
+                    <div class="metric-item">
+                      <span class="m-val">4 LPH</span>
+                      <span class="m-lbl">PC Dripper Flow</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- View 2: Sprinkler Radius Simulation -->
+            @if (activeShowcase() === 'sprinkler') {
+              <div class="sim-view-container animate-fade">
+                <div class="sprinkler-sim-canvas">
+                  <div class="sprinkler-center-head">
+                    <i class="fa-solid fa-sprinkler"></i>
+                    <div class="spray-wave wave-1"></div>
+                    <div class="spray-wave wave-2"></div>
+                    <div class="spray-wave wave-3"></div>
+                  </div>
+                  <div class="sprinkler-radius-stats">
+                    <div class="rad-stat-pill">
+                      <i class="fa-solid fa-arrows-to-circle"></i>
+                      <span>360° Uniform Precipitation Radius: 32 Ft</span>
+                    </div>
+                    <p class="rad-desc">
+                      Zero-runoff droplet sizing engineered specifically for groundnut, pulses, and tea plantations in Tamil Nadu.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- View 3: Solar Agri Pump Array -->
+            @if (activeShowcase() === 'solar') {
+              <div class="sim-view-container animate-fade">
+                <div class="solar-sim-canvas">
+                  <div class="solar-hardware-grid">
+                    <div class="hardware-card">
+                      <i class="fa-solid fa-solar-panel text-amber"></i>
+                      <span class="hw-title">Mono-Perc PV Array</span>
+                      <span class="hw-sub">High-efficiency generation</span>
+                    </div>
+                    <div class="hw-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="hardware-card">
+                      <i class="fa-solid fa-microchip text-blue"></i>
+                      <span class="hw-title">Hybrid MPPT VFD</span>
+                      <span class="hw-sub">Soft start & dry-run cutoff</span>
+                    </div>
+                    <div class="hw-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="hardware-card">
+                      <i class="fa-solid fa-faucet-drip text-brand"></i>
+                      <span class="hw-title">Drip Pressure Feed</span>
+                      <span class="hw-sub">Direct borewell integration</span>
+                    </div>
+                  </div>
+                  <div class="solar-benefit-banner">
+                    <i class="fa-solid fa-bolt-lightning text-amber"></i>
+                    <span>Grid-Independent Operation · Free Daylight Pumping · PM-KUSUM Subsidy Compatible</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- View 4: Field Installation Video Demo -->
+            @if (activeShowcase() === 'video') {
+              <div class="sim-view-container animate-fade">
+                <div class="video-preview-canvas">
+                  <img src="photos/drip.png" alt="Installation Field Video" class="video-bg-thumb" />
+                  <div class="video-overlay-tint"></div>
+                  <div class="video-play-center" (click)="toggleVideoModal()">
+                    <div class="play-pulse-ring"></div>
+                    <div class="play-btn-circle">
+                      <i class="fa-solid fa-play"></i>
+                    </div>
+                    <span class="video-play-label">Watch Field Installation Demo</span>
+                    <span class="video-duration">2:45 Min · Dindigul 4-Acre Banana Plantation</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Floating Trust Strip -->
             <div class="floating-stat">
               <div class="stat-icon">
                 <i class="fa-solid fa-users"></i>
@@ -173,6 +316,7 @@ const FAQS: FaqItem[] = [
                 <div class="stat-label">Tamil Nadu Farms Served Since 2012</div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -1431,6 +1575,316 @@ const FAQS: FaqItem[] = [
     color: var(--white);
   }
 
+  /* ── Interactive 3D & Simulation Showcase Styles ── */
+  .interactive-showcase {
+    background: #092015 !important;
+    border: 1px solid rgba(39, 196, 106, 0.25) !important;
+    border-radius: 20px;
+    padding: 1.25rem !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .showcase-nav-bar {
+    display: flex;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+
+  .showcase-tab-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94A3B8;
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0.65rem;
+    border-radius: 7px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+  }
+  .showcase-tab-btn:hover { color: #FFFFFF; }
+  .showcase-tab-btn.active {
+    background: #10B981;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+  .showcase-tab-btn.video-pill.active {
+    background: #F59E0B;
+  }
+
+  .sim-view-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* 3D Drip Schematic */
+  .schematic-canvas {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .schematic-node {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0.85rem;
+  }
+  .node-icon { color: #34D399; font-size: 0.95rem; }
+  .node-tag { color: #FFFFFF; font-size: 0.75rem; font-weight: 700; }
+
+  .schematic-pipe-line.pipe-main {
+    height: 4px;
+    background: #1D4ED8;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pipe-water-flow {
+    position: absolute;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #93C5FD, transparent);
+    animation: pipeFlow 2s linear infinite;
+  }
+  @keyframes pipeFlow {
+    from { left: -60px; }
+    to   { left: 100%; }
+  }
+
+  .schematic-laterals-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .lateral-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    color: #94A3B8;
+  }
+  .lat-label { min-width: 95px; }
+  .lat-pipe {
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    position: relative;
+  }
+  .droplets-pulse {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 15px, #34D399 15px, #34D399 20px);
+    animation: dropletGlow 1.5s infinite linear;
+  }
+  @keyframes dropletGlow {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+  .crop-tag {
+    font-size: 0.65rem;
+    background: rgba(39, 196, 106, 0.12);
+    color: #34D399;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .schematic-metrics-bar {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  .metric-item { text-align: center; }
+  .m-val { display: block; font-size: 1rem; font-weight: 800; color: #FFFFFF; }
+  .m-lbl { font-size: 0.62rem; color: #94A3B8; text-transform: uppercase; }
+
+  /* Sprinkler Sim */
+  .sprinkler-sim-canvas {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .sprinkler-center-head {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0284C7;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    position: relative;
+    margin-bottom: 1.5rem;
+    z-index: 2;
+  }
+  .spray-wave {
+    position: absolute;
+    border: 1.5px dashed rgba(56, 189, 248, 0.4);
+    border-radius: 50%;
+    animation: ripple 3s infinite ease-out;
+  }
+  .wave-1 { width: 110px; height: 110px; animation-delay: 0s; }
+  .wave-2 { width: 170px; height: 170px; animation-delay: 1s; }
+  .wave-3 { width: 230px; height: 230px; animation-delay: 2s; }
+  @keyframes ripple {
+    0% { transform: scale(0.6); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  .rad-stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(38, 134, 217, 0.15);
+    border: 1px solid rgba(38, 134, 217, 0.3);
+    color: #60A5FA;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    margin-bottom: 0.5rem;
+  }
+  .rad-desc {
+    font-size: 0.72rem;
+    color: #94A3B8;
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Solar Sim */
+  .solar-sim-canvas {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .solar-hardware-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .hardware-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .hardware-card i { font-size: 1.25rem; }
+  .hw-title { font-size: 0.72rem; font-weight: 700; color: #FFFFFF; }
+  .hw-sub   { font-size: 0.6rem; color: #94A3B8; }
+  .hw-arrow { color: #64748B; font-size: 0.75rem; }
+
+  .solar-benefit-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+    color: #FBBF24;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /* Video Canvas */
+  .video-preview-canvas {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-bg-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video-overlay-tint {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 23, 14, 0.75);
+  }
+  .video-play-center {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 5;
+    text-align: center;
+  }
+  .play-btn-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #F59E0B;
+    color: #0F1F17;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+    transition: transform 0.2s ease;
+  }
+  .play-btn-circle:hover { transform: scale(1.08); }
+  .video-play-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+  .video-duration {
+    font-size: 0.68rem;
+    color: #CBD5E1;
+    margin-top: 0.2rem;
+  }
+
   /* Responsive Breakpoints */
   @media (max-width: 1024px) {
     .hero-container { grid-template-columns: 1fr; gap: 3rem; }
@@ -1460,8 +1914,19 @@ export class HomeComponent {
   solutions = SOLUTIONS;
   faqs = FAQS;
   activeFaq = signal<number | null>(0);
+  activeShowcase = signal<'3d-drip' | 'sprinkler' | 'solar' | 'video'>('3d-drip');
+  showVideoModal = signal(false);
+
+  toggleShowcase(tab: '3d-drip' | 'sprinkler' | 'solar' | 'video') {
+    this.activeShowcase.set(tab);
+  }
+
+  toggleVideoModal() {
+    this.showVideoModal.update(v => !v);
+  }
 
   toggleFaq(index: number) {
     this.activeFaq.update(current => (current === index ? null : index));
   }
 }
+

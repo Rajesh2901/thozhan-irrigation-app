@@ -103,7 +103,7 @@ import { ContactFormData } from '../../core/models/interfaces';
             </div>
 
             <!-- Right: Contact Form Panel -->
-            <div class="card-light contact-form-panel">
+            <div class="card-light contact-form-panel" id="quote-form">
               @if (status() === 'success') {
                 <div class="success-panel text-center animate-fade">
                   <div class="success-icon-wrap">
@@ -206,6 +206,69 @@ import { ContactFormData } from '../../core/models/interfaces';
                 </form>
               }
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Regional Service Footprint & District Map ── -->
+      <section class="section section-cream service-map-section">
+        <div class="container-wide">
+          <div class="section-header text-center">
+            <span class="section-eyebrow eyebrow-light">
+              <i class="fa-solid fa-map-location-dot"></i> Statewide Field Network
+            </span>
+            <h2 class="section-title">Tamil Nadu Regional Service Hubs</h2>
+            <p class="section-subtitle">
+              Active engineering deployment and prompt on-site farm assessments across 18 key agricultural districts. Click any district to start your quote.
+            </p>
+          </div>
+
+          <div class="grid-3 district-hubs-grid">
+            @for (hub of regionalHubs; track hub.name) {
+              <div class="card-light district-hub-card hover-lift" (click)="selectDistrict(hub.name)">
+                <div class="hub-header">
+                  <div class="hub-icon-wrap" [class.primary-hub]="hub.isHQ">
+                    <i class="fa-solid" [class.fa-building-shield]="hub.isHQ" [class.fa-location-dot]="!hub.isHQ"></i>
+                  </div>
+                  <div>
+                    <h3 class="hub-name">{{ hub.name }}</h3>
+                    <span class="hub-name-ta">{{ hub.nameTa }}</span>
+                  </div>
+                  <span class="hub-status-pill" [class.hq]="hub.isHQ">
+                    {{ hub.isHQ ? 'Central HQ' : 'Field Team' }}
+                  </span>
+                </div>
+
+                <p class="hub-coverage">{{ hub.coverage }}</p>
+
+                <div class="hub-footer">
+                  <span class="hub-response-time">
+                    <i class="fa-regular fa-clock"></i> {{ hub.responseTime }}
+                  </span>
+                  <span class="hub-action-link">
+                    Select & Quote <i class="fa-solid fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Rapid Dispatch Commitment Banner -->
+          <div class="card-light dispatch-banner mt-8">
+            <div class="dispatch-info">
+              <div class="dispatch-icon">
+                <i class="fa-solid fa-truck-fast"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-forest">48-Hour Field Assessment Guarantee</h4>
+                <p class="text-xs text-secondary">
+                  Our certified agricultural engineers conduct hydraulic pressure measurement, water discharge tests, and FMB layout mapping within 48 hours of consultation booking.
+                </p>
+              </div>
+            </div>
+            <a href="tel:9489528432" class="btn btn-amber btn-sm">
+              <i class="fa-solid fa-phone"></i> Call Farmer Desk
+            </a>
           </div>
         </div>
       </section>
@@ -329,6 +392,156 @@ import { ContactFormData } from '../../core/models/interfaces';
       margin: 0 auto 1.5rem;
     }
     .text-forest { color: var(--forest-deep); }
+
+    /* Regional Service Network */
+    .service-map-section {
+      padding: 5rem 1.5rem;
+    }
+    .district-hubs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    @media (max-width: 1024px) {
+      .district-hubs-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .district-hubs-grid { grid-template-columns: 1fr; }
+    }
+
+    .district-hub-card {
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      border: 1px solid var(--border-light);
+    }
+    .district-hub-card:hover {
+      border-color: var(--brand-main);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(15, 61, 46, 0.1);
+    }
+
+    .hub-header {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      margin-bottom: 0.875rem;
+    }
+    .hub-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--cream-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .hub-icon-wrap.primary-hub {
+      background: rgba(22, 101, 52, 0.12);
+      color: var(--forest-deep);
+    }
+    .hub-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      margin: 0;
+      line-height: 1.2;
+    }
+    .hub-name-ta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .hub-status-pill {
+      margin-left: auto;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      background: rgba(30, 107, 78, 0.08);
+      color: var(--brand-main);
+      white-space: nowrap;
+    }
+    .hub-status-pill.hq {
+      background: rgba(22, 101, 52, 0.15);
+      color: var(--forest-deep);
+      border: 1px solid rgba(22, 101, 52, 0.3);
+      font-weight: 800;
+    }
+
+    .hub-coverage {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .hub-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.875rem;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.75rem;
+    }
+    .hub-response-time {
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .hub-action-link {
+      color: var(--brand-main);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .district-hub-card:hover .hub-action-link {
+      color: var(--forest-deep);
+    }
+
+    .dispatch-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      gap: 1.5rem;
+      background: var(--white);
+      border-left: 4px solid var(--brand-main);
+    }
+    @media (max-width: 640px) {
+      .dispatch-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    .dispatch-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .dispatch-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--mint-soft);
+      color: var(--brand-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
   `]
 })
 export class ContactComponent {
@@ -336,6 +549,143 @@ export class ContactComponent {
   private api = inject(ApiService);
 
   status = signal<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  regionalHubs = [
+    {
+      name: 'Dindigul',
+      nameTa: 'திண்டுக்கல்',
+      isHQ: true,
+      coverage: 'Central Warehouse & Technical Division. Direct installation & subsidy documentation cell.',
+      responseTime: 'Same-Day Assessment'
+    },
+    {
+      name: 'Madurai',
+      nameTa: 'மதுரை',
+      isHQ: false,
+      coverage: 'Usilampatti, Vadipatti, Melur horticultural belt coverage.',
+      responseTime: 'Within 24 Hours'
+    },
+    {
+      name: 'Theni',
+      nameTa: 'தேனி',
+      isHQ: false,
+      coverage: 'Bodinayakanur, Periyakulam, Cumbum cardamom & banana estates.',
+      responseTime: 'Within 24 Hours'
+    },
+    {
+      name: 'Karur',
+      nameTa: 'கரூர்',
+      isHQ: false,
+      coverage: 'Aravakurichi, Kulithalai, Mayanur drumstick & cash crops.',
+      responseTime: 'Within 24 Hours'
+    },
+    {
+      name: 'Tiruppur',
+      nameTa: 'திருப்பூர்',
+      isHQ: false,
+      coverage: 'Dharapuram, Kangeyam, Udumalaipettai coconut micro-irrigation.',
+      responseTime: 'Within 36 Hours'
+    },
+    {
+      name: 'Coimbatore',
+      nameTa: 'கோயம்புத்தூர்',
+      isHQ: false,
+      coverage: 'Pollachi, Annur, Mettupalayam vegetable & orchard precision grids.',
+      responseTime: 'Within 36 Hours'
+    },
+    {
+      name: 'Salem',
+      nameTa: 'சேலம்',
+      isHQ: false,
+      coverage: 'Attur, Mecheri, Omalur mango, tapioca & sago plantation systems.',
+      responseTime: 'Within 36 Hours'
+    },
+    {
+      name: 'Erode',
+      nameTa: 'ஈரோடு',
+      isHQ: false,
+      coverage: 'Gobichettipalayam, Bhavani, Sathyamangalam turmeric & sugarcane.',
+      responseTime: 'Within 36 Hours'
+    },
+    {
+      name: 'Tiruchirappalli',
+      nameTa: 'திருச்சிராப்பள்ளி',
+      isHQ: false,
+      coverage: 'Musiri, Manapparai, Lalgudi river basin banana & vegetable drip.',
+      responseTime: 'Within 36 Hours'
+    },
+    {
+      name: 'Pudukkottai',
+      nameTa: 'புதுக்கோட்டை',
+      isHQ: false,
+      coverage: 'Alangudi, Gandarvakottai, Aranthangi groundnut & cashew clusters.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Thanjavur',
+      nameTa: 'தஞ்சாவூர்',
+      isHQ: false,
+      coverage: 'Pattukkottai, Kumbakonam, Orathanadu delta crop sprinkler zones.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Sivaganga',
+      nameTa: 'சிவகங்கை',
+      isHQ: false,
+      coverage: 'Karaikudi, Manamadurai, Devakottai dryland drip automation.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Ramanathapuram',
+      nameTa: 'இராமநாதபுரம்',
+      isHQ: false,
+      coverage: 'Paramakudi, Mudukulathur, Kamuthi chili & arid pulse systems.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Virudhunagar',
+      nameTa: 'விருதுநகர்',
+      isHQ: false,
+      coverage: 'Rajapalayam, Srivilliputhur, Sattur cotton & horticulture blocks.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Thoothukudi',
+      nameTa: 'தூத்துக்குடி',
+      isHQ: false,
+      coverage: 'Kovilpatti, Ottapidaram, Tiruchendur rain gun & drip networks.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Tirunelveli',
+      nameTa: 'திருநெல்வேலி',
+      isHQ: false,
+      coverage: 'Ambasamudram, Radhapuram, Nanguneri paddy & coconut grids.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Dharmapuri',
+      nameTa: 'தர்மபுரி',
+      isHQ: false,
+      coverage: 'Harur, Palacode, Pennagaram tomato & mango drip installations.',
+      responseTime: 'Within 48 Hours'
+    },
+    {
+      name: 'Krishnagiri',
+      nameTa: 'கிருஷ்ணகிரி',
+      isHQ: false,
+      coverage: 'Hosur, Denkanikottai, Kaveripattinam polyhouse & flower drip.',
+      responseTime: 'Within 48 Hours'
+    }
+  ];
+
+  selectDistrict(name: string) {
+    this.contactForm.patchValue({ district: name });
+    const formElement = document.getElementById('quote-form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 
   districts = [
     'Dindigul', 'Madurai', 'Theni', 'Karur', 'Tiruchirappalli', 'Salem',
